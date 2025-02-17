@@ -5,13 +5,8 @@ using Trivial.Domain.Geometry;
 using Trivial.Domain.Layers;
 using Trivial.Domain.Models.Base;
 using Trivial.Domain.Events;
-using System.Runtime.CompilerServices;
 using Trivial.Domain.Options;
 using Trivial.Domain.Controls;
-
-[assembly: InternalsVisibleTo("Trivial.Graph")]
-[assembly: InternalsVisibleTo("Trivial.Graph.Tests")]
-[assembly: InternalsVisibleTo("Trivial.Domain.Tests")]
 
 namespace Trivial.Domain;
 
