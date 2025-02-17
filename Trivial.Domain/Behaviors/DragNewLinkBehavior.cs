@@ -12,28 +12,28 @@ public class DragNewLinkBehavior : BaseBehaviour
     private PositionAnchor? m_TargetPositionAnchor;
 
     public BaseLinkModel? OngoingLink { get; private set; }
+    public MouseEventButton DragButton { get; set; } = MouseEventButton.Left;
+    public Maybe<LinkFactory> LinkFactory { get; set; } = Maybe.None;
 
     public DragNewLinkBehavior(Diagram Diagram) : base(Diagram) {}
 
-    public void StartFrom(ILinkable Source, float ClientX, float ClientY)
+    public void StartFrom(ILinkable Source, Vector2 Pos)
     {
-        if (OngoingLink != null)
-            return;
+        if (OngoingLink != null) return;
 
-        m_TargetPositionAnchor = new PositionAnchor(CalculateTargetPosition(ClientX, ClientY));
-        OngoingLink = Diagram.Options.Links.Factory(Diagram, Source, m_TargetPositionAnchor);
-        if (OngoingLink == null)
-            return;
+        m_TargetPositionAnchor = new PositionAnchor(CalculateTargetPosition(Pos));
+        OngoingLink = LinkFactory.Map(F => F(Diagram, Source, m_TargetPositionAnchor))
+            .ValueOrLazy(() => Diagram.Options.Links.Factory(Diagram, Source, m_TargetPositionAnchor));
 
+        if (OngoingLink == null) return;
         Diagram.Links.Add(OngoingLink);
     }
 
-    public void StartFrom(BaseLinkModel Link, float ClientX, float ClientY)
+    public void StartFrom(BaseLinkModel Link, Vector2 Pos)
     {
-        if (OngoingLink != null)
-            return;
+        if (OngoingLink != null) return;
 
-        m_TargetPositionAnchor = new PositionAnchor(CalculateTargetPosition(ClientX, ClientY));
+        m_TargetPositionAnchor = new PositionAnchor(CalculateTargetPosition(Pos));
         OngoingLink = Link;
         OngoingLink.SetTarget(m_TargetPositionAnchor);
         OngoingLink.Refresh();
@@ -42,8 +42,7 @@ public class DragNewLinkBehavior : BaseBehaviour
 
     protected override void _OnPointerDown(Maybe<Model> Model, PointerEventArgs E)
     {
-        if (E.Button != (int)MouseEventButton.Left)
-            return;
+        if (E.Button != (int)DragButton) return;
 
         OngoingLink = null;
         m_TargetPositionAnchor = null;
@@ -54,8 +53,9 @@ public class DragNewLinkBehavior : BaseBehaviour
                 if (t_Port.Locked)
                     return;
 
-                m_TargetPositionAnchor = new PositionAnchor(CalculateTargetPosition(E.ClientX, E.ClientY));
-                OngoingLink = Diagram.Options.Links.Factory(Diagram, t_Port, m_TargetPositionAnchor);
+                m_TargetPositionAnchor = new PositionAnchor(CalculateTargetPosition(E.GetClientPos()));
+                OngoingLink = LinkFactory.Map(F => F(Diagram, t_Port, m_TargetPositionAnchor))
+                    .ValueOrLazy(() => Diagram.Options.Links.Factory(Diagram, t_Port, m_TargetPositionAnchor));
                 if (OngoingLink == null)
                     return;
 
@@ -69,7 +69,7 @@ public class DragNewLinkBehavior : BaseBehaviour
     {
         if (OngoingLink == null || Model.HasValue) return;
 
-        m_TargetPositionAnchor!.SetPosition(CalculateTargetPosition(E.ClientX, E.ClientY));
+        m_TargetPositionAnchor!.SetPosition(CalculateTargetPosition(E.GetClientPos()));
 
         if (Diagram.Options.Links.EnableSnapping)
         {
@@ -116,9 +116,9 @@ public class DragNewLinkBehavior : BaseBehaviour
         OngoingLink = null;
     }
 
-    private Vector2 CalculateTargetPosition(float ClientX, float ClientY)
+    private Vector2 CalculateTargetPosition(Vector2 Pos)
     {
-        var t_Target = Diagram.GetRelativeMousePoint(ClientX, ClientY);
+        var t_Target = Diagram.GetRelativeMousePoint(Pos.X, Pos.Y);
 
         if (OngoingLink == null)
         {

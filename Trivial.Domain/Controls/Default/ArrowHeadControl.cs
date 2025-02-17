@@ -53,7 +53,7 @@ public class ArrowHeadControl : ExecutableControl
             t_Link.SetSource(t_Link.Target);
         }
 
-        t_Dnlb.StartFrom(t_Link, E.ClientX, E.ClientY);
+        t_Dnlb.StartFrom(t_Link, E.GetClientPos());
         return ValueTask.CompletedTask;
     }
 }

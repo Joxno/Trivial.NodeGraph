@@ -14,14 +14,8 @@ public class DragNewLinkControl : ExecutableControl
     private readonly IPositionProvider m_PositionProvider;
 
     public DragNewLinkControl(float X, float Y, float OffsetX = 0, float OffsetY = 0)
-        : this(new BoundsBasedPositionProvider(X, Y, OffsetX, OffsetY))
-    {
-    }
-
-    public DragNewLinkControl(IPositionProvider PositionProvider)
-    {
-        m_PositionProvider = PositionProvider;
-    }
+        : this(new BoundsBasedPositionProvider(X, Y, OffsetX, OffsetY)) {}
+    public DragNewLinkControl(IPositionProvider PositionProvider) => m_PositionProvider = PositionProvider;
 
     public override Vector2? GetPosition(Model Model) => m_PositionProvider.GetPosition(Model);
 
@@ -34,7 +28,7 @@ public class DragNewLinkControl : ExecutableControl
         if (t_Behavior == null)
             throw new DiagramsException($"DragNewLinkBehavior was not found");
 
-        t_Behavior.StartFrom(t_Node, E.ClientX, E.ClientY);
+        t_Behavior.StartFrom(t_Node, E.GetClientPos());
         return ValueTask.CompletedTask;
     }
 }
