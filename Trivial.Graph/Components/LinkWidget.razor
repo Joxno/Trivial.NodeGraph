@@ -2,6 +2,7 @@
 
 @{
     var t_Color = Link.Selected ? Link.SelectedColor ?? BlazorDiagram.Options.Links.DefaultSelectedColor : Link.Color ?? BlazorDiagram.Options.Links.DefaultColor;
+    var t_Classes = Link.Classes ?? "";
     var t_Result = Link.PathGeneratorResult;
     if (t_Result == null)
         return;
@@ -13,7 +14,8 @@
 <path d="@t_D"
       stroke-width="@Link.Width.ToInvariantString()"
       fill="none"
-      stroke="@t_Color" />
+      stroke="@t_Color"
+      class="@t_Classes" />
 
 @if (t_Dnlb!.OngoingLink == null || t_Dnlb.OngoingLink != Link)
 {

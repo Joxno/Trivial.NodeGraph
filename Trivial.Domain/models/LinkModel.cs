@@ -23,5 +23,6 @@ public class LinkModel : BaseLinkModel
 
     public string? Color { get; set; }
     public string? SelectedColor { get; set; }
+    public string? Classes { get; set; }
     public float Width { get; set; } = 2;
 }

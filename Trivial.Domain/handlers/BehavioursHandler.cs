@@ -5,7 +5,7 @@ namespace Trivial.Graph.Domain.handlers;
 public class BehavioursHandler(Diagram Graph)
 {
     private readonly Dictionary<Type, BaseBehaviour> m_Behaviors = new();
-    
+
     public void RegisterBehavior(BaseBehaviour Behavior, bool Force = false)
     {
         var t_Type = Behavior.GetType();
@@ -26,4 +26,6 @@ public class BehavioursHandler(Diagram Graph)
             m_Behaviors[typeof(T)].Dispose();
             m_Behaviors.Remove(typeof(T));
         });
+
+    public bool HasBehaviour<T>() where T : BaseBehaviour => m_Behaviors.ContainsKey(typeof(T));
 }

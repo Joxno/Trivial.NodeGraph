@@ -110,6 +110,7 @@ public abstract class Diagram
 
     public void RegisterBehavior(BaseBehaviour Behavior, bool Force = false) => m_BehavioursHandler.RegisterBehavior(Behavior, Force);
     public T? GetBehavior<T>() where T : BaseBehaviour => m_BehavioursHandler.GetBehavior<T>();
+    public bool HasBehaviour<T>() where T : BaseBehaviour => m_BehavioursHandler.HasBehaviour<T>();
     public void UnregisterBehavior<T>() where T : BaseBehaviour => m_BehavioursHandler.UnregisterBehavior<T>();
 
     public void ZoomToFit(float Margin = 10) => m_ZoomHandler.ZoomToFit(Margin);
