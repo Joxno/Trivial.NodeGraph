@@ -109,7 +109,7 @@ public class NodeModel : MovableModel, IHasBounds, IHasShape, ILinkable
 
     public Rectangle? GetBounds(bool IncludePorts)
     {
-        if (Size == Size.Zero()) return null;
+        if (!Size.IsVisibleSize()) return null;
         if (!IncludePorts) return new Rectangle(Position, Size);
 
         var t_LeftPort = GetPort(PortAlignment.Left);

@@ -16,8 +16,7 @@ public sealed class ShapeIntersectionAnchor : Anchor
 
     public override Vector2? GetPosition(BaseLinkModel Link, Vector2[] Route)
     {
-        if (Node.Size == null)
-            return null;
+        if (!Node.Size.IsVisibleSize()) return null;
 
         var t_IsTarget = Link.Target == this;
         var t_NodeCenter = Node.GetBounds()!.Center;

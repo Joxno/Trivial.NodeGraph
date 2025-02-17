@@ -42,12 +42,10 @@ public class NodeRenderer : ComponentBase, IDisposable
     [JSInvokable]
     public void OnResize(Size Size)
     {
-        // When the node becomes invisible (a.k.a unrendered), the size is zero
-        if (Size == Size.Zero())
-            return;
+        if (!Size.IsVisibleSize()) return;
 
         Size = new Size(Size.Width / BlazorDiagram.Zoom, Size.Height / BlazorDiagram.Zoom);
-        if (Node.Size != null && Node.Size.Width.AlmostEqualTo(Size.Width) &&
+        if (Node.Size.Width.AlmostEqualTo(Size.Width) &&
             Node.Size.Height.AlmostEqualTo(Size.Height))
         {
             return;

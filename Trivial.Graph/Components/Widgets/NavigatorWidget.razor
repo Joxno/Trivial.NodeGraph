@@ -6,7 +6,7 @@
 
     @foreach (var t_Group in BlazorDiagram.Groups)
     {
-        if (t_Group.Size == null)
+        if (!t_Group.Size.IsVisibleSize())
             continue;
 
         <rect @key="t_Group"
@@ -21,7 +21,7 @@
 
     @foreach (var t_Node in BlazorDiagram.Nodes)
     {
-        if (t_Node.Size == null)
+        if (!t_Node.Size.IsVisibleSize())
             continue;
 
         @GetNodeRenderFragment(t_Node)

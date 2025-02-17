@@ -53,8 +53,7 @@ public class GroupRenderer : ComponentBase, IDisposable
 
     protected override void OnAfterRender(bool FirstRender)
     {
-        if (Group.Size == Group.Size.Zero())
-            return;
+        if (!Group.Size.IsVisibleSize()) return;
 
         // Update the port positions (and links) when the size of the group changes
         // This will save us some JS trips as well as useless rerenders

@@ -86,8 +86,7 @@ public partial class NavigatorWidget : IDisposable
 
         foreach (var t_Node in BlazorDiagram.Nodes.Union(BlazorDiagram.Groups))
         {
-            if (t_Node.Size == null)
-                continue;
+            if (!t_Node.Size.IsVisibleSize()) continue;
 
             t_MinX = MathF.Min(t_MinX, t_Node.Position.X);
             t_MinY = MathF.Min(t_MinY, t_Node.Position.Y);

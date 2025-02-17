@@ -24,8 +24,7 @@ public sealed class DynamicAnchor : Anchor
 
     public override Vector2? GetPosition(BaseLinkModel Link, Vector2[] Route)
     {
-        if (Node.Size == null)
-            return null;
+        if (!Node.Size.IsVisibleSize()) return null;
 
         var t_IsTarget = Link.Target == this;
         var t_Pt = Route.Length > 0 ? Route[t_IsTarget ? ^1 : 0] : GetOtherPosition(Link, t_IsTarget);
