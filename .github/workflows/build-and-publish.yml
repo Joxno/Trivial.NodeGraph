@@ -1,0 +1,26 @@
+name: Build and Publish
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '9.0.x'
+
+    - name: Run Build Script
+      shell: pwsh
+      run: ./Build.ps1
+      
+    - name: Run Publish Script
+      shell: pwsh
+      run: ./Publish.ps1 -NugetApiKey ${{ secrets.NUGET_TOKEN }}
