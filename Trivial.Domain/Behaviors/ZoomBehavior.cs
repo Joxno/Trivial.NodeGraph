@@ -4,7 +4,7 @@ using System;
 
 namespace Trivial.Domain.Behaviors;
 
-public class ZoomBehavior : Behavior
+public class ZoomBehavior : BaseBehaviour
 {
     public ZoomBehavior(Diagram Diagram) : base(Diagram)
     {
@@ -48,7 +48,7 @@ public class ZoomBehavior : Behavior
         });
     }
 
-    public override void Dispose()
+    protected override void _OnDispose()
     {
         Diagram.Wheel -= Diagram_Wheel;
     }

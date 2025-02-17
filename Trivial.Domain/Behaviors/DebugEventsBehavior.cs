@@ -4,7 +4,7 @@ using System;
 
 namespace Trivial.Domain.Behaviors;
 
-public class DebugEventsBehavior : Behavior
+public class DebugEventsBehavior : BaseBehaviour
 {
     public DebugEventsBehavior(Diagram Diagram) : base(Diagram)
     {
@@ -76,7 +76,7 @@ public class DebugEventsBehavior : Behavior
         Console.WriteLine("Changed");
     }
 
-    public override void Dispose()
+    protected override void _OnDispose()
     {
         Diagram.Changed -= Diagram_Changed;
         Diagram.ContainerChanged -= Diagram_ContainerChanged;

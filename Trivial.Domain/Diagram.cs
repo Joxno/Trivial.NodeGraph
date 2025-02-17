@@ -12,7 +12,7 @@ namespace Trivial.Domain;
 
 public abstract class Diagram
 {
-    private readonly Dictionary<Type, Behavior> m_Behaviors;
+    private readonly Dictionary<Type, BaseBehaviour> m_Behaviors;
     private readonly List<SelectableModel> m_OrderedSelectables;
 
     public event Action<Model?, PointerEventArgs>? PointerDown;
@@ -23,7 +23,7 @@ public abstract class Diagram
     public event Action<KeyboardEventArgs>? KeyDown;
     public event Action<WheelEventArgs>? Wheel;
     public event Action<Model?, PointerEventArgs>? PointerClick;
-    public event Action<Model?, PointerEventArgs>? PointerfloatClick;
+    public event Action<Model?, PointerEventArgs>? PointerDoubleClick;
 
     public event Action<SelectableModel>? SelectionChanged;
     public event Action? PanChanged;
@@ -33,7 +33,7 @@ public abstract class Diagram
 
     protected Diagram(bool RegisterDefaultBehaviors = true)
     {
-        m_Behaviors = new Dictionary<Type, Behavior>();
+        m_Behaviors = new Dictionary<Type, BaseBehaviour>();
         m_OrderedSelectables = new List<SelectableModel>();
 
         Nodes = new NodeLayer(this);
@@ -166,7 +166,7 @@ public abstract class Diagram
 
     #region Behaviors
 
-    public void RegisterBehavior(Behavior Behavior)
+    public void RegisterBehavior(BaseBehaviour Behavior)
     {
         var t_Type = Behavior.GetType();
         if (m_Behaviors.ContainsKey(t_Type))
@@ -175,13 +175,13 @@ public abstract class Diagram
         m_Behaviors.Add(t_Type, Behavior);
     }
 
-    public T? GetBehavior<T>() where T : Behavior
+    public T? GetBehavior<T>() where T : BaseBehaviour
     {
         var t_Type = typeof(T);
         return (T?)(m_Behaviors.ContainsKey(t_Type) ? m_Behaviors[t_Type] : null);
     }
 
-    public void UnregisterBehavior<T>() where T : Behavior
+    public void UnregisterBehavior<T>() where T : BaseBehaviour
     {
         var t_Type = typeof(T);
         if (!m_Behaviors.ContainsKey(t_Type))
@@ -396,7 +396,7 @@ public abstract class Diagram
 
     public void TriggerPointerClick(Model? Model, PointerEventArgs E) => PointerClick?.Invoke(Model, E);
 
-    public void TriggerPointerfloatClick(Model? Model, PointerEventArgs E) => PointerfloatClick?.Invoke(Model, E);
+    public void TriggerPointerfloatClick(Model? Model, PointerEventArgs E) => PointerDoubleClick?.Invoke(Model, E);
 
     #endregion
 }

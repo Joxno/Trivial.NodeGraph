@@ -1,67 +1,43 @@
 ﻿using System.Numerics;
-using Trivial.Domain.Geometry;
 using Trivial.Domain.Models.Base;
 using Trivial.Domain.Events;
 
 namespace Trivial.Domain.Behaviors;
 
-public class PanBehavior : Behavior
+public class PanBehavior : BaseBehaviour
 {
-    private Vector2? m_InitialPan;
-    private float m_LastClientX;
-    private float m_LastClientY;
+    private Maybe<Vector2> m_InitialPan = Maybe.None;
+    private Vector2 m_LastClientPos;
 
-    public PanBehavior(Diagram Diagram) : base(Diagram)
+    public MouseEventButton PanButton { get; set; } = MouseEventButton.Left;
+
+    public PanBehavior(Diagram Diagram) : base(Diagram) {}
+
+    protected override void _OnPointerDown(Maybe<Model> Model, PointerEventArgs E) => 
+        FP.If(E.Button != (int)PanButton, () => Start(Model, E.GetClientPos(), E.ShiftKey));
+    protected override void _OnPointerMove(Maybe<Model> Model, PointerEventArgs E) => Move(E.GetClientPos());
+    protected override void _OnPointerUp(Maybe<Model> Model, PointerEventArgs E) => End();
+
+    private void Start(Maybe<Model> Model, Vector2 Pos, bool ShiftKey)
     {
-        base.Diagram.PointerDown += OnPointerDown;
-        base.Diagram.PointerMove += OnPointerMove;
-        base.Diagram.PointerUp += OnPointerUp;
-    }
-
-    private void OnPointerDown(Model? Model, PointerEventArgs E)
-    {
-        if (E.Button != (int)MouseEventButton.Left)
-            return;
-
-        Start(Model, E.ClientX, E.ClientY, E.ShiftKey);
-    }
-
-    private void OnPointerMove(Model? Model, PointerEventArgs E) => Move(E.ClientX, E.ClientY);
-
-    private void OnPointerUp(Model? Model, PointerEventArgs E) => End();
-
-    private void Start(Model? Model, float ClientX, float ClientY, bool ShiftKey)
-    {
-        if (!Diagram.Options.AllowPanning || Model != null || ShiftKey)
-            return;
+        if (!Diagram.Options.AllowPanning || Model.HasValue || ShiftKey) return;
 
         m_InitialPan = Diagram.Pan;
-        m_LastClientX = ClientX;
-        m_LastClientY = ClientY;
+        m_LastClientPos = Pos;
     }
 
-    private void Move(float ClientX, float ClientY)
+    private void Move(Vector2 Pos)
     {
-        if (!Diagram.Options.AllowPanning || m_InitialPan == null)
-            return;
+        if (!Diagram.Options.AllowPanning || !m_InitialPan.HasValue) return;
 
-        var t_DeltaX = ClientX - m_LastClientX - (Diagram.Pan.X - m_InitialPan.Value.X);
-        var t_DeltaY = ClientY - m_LastClientY - (Diagram.Pan.Y - m_InitialPan.Value.Y);
-        Diagram.UpdatePan(t_DeltaX, t_DeltaY);
+        var t_Delta = Pos - m_LastClientPos - (Diagram.Pan - m_InitialPan.Value);
+        Diagram.UpdatePan(t_Delta.X, t_Delta.Y);
     }
 
     private void End()
     {
-        if (!Diagram.Options.AllowPanning)
-            return;
+        if (!Diagram.Options.AllowPanning) return;
 
-        m_InitialPan = null;
-    }
-
-    public override void Dispose()
-    {
-        Diagram.PointerDown -= OnPointerDown;
-        Diagram.PointerMove -= OnPointerMove;
-        Diagram.PointerUp -= OnPointerUp;
+        m_InitialPan = null!;
     }
 }

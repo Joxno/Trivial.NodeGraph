@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="SvgPathProperties" Version="1.1.2" />
+    <PackageReference Include="Trivial.Functional" Version="1.0.0-D250216223347" />
   </ItemGroup>
 
 </Project>

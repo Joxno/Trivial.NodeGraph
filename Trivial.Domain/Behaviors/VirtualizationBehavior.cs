@@ -2,7 +2,7 @@ using Trivial.Domain.Models.Base;
 
 namespace Trivial.Domain.Behaviors;
 
-public class VirtualizationBehavior : Behavior
+public class VirtualizationBehavior : BaseBehaviour
 {
     public VirtualizationBehavior(Diagram Diagram) : base(Diagram)
     {
@@ -60,7 +60,7 @@ public class VirtualizationBehavior : Behavior
         Model.Visible = t_Right > 0 && t_Left < Diagram.Container!.Width && t_Bottom > 0 && t_Top < Diagram.Container.Height;
     }
 
-    public override void Dispose()
+    protected override void _OnDispose()
     {
         Diagram.ZoomChanged -= CheckVisibility;
         Diagram.PanChanged -= CheckVisibility;

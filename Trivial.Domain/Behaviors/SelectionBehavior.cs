@@ -3,17 +3,14 @@ using Trivial.Domain.Events;
 
 namespace Trivial.Domain.Behaviors;
 
-public class SelectionBehavior : Behavior
+public class SelectionBehavior : BaseBehaviour
 {
-    public SelectionBehavior(Diagram Diagram) : base(Diagram)
-    {
-        base.Diagram.PointerDown += OnPointerDown;
-    }
+    public SelectionBehavior(Diagram Diagram) : base(Diagram) {}
 
-    private void OnPointerDown(Model? Model, PointerEventArgs E)
+    protected override void _OnPointerDown(Maybe<Model> Model, PointerEventArgs E)
     {
         var t_CtrlKey = E.CtrlKey;
-        switch (Model)
+        switch (Model!.ValueOr(null))
         {
             case null:
                 Diagram.UnselectAll();
@@ -31,10 +28,5 @@ public class SelectionBehavior : Behavior
                 break;
             }
         }
-    }
-
-    public override void Dispose()
-    {
-        Diagram.PointerDown -= OnPointerDown;
     }
 }

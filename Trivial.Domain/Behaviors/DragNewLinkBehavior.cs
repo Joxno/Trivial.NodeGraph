@@ -1,26 +1,19 @@
 ﻿using Trivial.Domain.Models;
 using Trivial.Domain.Models.Base;
 using Trivial.Domain.Events;
-using System.Linq;
 using System.Numerics;
 using Trivial.Domain.Anchors;
-using Trivial.Domain.Geometry;
 using Trivial.Domain.Extensions;
 
 namespace Trivial.Domain.Behaviors;
 
-public class DragNewLinkBehavior : Behavior
+public class DragNewLinkBehavior : BaseBehaviour
 {
     private PositionAnchor? m_TargetPositionAnchor;
 
     public BaseLinkModel? OngoingLink { get; private set; }
 
-    public DragNewLinkBehavior(Diagram Diagram) : base(Diagram)
-    {
-        base.Diagram.PointerDown += OnPointerDown;
-        base.Diagram.PointerMove += OnPointerMove;
-        base.Diagram.PointerUp += OnPointerUp;
-    }
+    public DragNewLinkBehavior(Diagram Diagram) : base(Diagram) {}
 
     public void StartFrom(ILinkable Source, float ClientX, float ClientY)
     {
@@ -47,7 +40,7 @@ public class DragNewLinkBehavior : Behavior
         OngoingLink.RefreshLinks();
     }
 
-    private void OnPointerDown(Model? Model, MouseEventArgs E)
+    protected override void _OnPointerDown(Maybe<Model> Model, PointerEventArgs E)
     {
         if (E.Button != (int)MouseEventButton.Left)
             return;
@@ -55,25 +48,26 @@ public class DragNewLinkBehavior : Behavior
         OngoingLink = null;
         m_TargetPositionAnchor = null;
 
-        if (Model is PortModel t_Port)
-        {
-            if (t_Port.Locked)
-                return;
+        Model.Then(M => {
+            if (M is PortModel t_Port)
+            {
+                if (t_Port.Locked)
+                    return;
 
-            m_TargetPositionAnchor = new PositionAnchor(CalculateTargetPosition(E.ClientX, E.ClientY));
-            OngoingLink = Diagram.Options.Links.Factory(Diagram, t_Port, m_TargetPositionAnchor);
-            if (OngoingLink == null)
-                return;
+                m_TargetPositionAnchor = new PositionAnchor(CalculateTargetPosition(E.ClientX, E.ClientY));
+                OngoingLink = Diagram.Options.Links.Factory(Diagram, t_Port, m_TargetPositionAnchor);
+                if (OngoingLink == null)
+                    return;
 
-            OngoingLink.SetTarget(m_TargetPositionAnchor);
-            Diagram.Links.Add(OngoingLink);
-        }
+                OngoingLink.SetTarget(m_TargetPositionAnchor);
+                Diagram.Links.Add(OngoingLink);
+            }
+        });
     }
 
-    private void OnPointerMove(Model? Model, MouseEventArgs E)
+    protected override void _OnPointerMove(Maybe<Model> Model, PointerEventArgs E)
     {
-        if (OngoingLink == null || Model != null)
-            return;
+        if (OngoingLink == null || Model.HasValue) return;
 
         m_TargetPositionAnchor!.SetPosition(CalculateTargetPosition(E.ClientX, E.ClientY));
 
@@ -90,7 +84,7 @@ public class DragNewLinkBehavior : Behavior
         OngoingLink.RefreshLinks();
     }
 
-    private void OnPointerUp(Model? Model, MouseEventArgs E)
+    protected override void _OnPointerUp(Maybe<Model> Model, PointerEventArgs E)
     {
         if (OngoingLink == null)
             return;
@@ -102,7 +96,7 @@ public class DragNewLinkBehavior : Behavior
             return;
         }
 
-        if (Model is ILinkable t_Linkable && (OngoingLink.Source.Model == null || OngoingLink.Source.Model.CanAttachTo(t_Linkable)))
+        if (Model.HasValue && Model.Value is ILinkable t_Linkable && (OngoingLink.Source.Model == null || OngoingLink.Source.Model.CanAttachTo(t_Linkable)))
         {
             var t_TargetAnchor = Diagram.Options.Links.TargetAnchorFactory(Diagram, OngoingLink, t_Linkable);
             OngoingLink.SetTarget(t_TargetAnchor);
@@ -162,12 +156,5 @@ public class DragNewLinkBehavior : Behavior
         }
 
         return t_NearestSnapPort;
-    }
-
-    public override void Dispose()
-    {
-        Diagram.PointerDown -= OnPointerDown;
-        Diagram.PointerMove -= OnPointerMove;
-        Diagram.PointerUp -= OnPointerUp;
     }
 }

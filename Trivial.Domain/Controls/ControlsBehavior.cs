@@ -3,7 +3,7 @@ using Trivial.Domain.Models.Base;
 
 namespace Trivial.Domain.Controls;
 
-public class ControlsBehavior : Behavior
+public class ControlsBehavior : BaseBehaviour
 {
     public ControlsBehavior(Diagram Diagram) : base(Diagram)
     {
@@ -52,7 +52,7 @@ public class ControlsBehavior : Behavior
         t_Controls.Hide();
     }
 
-    public override void Dispose()
+    protected override void _OnDispose()
     {
         Diagram.PointerEnter -= OnPointerEnter;
         Diagram.PointerLeave -= OnPointerLeave;
