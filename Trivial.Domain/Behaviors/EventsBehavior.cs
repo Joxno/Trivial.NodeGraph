@@ -6,56 +6,56 @@ namespace Trivial.Domain.Behaviors;
 
 public class EventsBehavior : Behavior
 {
-    private readonly Stopwatch _mouseClickSw;
-    private Model? _model;
-    private bool _captureMouseMove;
-    private int _mouseMovedCount;
+    private readonly Stopwatch m_MouseClickSw;
+    private Model? m_Model;
+    private bool m_CaptureMouseMove;
+    private int m_MouseMovedCount;
 
-    public EventsBehavior(Diagram diagram) : base(diagram)
+    public EventsBehavior(Diagram Diagram) : base(Diagram)
     {
-        _mouseClickSw = new Stopwatch();
+        m_MouseClickSw = new Stopwatch();
 
-        Diagram.PointerDown += OnPointerDown;
-        Diagram.PointerMove += OnPointerMove;
-        Diagram.PointerUp += OnPointerUp;
-        Diagram.PointerClick += OnPointerClick;
+        base.Diagram.PointerDown += OnPointerDown;
+        base.Diagram.PointerMove += OnPointerMove;
+        base.Diagram.PointerUp += OnPointerUp;
+        base.Diagram.PointerClick += OnPointerClick;
     }
 
-    private void OnPointerClick(Model? model, PointerEventArgs e)
+    private void OnPointerClick(Model? Model, PointerEventArgs E)
     {
-        if (_mouseClickSw.IsRunning && _mouseClickSw.ElapsedMilliseconds <= 500)
+        if (m_MouseClickSw.IsRunning && m_MouseClickSw.ElapsedMilliseconds <= 500)
         {
-            Diagram.TriggerPointerfloatClick(model, e);
+            Diagram.TriggerPointerfloatClick(Model, E);
         }
 
-        _mouseClickSw.Restart();
+        m_MouseClickSw.Restart();
     }
 
-    private void OnPointerDown(Model? model, PointerEventArgs e)
+    private void OnPointerDown(Model? Model, PointerEventArgs E)
     {
-        _captureMouseMove = true;
-        _mouseMovedCount = 0;
-        _model = model;
+        m_CaptureMouseMove = true;
+        m_MouseMovedCount = 0;
+        m_Model = Model;
     }
 
-    private void OnPointerMove(Model? model, PointerEventArgs e)
+    private void OnPointerMove(Model? Model, PointerEventArgs E)
     {
-        if (!_captureMouseMove)
+        if (!m_CaptureMouseMove)
             return;
 
-        _mouseMovedCount++;
+        m_MouseMovedCount++;
     }
 
-    private void OnPointerUp(Model? model, PointerEventArgs e)
+    private void OnPointerUp(Model? Model, PointerEventArgs E)
     {
-        if (!_captureMouseMove) return; // Only set by OnMouseDown
-        _captureMouseMove = false;
-        if (_mouseMovedCount > 0) return;
+        if (!m_CaptureMouseMove) return; // Only set by OnMouseDown
+        m_CaptureMouseMove = false;
+        if (m_MouseMovedCount > 0) return;
 
-        if (_model == model)
+        if (m_Model == Model)
         {
-            Diagram.TriggerPointerClick(model, e);
-            _model = null;
+            Diagram.TriggerPointerClick(Model, E);
+            m_Model = null;
         }
     }
 
@@ -65,6 +65,6 @@ public class EventsBehavior : Behavior
         Diagram.PointerMove -= OnPointerMove;
         Diagram.PointerUp -= OnPointerUp;
         Diagram.PointerClick -= OnPointerClick;
-        _model = null;
+        m_Model = null;
     }
 }

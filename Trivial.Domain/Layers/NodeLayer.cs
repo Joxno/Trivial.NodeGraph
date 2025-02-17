@@ -5,13 +5,13 @@ namespace Trivial.Domain.Layers;
 
 public class NodeLayer : BaseLayer<NodeModel>
 {
-    public NodeLayer(Diagram diagram) : base(diagram) { }
+    public NodeLayer(Diagram Diagram) : base(Diagram) { }
 
-    protected override void OnItemRemoved(NodeModel node)
+    protected override void OnItemRemoved(NodeModel Node)
     {
-        Diagram.Links.Remove(node.PortLinks.ToList());
-        Diagram.Links.Remove(node.Links.ToList());
-        node.Group?.RemoveChild(node);
-        Diagram.Controls.RemoveFor(node);
+        Diagram.Links.Remove(Node.PortLinks.ToList());
+        Diagram.Links.Remove(Node.Links.ToList());
+        Node.Group?.RemoveChild(Node);
+        Diagram.Controls.RemoveFor(Node);
     }
 }

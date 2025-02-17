@@ -12,48 +12,48 @@ namespace Trivial.Domain.Controls.Default;
 
 public class ArrowHeadControl : ExecutableControl
 {
-    public ArrowHeadControl(bool source, LinkMarker? marker = null)
+    public ArrowHeadControl(bool Source, LinkMarker? Marker = null)
     {
-        Source = source;
-        Marker = marker ?? LinkMarker.NewArrow(20, 20);
+        this.Source = Source;
+        this.Marker = Marker ?? LinkMarker.NewArrow(20, 20);
     }
 
     public bool Source { get; }
     public LinkMarker Marker { get; }
     public float Angle { get; private set; }
 
-    public override Vector2? GetPosition(Model model)
+    public override Vector2? GetPosition(Model Model)
     {
-        if (model is not BaseLinkModel link)
+        if (Model is not BaseLinkModel t_Link)
             throw new DiagramsException("ArrowHeadControl only works for models of type BaseLinkModel");
 
-        var dist = Source ? Marker.Width - (link.SourceMarker?.Width ?? 0) : (link.TargetMarker?.Width ?? 0) - Marker.Width;
-        var pp = new LinkPathPositionProvider(dist);
-        var p1 = pp.GetPosition(link);
-        if (p1 is not null)
+        var t_Dist = Source ? Marker.Width - (t_Link.SourceMarker?.Width ?? 0) : (t_Link.TargetMarker?.Width ?? 0) - Marker.Width;
+        var t_Pp = new LinkPathPositionProvider(t_Dist);
+        var t_P1 = t_Pp.GetPosition(t_Link);
+        if (t_P1 is not null)
         {
-            var p2 = Source ? link.Source.GetPosition(link) : link.Target.GetPosition(link);
-            if (p2 is not null)
+            var t_P2 = Source ? t_Link.Source.GetPosition(t_Link) : t_Link.Target.GetPosition(t_Link);
+            if (t_P2 is not null)
             {
-                Angle = MathF.Atan2(p2.Value.Y - p1.Value.Y, p2.Value.X - p1.Value.X) * 180 / MathF.PI;
+                Angle = MathF.Atan2(t_P2.Value.Y - t_P1.Value.Y, t_P2.Value.X - t_P1.Value.X) * 180 / MathF.PI;
             }
         }
 
-        return p1;
+        return t_P1;
     }
 
-    public override ValueTask OnPointerDown(Diagram diagram, Model model, PointerEventArgs e)
+    public override ValueTask OnPointerDown(Diagram Diagram, Model Model, PointerEventArgs E)
     {
-        if (model is not BaseLinkModel link)
+        if (Model is not BaseLinkModel t_Link)
             throw new DiagramsException("ArrowHeadControl only works for models of type BaseLinkModel");
 
-        var dnlb = diagram.GetBehavior<DragNewLinkBehavior>()!;
+        var t_Dnlb = Diagram.GetBehavior<DragNewLinkBehavior>()!;
         if (Source)
         {
-            link.SetSource(link.Target);
+            t_Link.SetSource(t_Link.Target);
         }
 
-        dnlb.StartFrom(link, e.ClientX, e.ClientY);
+        t_Dnlb.StartFrom(t_Link, E.ClientX, E.ClientY);
         return ValueTask.CompletedTask;
     }
 }

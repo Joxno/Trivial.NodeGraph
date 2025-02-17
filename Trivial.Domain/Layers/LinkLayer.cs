@@ -6,59 +6,59 @@ namespace Trivial.Domain.Layers;
 
 public class LinkLayer : BaseLayer<BaseLinkModel>
 {
-    public LinkLayer(Diagram diagram) : base(diagram) { }
+    public LinkLayer(Diagram Diagram) : base(Diagram) { }
 
-    protected override void OnItemAdded(BaseLinkModel link)
+    protected override void OnItemAdded(BaseLinkModel Link)
     {
-        link.Diagram = Diagram;
-        HandleAnchor(link, link.Source, true);
-        HandleAnchor(link, link.Target, true);
-        link.Refresh();
+        Link.Diagram = Diagram;
+        HandleAnchor(Link, Link.Source, true);
+        HandleAnchor(Link, Link.Target, true);
+        Link.Refresh();
 
-        link.SourceChanged += OnLinkSourceChanged;
-        link.TargetChanged += OnLinkTargetChanged;
+        Link.SourceChanged += OnLinkSourceChanged;
+        Link.TargetChanged += OnLinkTargetChanged;
     }
 
-    protected override void OnItemRemoved(BaseLinkModel link)
+    protected override void OnItemRemoved(BaseLinkModel Link)
     {
-        link.Diagram = null;
-        HandleAnchor(link, link.Source, false);
-        HandleAnchor(link, link.Target, false);
-        link.Refresh();
+        Link.Diagram = null;
+        HandleAnchor(Link, Link.Source, false);
+        HandleAnchor(Link, Link.Target, false);
+        Link.Refresh();
 
-        link.SourceChanged -= OnLinkSourceChanged;
-        link.TargetChanged -= OnLinkTargetChanged;
+        Link.SourceChanged -= OnLinkSourceChanged;
+        Link.TargetChanged -= OnLinkTargetChanged;
         
-        Diagram.Controls.RemoveFor(link);
-        Remove(link.Links.ToList());
+        Diagram.Controls.RemoveFor(Link);
+        Remove(Link.Links.ToList());
     }
 
-    private static void OnLinkSourceChanged(BaseLinkModel link, Anchor old, Anchor @new)
+    private static void OnLinkSourceChanged(BaseLinkModel Link, Anchor Old, Anchor New)
     {
-        HandleAnchor(link, old, add: false);
-        HandleAnchor(link, @new, add: true);
+        HandleAnchor(Link, Old, Add: false);
+        HandleAnchor(Link, New, Add: true);
     }
 
-    private static void OnLinkTargetChanged(BaseLinkModel link, Anchor old, Anchor @new)
+    private static void OnLinkTargetChanged(BaseLinkModel Link, Anchor Old, Anchor New)
     {
-        HandleAnchor(link, old, add: false);
-        HandleAnchor(link, @new, add: true);
+        HandleAnchor(Link, Old, Add: false);
+        HandleAnchor(Link, New, Add: true);
     }
 
-    private static void HandleAnchor(BaseLinkModel link, Anchor anchor, bool add)
+    private static void HandleAnchor(BaseLinkModel Link, Anchor Anchor, bool Add)
     {
-        if (add)
+        if (Add)
         {
-            anchor.Model?.AddLink(link);
+            Anchor.Model?.AddLink(Link);
         }
         else
         {
-            anchor.Model?.RemoveLink(link);
+            Anchor.Model?.RemoveLink(Link);
         }
 
-        if (anchor.Model is Model model)
+        if (Anchor.Model is Model t_Model)
         {
-            model.Refresh();
+            t_Model.Refresh();
         }
     }
 }

@@ -6,19 +6,19 @@ using Microsoft.JSInterop;
 
 namespace Trivial.Graph.Extensions;
 
-public static class JSRuntimeExtensions
+public static class JsRuntimeExtensions
 {
-    public static async Task<Rectangle> GetBoundingClientRect(this IJSRuntime jsRuntime, ElementReference element)
+    public static async Task<Rectangle> GetBoundingClientRect(this IJSRuntime JsRuntime, ElementReference Element)
     {
-        return await jsRuntime.InvokeAsync<Rectangle>("ZBlazorDiagrams.getBoundingClientRect", element);
+        return await JsRuntime.InvokeAsync<Rectangle>("ZBlazorDiagrams.getBoundingClientRect", Element);
     }
 
-    public static async Task ObserveResizes<T>(this IJSRuntime jsRuntime, ElementReference element,
-        DotNetObjectReference<T> reference) where T : class
+    public static async Task ObserveResizes<T>(this IJSRuntime JsRuntime, ElementReference Element,
+        DotNetObjectReference<T> Reference) where T : class
     {
         try
         {
-            await jsRuntime.InvokeVoidAsync("ZBlazorDiagrams.observe", element, reference, element.Id);
+            await JsRuntime.InvokeVoidAsync("ZBlazorDiagrams.observe", Element, Reference, Element.Id);
         }
         catch (ObjectDisposedException)
         {
@@ -26,8 +26,8 @@ public static class JSRuntimeExtensions
         }
     }
 
-    public static async Task UnobserveResizes(this IJSRuntime jsRuntime, ElementReference element)
+    public static async Task UnobserveResizes(this IJSRuntime JsRuntime, ElementReference Element)
     {
-        await jsRuntime.InvokeVoidAsync("ZBlazorDiagrams.unobserve", element, element.Id);
+        await JsRuntime.InvokeVoidAsync("ZBlazorDiagrams.unobserve", Element, Element.Id);
     }
 }

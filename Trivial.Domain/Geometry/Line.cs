@@ -4,40 +4,40 @@ namespace Trivial.Domain.Geometry;
 
 public class Line
 {
-    public Line(Vector2 start, Vector2 end)
+    public Line(Vector2 Start, Vector2 End)
     {
-        Start = start;
-        End = end;
+        this.Start = Start;
+        this.End = End;
     }
 
     public Vector2 Start { get; }
     public Vector2 End { get; }
 
-    public Vector2? GetIntersection(Line line)
+    public Vector2? GetIntersection(Line Line)
     {
-        var pt1Dir = new Vector2(End.X - Start.X, End.Y - Start.Y);
-        var pt2Dir = new Vector2(line.End.X - line.Start.X, line.End.Y - line.Start.Y);
-        var det = (pt1Dir.X * pt2Dir.Y) - (pt1Dir.Y * pt2Dir.X);
-        var deltaPt = new Vector2(line.Start.X - Start.X, line.Start.Y - Start.Y);
-        var alpha = (deltaPt.X * pt2Dir.Y) - (deltaPt.Y * pt2Dir.X);
-        var beta = (deltaPt.X * pt1Dir.Y) - (deltaPt.Y * pt1Dir.X);
+        var t_Pt1Dir = new Vector2(End.X - Start.X, End.Y - Start.Y);
+        var t_Pt2Dir = new Vector2(Line.End.X - Line.Start.X, Line.End.Y - Line.Start.Y);
+        var t_Det = (t_Pt1Dir.X * t_Pt2Dir.Y) - (t_Pt1Dir.Y * t_Pt2Dir.X);
+        var t_DeltaPt = new Vector2(Line.Start.X - Start.X, Line.Start.Y - Start.Y);
+        var t_Alpha = (t_DeltaPt.X * t_Pt2Dir.Y) - (t_DeltaPt.Y * t_Pt2Dir.X);
+        var t_Beta = (t_DeltaPt.X * t_Pt1Dir.Y) - (t_DeltaPt.Y * t_Pt1Dir.X);
 
-        if (det == 0 || alpha * det < 0 || beta * det < 0)
+        if (t_Det == 0 || t_Alpha * t_Det < 0 || t_Beta * t_Det < 0)
             return null;
 
-        if (det > 0)
+        if (t_Det > 0)
         {
-            if (alpha > det || beta > det)
+            if (t_Alpha > t_Det || t_Beta > t_Det)
                 return null;
 
         }
         else
         {
-            if (alpha < det || beta < det)
+            if (t_Alpha < t_Det || t_Beta < t_Det)
                 return null;
         }
 
-        return new Vector2(Start.X + (alpha * pt1Dir.X / det), Start.Y + (alpha * pt1Dir.Y / det));
+        return new Vector2(Start.X + (t_Alpha * t_Pt1Dir.X / t_Det), Start.Y + (t_Alpha * t_Pt1Dir.Y / t_Det));
     }
 
     public override string ToString() => $"Line from {Start} to {End}";

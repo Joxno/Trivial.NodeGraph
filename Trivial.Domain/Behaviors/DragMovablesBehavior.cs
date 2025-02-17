@@ -10,103 +10,103 @@ namespace Trivial.Domain.Behaviors;
 
 public class DragMovablesBehavior : Behavior
 {
-    private readonly Dictionary<MovableModel, Vector2> _initialPositions;
-    private float? _lastClientX;
-    private float? _lastClientY;
-    private bool _moved;
+    private readonly Dictionary<MovableModel, Vector2> m_InitialPositions;
+    private float? m_LastClientX;
+    private float? m_LastClientY;
+    private bool m_Moved;
 
-    public DragMovablesBehavior(Diagram diagram) : base(diagram)
+    public DragMovablesBehavior(Diagram Diagram) : base(Diagram)
     {
-        _initialPositions = new Dictionary<MovableModel, Vector2>();
-        Diagram.PointerDown += OnPointerDown;
-        Diagram.PointerMove += OnPointerMove;
-        Diagram.PointerUp += OnPointerUp;
+        m_InitialPositions = new Dictionary<MovableModel, Vector2>();
+        base.Diagram.PointerDown += OnPointerDown;
+        base.Diagram.PointerMove += OnPointerMove;
+        base.Diagram.PointerUp += OnPointerUp;
     }
 
-    private void OnPointerDown(Model? model, PointerEventArgs e)
+    private void OnPointerDown(Model? Model, PointerEventArgs E)
     {
-        if (model is not MovableModel)
+        if (Model is not MovableModel)
             return;
 
-        _initialPositions.Clear();
-        foreach (var sm in Diagram.GetSelectedModels())
+        m_InitialPositions.Clear();
+        foreach (var t_Sm in Diagram.GetSelectedModels())
         {
-            if (sm is not MovableModel movable || movable.Locked)
+            if (t_Sm is not MovableModel t_Movable || t_Movable.Locked)
                 continue;
 
             // Special case: groups without auto size on
-            if (sm is NodeModel node && node.Group != null && !node.Group.AutoSize)
+            if (t_Sm is NodeModel t_Node && t_Node.Group != null && !t_Node.Group.AutoSize)
                 continue;
 
-            var position = movable.Position;
-            if (Diagram.Options.GridSnapToCenter && movable is NodeModel n)
+            var t_Position = t_Movable.Position;
+            if (Diagram.Options.GridSnapToCenter && t_Movable is NodeModel t_N)
             {
-                position = new Vector2(movable.Position.X + (n.Size?.Width ?? 0) / 2,
-                    movable.Position.Y + (n.Size?.Height ?? 0) / 2);
+                t_Position = new Vector2(t_Movable.Position.X + (t_N.Size?.Width ?? 0) / 2,
+                    t_Movable.Position.Y + (t_N.Size?.Height ?? 0) / 2);
             }
 
-            _initialPositions.Add(movable, position);
+            m_InitialPositions.Add(t_Movable, t_Position);
         }
 
-        _lastClientX = e.ClientX;
-        _lastClientY = e.ClientY;
-        _moved = false;
+        m_LastClientX = E.ClientX;
+        m_LastClientY = E.ClientY;
+        m_Moved = false;
     }
 
-    private void OnPointerMove(Model? model, PointerEventArgs e)
+    private void OnPointerMove(Model? Model, PointerEventArgs E)
     {
-        if (_initialPositions.Count == 0 || _lastClientX == null || _lastClientY == null)
+        if (m_InitialPositions.Count == 0 || m_LastClientX == null || m_LastClientY == null)
             return;
 
-        _moved = true;
-        var deltaX = (e.ClientX - _lastClientX.Value) / Diagram.Zoom;
-        var deltaY = (e.ClientY - _lastClientY.Value) / Diagram.Zoom;
+        m_Moved = true;
+        var t_DeltaX = (E.ClientX - m_LastClientX.Value) / Diagram.Zoom;
+        var t_DeltaY = (E.ClientY - m_LastClientY.Value) / Diagram.Zoom;
 
-        foreach (var (movable, initialPosition) in _initialPositions)
+        foreach (var (t_Movable, t_InitialPosition) in m_InitialPositions)
         {
-            var ndx = ApplyGridSize(deltaX + initialPosition.X);
-            var ndy = ApplyGridSize(deltaY + initialPosition.Y);
-            if (Diagram.Options.GridSnapToCenter && movable is NodeModel node)
+            var t_Ndx = ApplyGridSize(t_DeltaX + t_InitialPosition.X);
+            var t_Ndy = ApplyGridSize(t_DeltaY + t_InitialPosition.Y);
+            if (Diagram.Options.GridSnapToCenter && t_Movable is NodeModel t_Node)
             {
-                node.SetPosition(ndx - (node.Size?.Width ?? 0) / 2, ndy - (node.Size?.Height ?? 0) / 2);
+                t_Node.SetPosition(t_Ndx - (t_Node.Size?.Width ?? 0) / 2, t_Ndy - (t_Node.Size?.Height ?? 0) / 2);
             }
             else
             {
-                movable.SetPosition(ndx, ndy);
+                t_Movable.SetPosition(t_Ndx, t_Ndy);
             }
         }
     }
 
-    private void OnPointerUp(Model? model, PointerEventArgs e)
+    private void OnPointerUp(Model? Model, PointerEventArgs E)
     {
-        if (_initialPositions.Count == 0)
+        if (m_InitialPositions.Count == 0)
             return;
 
-        if (_moved)
+        if (m_Moved)
         {
-            foreach (var (movable, _) in _initialPositions)
+            foreach (var (t_Movable, _) in m_InitialPositions)
             {
-                movable.TriggerMoved();
+                t_Movable.TriggerMoved();
             }
         }
         
-        _initialPositions.Clear();
-        _lastClientX = null;
-        _lastClientY = null;
+        m_InitialPositions.Clear();
+        m_LastClientX = null;
+        m_LastClientY = null;
     }
 
-    private float ApplyGridSize(float n)
+    private float ApplyGridSize(float N)
     {
         if (Diagram.Options.GridSize == null)
-            return n;
+            return N;
 
-        var gridSize = Diagram.Options.GridSize.Value;
-        return gridSize * MathF.Floor((n + gridSize / 2.0f) / gridSize);
+        var t_GridSize = Diagram.Options.GridSize.Value;
+        return t_GridSize * MathF.Floor((N + t_GridSize / 2.0f) / t_GridSize);
     }
 
     public override void Dispose()
     {
-        _initialPositions.Clear();
+        m_InitialPositions.Clear();
         
         Diagram.PointerDown -= OnPointerDown;
         Diagram.PointerMove -= OnPointerMove;

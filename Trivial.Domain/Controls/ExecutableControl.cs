@@ -6,5 +6,5 @@ namespace Trivial.Domain.Controls;
 
 public abstract class ExecutableControl : Control
 {
-    public abstract ValueTask OnPointerDown(Diagram diagram, Model model, PointerEventArgs e);
+    public abstract ValueTask OnPointerDown(Diagram Diagram, Model Model, PointerEventArgs E);
 }

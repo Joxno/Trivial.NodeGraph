@@ -5,51 +5,51 @@ namespace Trivial.Domain.Controls;
 
 public class ControlsBehavior : Behavior
 {
-    public ControlsBehavior(Diagram diagram) : base(diagram)
+    public ControlsBehavior(Diagram Diagram) : base(Diagram)
     {
-        Diagram.PointerEnter += OnPointerEnter;
-        Diagram.PointerLeave += OnPointerLeave;
-        Diagram.SelectionChanged += OnSelectionChanged;
+        base.Diagram.PointerEnter += OnPointerEnter;
+        base.Diagram.PointerLeave += OnPointerLeave;
+        base.Diagram.SelectionChanged += OnSelectionChanged;
     }
 
-    private void OnSelectionChanged(SelectableModel model)
+    private void OnSelectionChanged(SelectableModel Model)
     {
-        var controls = Diagram.Controls.GetFor(model);
-        if (controls is not { Type: ControlsType.OnSelection })
+        var t_Controls = Diagram.Controls.GetFor(Model);
+        if (t_Controls is not { Type: ControlsType.OnSelection })
             return;
 
-        if (model.Selected)
+        if (Model.Selected)
         {
-            controls.Show();
+            t_Controls.Show();
         }
         else
         {
-            controls.Hide();
+            t_Controls.Hide();
         }
     }
 
-    private void OnPointerEnter(Model? model, PointerEventArgs e)
+    private void OnPointerEnter(Model? Model, PointerEventArgs E)
     {
-        if (model == null)
+        if (Model == null)
             return;
         
-        var controls = Diagram.Controls.GetFor(model);
-        if (controls is not { Type: ControlsType.OnHover })
+        var t_Controls = Diagram.Controls.GetFor(Model);
+        if (t_Controls is not { Type: ControlsType.OnHover })
             return;
         
-        controls.Show();
+        t_Controls.Show();
     }
 
-    private void OnPointerLeave(Model? model, PointerEventArgs e)
+    private void OnPointerLeave(Model? Model, PointerEventArgs E)
     {
-        if (model == null)
+        if (Model == null)
             return;
         
-        var controls = Diagram.Controls.GetFor(model);
-        if (controls is not { Type: ControlsType.OnHover })
+        var t_Controls = Diagram.Controls.GetFor(Model);
+        if (t_Controls is not { Type: ControlsType.OnHover })
             return;
         
-        controls.Hide();
+        t_Controls.Hide();
     }
 
     public override void Dispose()

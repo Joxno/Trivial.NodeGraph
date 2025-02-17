@@ -7,12 +7,12 @@ namespace Trivial.Domain.Geometry;
 
 public class Ellipse : IShape
 {
-    public Ellipse(float cx, float cy, float rx, float ry)
+    public Ellipse(float Cx, float Cy, float Rx, float Ry)
     {
-        Cx = cx;
-        Cy = cy;
-        Rx = rx;
-        Ry = ry;
+        this.Cx = Cx;
+        this.Cy = Cy;
+        this.Rx = Rx;
+        this.Ry = Ry;
     }
 
     public float Cx { get; }
@@ -20,50 +20,50 @@ public class Ellipse : IShape
     public float Rx { get; }
     public float Ry { get; }
 
-    public IEnumerable<Vector2> GetIntersectionsWithLine(Line line)
+    public IEnumerable<Vector2> GetIntersectionsWithLine(Line Line)
     {
-        var a1 = line.Start;
-        var a2 = line.End;
-        var dir = new Vector2(line.End.X - line.Start.X, line.End.Y - line.Start.Y);
-        var diff = a1 - new Vector2(Cx, Cy);
-        var mDir = new Vector2(dir.X / (Rx * Rx), dir.Y / (Ry * Ry));
-        var mDiff = new Vector2(diff.X / (Rx * Rx), diff.Y / (Ry * Ry));
+        var t_A1 = Line.Start;
+        var t_A2 = Line.End;
+        var t_Dir = new Vector2(Line.End.X - Line.Start.X, Line.End.Y - Line.Start.Y);
+        var t_Diff = t_A1 - new Vector2(Cx, Cy);
+        var t_MDir = new Vector2(t_Dir.X / (Rx * Rx), t_Dir.Y / (Ry * Ry));
+        var t_MDiff = new Vector2(t_Diff.X / (Rx * Rx), t_Diff.Y / (Ry * Ry));
 
-        var a = dir.Dot(mDir);
-        var b = dir.Dot(mDiff);
-        var c = diff.Dot(mDiff) - 1.0f;
-        var d = b * b - a * c;
+        var t_A = t_Dir.Dot(t_MDir);
+        var t_B = t_Dir.Dot(t_MDiff);
+        var t_C = t_Diff.Dot(t_MDiff) - 1.0f;
+        var t_D = t_B * t_B - t_A * t_C;
 
-        if (d > 0)
+        if (t_D > 0)
         {
-            var root = MathF.Sqrt(d);
-            var ta = (-b - root) / a;
-            var tb = (-b + root) / a;
+            var t_Root = MathF.Sqrt(t_D);
+            var t_Ta = (-t_B - t_Root) / t_A;
+            var t_Tb = (-t_B + t_Root) / t_A;
 
-            if (ta >= 0 && 1 >= ta || tb >= 0 && 1 >= tb)
+            if (t_Ta >= 0 && 1 >= t_Ta || t_Tb >= 0 && 1 >= t_Tb)
             {
-                if (0 <= ta && ta <= 1)
-                    yield return a1.Lerp(a2, ta);
+                if (0 <= t_Ta && t_Ta <= 1)
+                    yield return t_A1.Lerp(t_A2, t_Ta);
 
-                if (0 <= tb && tb <= 1)
-                    yield return a1.Lerp(a2, tb);
+                if (0 <= t_Tb && t_Tb <= 1)
+                    yield return t_A1.Lerp(t_A2, t_Tb);
             }
         }
         else
         {
-            var t = -b / a;
-            if (0 <= t && t <= 1)
+            var t_T = -t_B / t_A;
+            if (0 <= t_T && t_T <= 1)
             {
-                yield return a1.Lerp(a2, t);
+                yield return t_A1.Lerp(t_A2, t_T);
             }
         }
     }
 
-    public Vector2? GetPointAtAngle(float a)
+    public Vector2? GetPointAtAngle(float A)
     {
-        var t = MathF.Tan(a / 360 * MathF.PI);
-        var px = Rx * (1 - MathF.Pow(t, 2)) / (1 + MathF.Pow(t, 2));
-        var py = Ry * 2 * t / (1 + MathF.Pow(t, 2));
-        return new Vector2(Cx + px, Cy + py);
+        var t_T = MathF.Tan(A / 360 * MathF.PI);
+        var t_Px = Rx * (1 - MathF.Pow(t_T, 2)) / (1 + MathF.Pow(t_T, 2));
+        var t_Py = Ry * 2 * t_T / (1 + MathF.Pow(t_T, 2));
+        return new Vector2(Cx + t_Px, Cy + t_Py);
     }
 }

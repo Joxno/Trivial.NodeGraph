@@ -5,21 +5,21 @@ namespace Trivial.Domain.Models;
 
 public class LinkModel : BaseLinkModel
 {
-    public LinkModel(Anchor source, Anchor target) : base(source, target) { }
+    public LinkModel(Anchor Source, Anchor Target) : base(Source, Target) { }
 
-    public LinkModel(string id, Anchor source, Anchor target) : base(id, source, target) { }
+    public LinkModel(string Id, Anchor Source, Anchor Target) : base(Id, Source, Target) { }
 
-    public LinkModel(PortModel sourcePort, PortModel targetPort)
-        : base(new SinglePortAnchor(sourcePort), new SinglePortAnchor(targetPort)) { }
+    public LinkModel(PortModel SourcePort, PortModel TargetPort)
+        : base(new SinglePortAnchor(SourcePort), new SinglePortAnchor(TargetPort)) { }
 
-    public LinkModel(NodeModel sourceNode, NodeModel targetNode)
-        : base(new ShapeIntersectionAnchor(sourceNode), new ShapeIntersectionAnchor(targetNode)) { }
+    public LinkModel(NodeModel SourceNode, NodeModel TargetNode)
+        : base(new ShapeIntersectionAnchor(SourceNode), new ShapeIntersectionAnchor(TargetNode)) { }
 
-    public LinkModel(string id, PortModel sourcePort, PortModel targetPort)
-        : base(id, new SinglePortAnchor(sourcePort), new SinglePortAnchor(targetPort)) { }
+    public LinkModel(string Id, PortModel SourcePort, PortModel TargetPort)
+        : base(Id, new SinglePortAnchor(SourcePort), new SinglePortAnchor(TargetPort)) { }
 
-    public LinkModel(string id, NodeModel sourceNode, NodeModel targetNode)
-        : base(id, new ShapeIntersectionAnchor(sourceNode), new ShapeIntersectionAnchor(targetNode)) { }
+    public LinkModel(string Id, NodeModel SourceNode, NodeModel TargetNode)
+        : base(Id, new ShapeIntersectionAnchor(SourceNode), new ShapeIntersectionAnchor(TargetNode)) { }
 
     public string? Color { get; set; }
     public string? SelectedColor { get; set; }

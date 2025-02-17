@@ -7,17 +7,17 @@ namespace Trivial.Domain.Anchors;
 
 public class LinkAnchor : Anchor
 {
-    private readonly LinkPathPositionProvider _positionProvider;
+    private readonly LinkPathPositionProvider m_PositionProvider;
 
-    public LinkAnchor(BaseLinkModel link, float distance, float offsetX = 0, float offsetY = 0) : base(link)
+    public LinkAnchor(BaseLinkModel Link, float Distance, float OffsetX = 0, float OffsetY = 0) : base(Link)
     {
-        _positionProvider = new LinkPathPositionProvider(distance, offsetX, offsetY);
-        Link = link;
+        m_PositionProvider = new LinkPathPositionProvider(Distance, OffsetX, OffsetY);
+        this.Link = Link;
     }
 
     public BaseLinkModel Link { get; }
 
-    public override Vector2? GetPosition(BaseLinkModel link, Vector2[] route) => _positionProvider.GetPosition(Link);
+    public override Vector2? GetPosition(BaseLinkModel Link, Vector2[] Route) => m_PositionProvider.GetPosition(this.Link);
 
-    public override Vector2? GetPlainPosition() => _positionProvider.GetPosition(Link);
+    public override Vector2? GetPlainPosition() => m_PositionProvider.GetPosition(Link);
 }

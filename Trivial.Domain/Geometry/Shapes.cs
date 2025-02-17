@@ -5,34 +5,34 @@ namespace Trivial.Domain.Geometry;
 
 public static class Shapes
 {
-    public static IShape Rectangle(NodeModel node) => Rectangle(node.Position, node.Size!);
+    public static IShape Rectangle(NodeModel Node) => Rectangle(Node.Position, Node.Size!);
 
-    public static IShape Circle(NodeModel node) => Circle(node.Position, node.Size!);
+    public static IShape Circle(NodeModel Node) => Circle(Node.Position, Node.Size!);
 
-    public static IShape Ellipse(NodeModel node) => Ellipse(node.Position, node.Size!);
+    public static IShape Ellipse(NodeModel Node) => Ellipse(Node.Position, Node.Size!);
 
-    public static IShape Rectangle(PortModel port) => Rectangle(port.Position, port.Size!);
+    public static IShape Rectangle(PortModel Port) => Rectangle(Port.Position, Port.Size!);
 
-    public static IShape Circle(PortModel port) => Circle(port.Position, port.Size!);
+    public static IShape Circle(PortModel Port) => Circle(Port.Position, Port.Size!);
 
-    public static IShape Ellipse(PortModel port) => Ellipse(port.Position, port.Size!);
+    public static IShape Ellipse(PortModel Port) => Ellipse(Port.Position, Port.Size!);
     
-    private static IShape Rectangle(Vector2 position, Size size) => new Rectangle(position, size);
+    private static IShape Rectangle(Vector2 Position, Size Size) => new Rectangle(Position, Size);
 
-    private static IShape Circle(Vector2 position, Size size)
+    private static IShape Circle(Vector2 Position, Size Size)
     {
-        var halfWidth = size.Width / 2;
-        var centerX = position.X + halfWidth;
-        var centerY = position.Y + size.Height / 2;
-        return new Ellipse(centerX, centerY, halfWidth, halfWidth);
+        var t_HalfWidth = Size.Width / 2;
+        var t_CenterX = Position.X + t_HalfWidth;
+        var t_CenterY = Position.Y + Size.Height / 2;
+        return new Ellipse(t_CenterX, t_CenterY, t_HalfWidth, t_HalfWidth);
     }
 
-    private static IShape Ellipse(Vector2 position, Size size)
+    private static IShape Ellipse(Vector2 Position, Size Size)
     {
-        var halfWidth = size.Width / 2;
-        var halfHeight = size.Height / 2;
-        var centerX = position.X + halfWidth;
-        var centerY = position.Y + halfHeight;
-        return new Ellipse(centerX, centerY, halfWidth, halfHeight);
+        var t_HalfWidth = Size.Width / 2;
+        var t_HalfHeight = Size.Height / 2;
+        var t_CenterX = Position.X + t_HalfWidth;
+        var t_CenterY = Position.Y + t_HalfHeight;
+        return new Ellipse(t_CenterX, t_CenterY, t_HalfWidth, t_HalfHeight);
     }
 }

@@ -7,80 +7,80 @@ namespace Trivial.Domain;
 
 public abstract class BaseLayer<T> : IReadOnlyList<T> where T : Model
 {
-    private readonly List<T> _items = new List<T>();
+    private readonly List<T> m_Items = new List<T>();
 
     public event Action<T>? Added;
     public event Action<T>? Removed;
 
-    public BaseLayer(Diagram diagram)
+    public BaseLayer(Diagram Diagram)
     {
-        Diagram = diagram;
+        this.Diagram = Diagram;
     }
 
-    public virtual TSpecific Add<TSpecific>(TSpecific item) where TSpecific : T
+    public virtual TSpecific Add<TSpecific>(TSpecific Item) where TSpecific : T
     {
-        if (item is null)
-            throw new ArgumentNullException(nameof(item));
+        if (Item is null)
+            throw new ArgumentNullException(nameof(Item));
 
         Diagram.Batch(() =>
         {
-            _items.Add(item);
-            OnItemAdded(item);
-            Added?.Invoke(item);
+            m_Items.Add(Item);
+            OnItemAdded(Item);
+            Added?.Invoke(Item);
         });
-        return item;
+        return Item;
     }
 
-    public virtual void Add(IEnumerable<T> items)
+    public virtual void Add(IEnumerable<T> Items)
     {
-        if (items is null)
-            throw new ArgumentNullException(nameof(items));
+        if (Items is null)
+            throw new ArgumentNullException(nameof(Items));
 
         Diagram.Batch(() =>
         {
-            foreach (var item in items)
+            foreach (var t_Item in Items)
             {
-                _items.Add(item);
-                OnItemAdded(item);
-                Added?.Invoke(item);
+                m_Items.Add(t_Item);
+                OnItemAdded(t_Item);
+                Added?.Invoke(t_Item);
             }
         });
     }
 
-    public virtual void Remove(T item)
+    public virtual void Remove(T Item)
     {
-        if (item is null)
-            throw new ArgumentNullException(nameof(item));
+        if (Item is null)
+            throw new ArgumentNullException(nameof(Item));
 
-        if (_items.Remove(item))
+        if (m_Items.Remove(Item))
         {
             Diagram.Batch(() =>
             {
-                OnItemRemoved(item);
-                Removed?.Invoke(item);
+                OnItemRemoved(Item);
+                Removed?.Invoke(Item);
             });
         }
     }
 
-    public virtual void Remove(IEnumerable<T> items)
+    public virtual void Remove(IEnumerable<T> Items)
     {
-        if (items is null)
-            throw new ArgumentNullException(nameof(items));
+        if (Items is null)
+            throw new ArgumentNullException(nameof(Items));
 
         Diagram.Batch(() =>
         {
-            foreach (var item in items)
+            foreach (var t_Item in Items)
             {
-                if (_items.Remove(item))
+                if (m_Items.Remove(t_Item))
                 {
-                    OnItemRemoved(item);
-                    Removed?.Invoke(item);
+                    OnItemRemoved(t_Item);
+                    Removed?.Invoke(t_Item);
                 }
             }
         });
     }
 
-    public bool Contains(T item) => _items.Contains(item);
+    public bool Contains(T Item) => m_Items.Contains(Item);
 
     public void Clear()
     {
@@ -89,24 +89,24 @@ public abstract class BaseLayer<T> : IReadOnlyList<T> where T : Model
 
         Diagram.Batch(() =>
         {
-            for (var i = _items.Count - 1; i >= 0; i--)
+            for (var t_I = m_Items.Count - 1; t_I >= 0; t_I--)
             {
-                var item = _items[i];
-                _items.RemoveAt(i);
-                OnItemRemoved(item);
-                Removed?.Invoke(item);
+                var t_Item = m_Items[t_I];
+                m_Items.RemoveAt(t_I);
+                OnItemRemoved(t_Item);
+                Removed?.Invoke(t_Item);
             }
         });
     }
 
-    protected virtual void OnItemAdded(T item) { }
+    protected virtual void OnItemAdded(T Item) { }
 
-    protected virtual void OnItemRemoved(T item) { }
+    protected virtual void OnItemRemoved(T Item) { }
 
     public Diagram Diagram { get; }
 
-    public int Count => _items.Count;
-    public T this[int index] => _items[index];
-    public IEnumerator<T> GetEnumerator() => _items.GetEnumerator();
-    IEnumerator IEnumerable.GetEnumerator() => _items.GetEnumerator();
+    public int Count => m_Items.Count;
+    public T this[int Index] => m_Items[Index];
+    public IEnumerator<T> GetEnumerator() => m_Items.GetEnumerator();
+    IEnumerator IEnumerable.GetEnumerator() => m_Items.GetEnumerator();
 }

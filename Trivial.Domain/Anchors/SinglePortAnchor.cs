@@ -7,24 +7,24 @@ namespace Trivial.Domain.Anchors;
 
 public sealed class SinglePortAnchor : Anchor
 {
-    public SinglePortAnchor(PortModel port) : base(port)
+    public SinglePortAnchor(PortModel Port) : base(Port)
     {
-        Port = port;
+        this.Port = Port;
     }
     
     public PortModel Port { get; }
     public bool MiddleIfNoMarker { get; set; } = false;
     public bool UseShapeAndAlignment { get; set; } = true;
 
-    public override Vector2? GetPosition(BaseLinkModel link, Vector2[] route)
+    public override Vector2? GetPosition(BaseLinkModel Link, Vector2[] Route)
     {
         if (!Port.Initialized)
             return null;
 
-        if (MiddleIfNoMarker && ((link.Source == this && link.SourceMarker is null) || (link.Target == this && link.TargetMarker is null)))
+        if (MiddleIfNoMarker && ((Link.Source == this && Link.SourceMarker is null) || (Link.Target == this && Link.TargetMarker is null)))
             return Port.MiddlePosition;
         
-        var pt = Port.Position;
+        var t_Pt = Port.Position;
         if (UseShapeAndAlignment)
         {
             return Port.Alignment switch
@@ -43,14 +43,14 @@ public sealed class SinglePortAnchor : Anchor
 
         return Port.Alignment switch
         {
-            PortAlignment.Top => new Vector2(pt.X + Port.Size.Width / 2, pt.Y),
-            PortAlignment.TopRight => new Vector2(pt.X + Port.Size.Width, pt.Y),
-            PortAlignment.Right => new Vector2(pt.X + Port.Size.Width, pt.Y + Port.Size.Height / 2),
-            PortAlignment.BottomRight => new Vector2(pt.X + Port.Size.Width, pt.Y + Port.Size.Height),
-            PortAlignment.Bottom => new Vector2(pt.X + Port.Size.Width / 2, pt.Y + Port.Size.Height),
-            PortAlignment.BottomLeft => new Vector2(pt.X, pt.Y + Port.Size.Height),
-            PortAlignment.Left => new Vector2(pt.X, pt.Y + Port.Size.Height / 2),
-            _ => pt,
+            PortAlignment.Top => new Vector2(t_Pt.X + Port.Size.Width / 2, t_Pt.Y),
+            PortAlignment.TopRight => new Vector2(t_Pt.X + Port.Size.Width, t_Pt.Y),
+            PortAlignment.Right => new Vector2(t_Pt.X + Port.Size.Width, t_Pt.Y + Port.Size.Height / 2),
+            PortAlignment.BottomRight => new Vector2(t_Pt.X + Port.Size.Width, t_Pt.Y + Port.Size.Height),
+            PortAlignment.Bottom => new Vector2(t_Pt.X + Port.Size.Width / 2, t_Pt.Y + Port.Size.Height),
+            PortAlignment.BottomLeft => new Vector2(t_Pt.X, t_Pt.Y + Port.Size.Height),
+            PortAlignment.Left => new Vector2(t_Pt.X, t_Pt.Y + Port.Size.Height / 2),
+            _ => t_Pt,
         };
     }
 

@@ -1,6 +1,6 @@
 ﻿<div class="diagram-canvas @Class"
      tabindex="-1"
-     @ref="elementReference"
+     @ref="ElementReference"
      @onpointerdown="OnPointerDown"
      @onpointermove="OnPointerMove"
      @onpointerup="OnPointerUp"
@@ -11,19 +11,19 @@
 
     <svg class="diagram-svg-layer" style="@GetLayerStyle(BlazorDiagram.Options.LinksLayerOrder)">
 
-        @foreach (var model in BlazorDiagram.OrderedSelectables)
+        @foreach (var t_Model in BlazorDiagram.OrderedSelectables)
         {
-            if (model is SvgNodeModel node && node.Group == null)
+            if (t_Model is SvgNodeModel t_Node && t_Node.Group == null)
             {
-                <NodeRenderer @key="node" Node="node" />
+                <NodeRenderer @key="t_Node" Node="t_Node" />
             }
-            else if (model is SvgGroupModel group && group.Group == null)
+            else if (t_Model is SvgGroupModel t_Group && t_Group.Group == null)
             {
-                <GroupRenderer @key="group" Group="group" />
+                <GroupRenderer @key="t_Group" Group="t_Group" />
             }
-            else if (model is BaseLinkModel link)
+            else if (t_Model is BaseLinkModel t_Link)
             {
-                <LinkRenderer @key="link" Link="link" />
+                <LinkRenderer @key="t_Link" Link="t_Link" />
             }
         }
 
@@ -34,18 +34,18 @@
 
     <div class="diagram-html-layer" style="@GetLayerStyle(BlazorDiagram.Options.NodesLayerOrder)">
 
-        @foreach (var model in BlazorDiagram.OrderedSelectables)
+        @foreach (var t_Model in BlazorDiagram.OrderedSelectables)
         {
-            if (model is GroupModel group)
+            if (t_Model is GroupModel t_Group)
             {
-                if (group.Group == null && group is not SvgGroupModel)
+                if (t_Group.Group == null && t_Group is not SvgGroupModel)
                 {
-                    <GroupRenderer @key="group" Group="group" />
+                    <GroupRenderer @key="t_Group" Group="t_Group" />
                 }
             }
-            else if (model is NodeModel node && node.Group == null && node is not SvgNodeModel)
+            else if (t_Model is NodeModel t_Node && t_Node.Group == null && t_Node is not SvgNodeModel)
             {
-                <NodeRenderer @key="node" Node="node" />
+                <NodeRenderer @key="t_Node" Node="t_Node" />
             }
         }
 

@@ -9,43 +9,43 @@ namespace Trivial.Domain.Anchors;
 
 public abstract class Anchor
 {
-    protected Anchor(ILinkable? model = null)
+    protected Anchor(ILinkable? Model = null)
     {
-        Model = model;
+        this.Model = Model;
     }
 
     public ILinkable? Model { get; }
 
-    public abstract Vector2? GetPosition(BaseLinkModel link, Vector2[] route);
+    public abstract Vector2? GetPosition(BaseLinkModel Link, Vector2[] Route);
 
     public abstract Vector2? GetPlainPosition();
 
-    public Vector2? GetPosition(BaseLinkModel link) => GetPosition(link, Array.Empty<Vector2>());
+    public Vector2? GetPosition(BaseLinkModel Link) => GetPosition(Link, Array.Empty<Vector2>());
 
-    protected static Vector2? GetOtherPosition(BaseLinkModel link, bool isTarget)
+    protected static Vector2? GetOtherPosition(BaseLinkModel Link, bool IsTarget)
     {
-        var anchor = isTarget ? link.Source : link.Target!;
-        return anchor.GetPlainPosition();
+        var t_Anchor = IsTarget ? Link.Source : Link.Target!;
+        return t_Anchor.GetPlainPosition();
     }
 
-    protected static Vector2? GetClosestPointTo(IEnumerable<Vector2> points, Vector2 point)
+    protected static Vector2? GetClosestPointTo(IEnumerable<Vector2> Points, Vector2 Point)
     {
-        var minDist = float.MaxValue;
-        Vector2? minPoint = null;
+        var t_MinDist = float.MaxValue;
+        Vector2? t_MinPoint = null;
 
-        foreach (var pt in points)
+        foreach (var t_Pt in Points)
         {
-            if (pt == null)
+            if (t_Pt == null)
                 continue;
             
-            var dist = pt.DistanceTo(point);
-            if (dist < minDist)
+            var t_Dist = t_Pt.DistanceTo(Point);
+            if (t_Dist < t_MinDist)
             {
-                minDist = dist;
-                minPoint = pt;
+                t_MinDist = t_Dist;
+                t_MinPoint = t_Pt;
             }
         }
 
-        return minPoint;
+        return t_MinPoint;
     }
 }

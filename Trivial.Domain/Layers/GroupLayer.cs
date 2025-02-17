@@ -5,45 +5,45 @@ namespace Trivial.Domain.Layers;
 
 public class GroupLayer : BaseLayer<GroupModel>
 {
-    public GroupLayer(Diagram diagram) : base(diagram)
+    public GroupLayer(Diagram Diagram) : base(Diagram)
     {
     }
 
-    public GroupModel Group(params NodeModel[] children)
+    public GroupModel Group(params NodeModel[] Children)
     {
-        return Add(Diagram.Options.Groups.Factory(Diagram, children));
+        return Add(Diagram.Options.Groups.Factory(Diagram, Children));
     }
 
     /// <summary>
     /// Removes the group AND its children
     /// </summary>
-    public void Delete(GroupModel group)
+    public void Delete(GroupModel Group)
     {
         Diagram.Batch(() =>
         {
-            var children = group.Children.ToArray();
+            var t_Children = Group.Children.ToArray();
 
-            Remove(group);
+            Remove(Group);
 
-            foreach (var child in children)
+            foreach (var t_Child in t_Children)
             {
-                if (child is GroupModel g)
+                if (t_Child is GroupModel t_G)
                 {
-                    Delete(g);
+                    Delete(t_G);
                 }
                 else
                 {
-                    Diagram.Nodes.Remove(child);
+                    Diagram.Nodes.Remove(t_Child);
                 }
             }
         });
     }
 
-    protected override void OnItemRemoved(GroupModel group)
+    protected override void OnItemRemoved(GroupModel Group)
     {
-        Diagram.Links.Remove(group.PortLinks.ToArray());
-        Diagram.Links.Remove(group.Links.ToArray());
-        group.Ungroup();
-        group.Group?.RemoveChild(group);
+        Diagram.Links.Remove(Group.PortLinks.ToArray());
+        Diagram.Links.Remove(Group.Links.ToArray());
+        Group.Ungroup();
+        Group.Group?.RemoveChild(Group);
     }
 }

@@ -6,5 +6,5 @@ public class DiagramGroupOptions
 {
     public bool Enabled { get; set; }
     
-    public GroupFactory Factory { get; set; } = (diagram, children) => new GroupModel(children);
+    public GroupFactory Factory { get; set; } = (Diagram, Children) => new GroupModel(Children);
 }

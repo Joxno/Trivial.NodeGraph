@@ -14,11 +14,11 @@ namespace Trivial.Graph.Components.Renderers;
 
 public class NodeRenderer : ComponentBase, IDisposable
 {
-    private bool _becameVisible;
-    private ElementReference _element;
-    private bool _isSvg;
-    private DotNetObjectReference<NodeRenderer>? _reference;
-    private bool _shouldRender;
+    private bool m_BecameVisible;
+    private ElementReference m_Element;
+    private bool m_IsSvg;
+    private DotNetObjectReference<NodeRenderer>? m_Reference;
+    private bool m_ShouldRender;
 
     [CascadingParameter] public BlazorDiagram BlazorDiagram { get; set; } = null!;
 
@@ -31,29 +31,29 @@ public class NodeRenderer : ComponentBase, IDisposable
         Node.Changed -= OnNodeChanged;
         Node.VisibilityChanged -= OnVisibilityChanged;
 
-        if (_element.Id != null && !Node.ControlledSize)
+        if (m_Element.Id != null && !Node.ControlledSize)
         {
-            _ = JsRuntime.UnobserveResizes(_element);
+            _ = JsRuntime.UnobserveResizes(m_Element);
         }
 
-        _reference?.Dispose();
+        m_Reference?.Dispose();
     }
 
     [JSInvokable]
-    public void OnResize(Size size)
+    public void OnResize(Size Size)
     {
         // When the node becomes invisible (a.k.a unrendered), the size is zero
-        if (Size.Zero.Equals(size))
+        if (Size.Zero.Equals(Size))
             return;
 
-        size = new Size(size.Width / BlazorDiagram.Zoom, size.Height / BlazorDiagram.Zoom);
-        if (Node.Size != null && Node.Size.Width.AlmostEqualTo(size.Width) &&
-            Node.Size.Height.AlmostEqualTo(size.Height))
+        Size = new Size(Size.Width / BlazorDiagram.Zoom, Size.Height / BlazorDiagram.Zoom);
+        if (Node.Size != null && Node.Size.Width.AlmostEqualTo(Size.Width) &&
+            Node.Size.Height.AlmostEqualTo(Size.Height))
         {
             return;
         }
 
-        Node.Size = size;
+        Node.Size = Size;
         Node.Refresh();
         Node.RefreshLinks();
         Node.ReinitializePorts();
@@ -63,7 +63,7 @@ public class NodeRenderer : ComponentBase, IDisposable
     {
         base.OnInitialized();
 
-        _reference = DotNetObjectReference.Create(this);
+        m_Reference = DotNetObjectReference.Create(this);
         Node.Changed += OnNodeChanged;
         Node.VisibilityChanged += OnVisibilityChanged;
     }
@@ -72,71 +72,71 @@ public class NodeRenderer : ComponentBase, IDisposable
     {
         base.OnParametersSet();
 
-        _isSvg = Node is SvgNodeModel;
+        m_IsSvg = Node is SvgNodeModel;
     }
 
     protected override bool ShouldRender()
     {
-        if (!_shouldRender)
+        if (!m_ShouldRender)
             return false;
 
-        _shouldRender = false;
+        m_ShouldRender = false;
         return true;
     }
 
-    protected override void BuildRenderTree(RenderTreeBuilder builder)
+    protected override void BuildRenderTree(RenderTreeBuilder Builder)
     {
         if (!Node.Visible)
             return;
 
-        var componentType = BlazorDiagram.GetComponent(Node) ??
-                            (_isSvg ? typeof(SvgNodeWidget) : typeof(NodeWidget));
-        var classes = new StringBuilder("diagram-node")
+        var t_ComponentType = BlazorDiagram.GetComponent(Node) ??
+                            (m_IsSvg ? typeof(SvgNodeWidget) : typeof(NodeWidget));
+        var t_Classes = new StringBuilder("diagram-node")
             .AppendIf(" locked", Node.Locked)
             .AppendIf(" selected", Node.Selected)
             .AppendIf(" grouped", Node.Group != null);
 
-        builder.OpenElement(0, _isSvg ? "g" : "div");
-        builder.AddAttribute(1, "class", classes.ToString());
-        builder.AddAttribute(2, "data-node-id", Node.Id);
+        Builder.OpenElement(0, m_IsSvg ? "g" : "div");
+        Builder.AddAttribute(1, "class", t_Classes.ToString());
+        Builder.AddAttribute(2, "data-node-id", Node.Id);
 
-        if (_isSvg)
+        if (m_IsSvg)
         {
-            builder.AddAttribute(3, "transform",
+            Builder.AddAttribute(3, "transform",
                 $"translate({Node.Position.X.ToInvariantString()} {Node.Position.Y.ToInvariantString()})");
         }
         else
         {
-            builder.AddAttribute(3, "style",
+            Builder.AddAttribute(3, "style",
                 $"top: {Node.Position.Y.ToInvariantString()}px; left: {Node.Position.X.ToInvariantString()}px");
         }
 
-        builder.AddAttribute(4, "onpointerdown", EventCallback.Factory.Create<PointerEventArgs>(this, OnPointerDown));
-        builder.AddEventStopPropagationAttribute(5, "onpointerdown", true);
-        builder.AddAttribute(6, "onpointerup", EventCallback.Factory.Create<PointerEventArgs>(this, OnPointerUp));
-        builder.AddEventStopPropagationAttribute(7, "onpointerup", true);
-        builder.AddAttribute(8, "onmouseenter", EventCallback.Factory.Create<MouseEventArgs>(this, OnMouseEnter));
-        builder.AddAttribute(9, "onmouseleave", EventCallback.Factory.Create<MouseEventArgs>(this, OnMouseLeave));
-        builder.AddElementReferenceCapture(10, value => _element = value);
-        builder.OpenComponent(11, componentType);
-        builder.AddAttribute(12, "Node", Node);
-        builder.CloseComponent();
+        Builder.AddAttribute(4, "onpointerdown", EventCallback.Factory.Create<PointerEventArgs>(this, OnPointerDown));
+        Builder.AddEventStopPropagationAttribute(5, "onpointerdown", true);
+        Builder.AddAttribute(6, "onpointerup", EventCallback.Factory.Create<PointerEventArgs>(this, OnPointerUp));
+        Builder.AddEventStopPropagationAttribute(7, "onpointerup", true);
+        Builder.AddAttribute(8, "onmouseenter", EventCallback.Factory.Create<MouseEventArgs>(this, OnMouseEnter));
+        Builder.AddAttribute(9, "onmouseleave", EventCallback.Factory.Create<MouseEventArgs>(this, OnMouseLeave));
+        Builder.AddElementReferenceCapture(10, Value => m_Element = Value);
+        Builder.OpenComponent(11, t_ComponentType);
+        Builder.AddAttribute(12, "Node", Node);
+        Builder.CloseComponent();
 
-        builder.CloseElement();
+        Builder.CloseElement();
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    protected override async Task OnAfterRenderAsync(bool FirstRender)
     {
-        if (firstRender && !Node.Visible)
+        if (FirstRender && !Node.Visible)
             return;
 
-        if (firstRender || _becameVisible)
+        if (FirstRender || m_BecameVisible)
         {
-            _becameVisible = false;
+            m_BecameVisible = false;
 
             if (!Node.ControlledSize)
             {
-                await JsRuntime.ObserveResizes(_element, _reference!);
+                await JsRuntime.ObserveResizes(m_Element, m_Reference!);
             }
         }
     }
@@ -148,33 +148,33 @@ public class NodeRenderer : ComponentBase, IDisposable
 
     private void OnVisibilityChanged(Model _)
     {
-        _becameVisible = Node.Visible;
+        m_BecameVisible = Node.Visible;
         ReRender();
     }
 
     private void ReRender()
     {
-        _shouldRender = true;
+        m_ShouldRender = true;
         InvokeAsync(StateHasChanged);
     }
 
-    private void OnPointerDown(PointerEventArgs e)
+    private void OnPointerDown(PointerEventArgs E)
     {
-        BlazorDiagram.TriggerPointerDown(Node, e.ToCore());
+        BlazorDiagram.TriggerPointerDown(Node, E.ToCore());
     }
 
-    private void OnPointerUp(PointerEventArgs e)
+    private void OnPointerUp(PointerEventArgs E)
     {
-        BlazorDiagram.TriggerPointerUp(Node, e.ToCore());
+        BlazorDiagram.TriggerPointerUp(Node, E.ToCore());
     }
 
-    private void OnMouseEnter(MouseEventArgs e)
+    private void OnMouseEnter(MouseEventArgs E)
     {
-        BlazorDiagram.TriggerPointerEnter(Node, e.ToCore());
+        BlazorDiagram.TriggerPointerEnter(Node, E.ToCore());
     }
 
-    private void OnMouseLeave(MouseEventArgs e)
+    private void OnMouseLeave(MouseEventArgs E)
     {
-        BlazorDiagram.TriggerPointerLeave(Node, e.ToCore());
+        BlazorDiagram.TriggerPointerLeave(Node, E.ToCore());
     }
 }

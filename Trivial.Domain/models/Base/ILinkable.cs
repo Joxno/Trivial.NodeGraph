@@ -6,9 +6,9 @@ public interface ILinkable
 {
     public IReadOnlyList<BaseLinkModel> Links { get; }
 
-    public bool CanAttachTo(ILinkable other);
+    public bool CanAttachTo(ILinkable Other);
 
-    internal void AddLink(BaseLinkModel link);
+    internal void AddLink(BaseLinkModel Link);
 
-    internal void RemoveLink(BaseLinkModel link);
+    internal void RemoveLink(BaseLinkModel Link);
 }

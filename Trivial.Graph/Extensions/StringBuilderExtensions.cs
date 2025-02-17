@@ -4,10 +4,10 @@ namespace Trivial.Graph.Extensions;
 
 public static class StringBuilderExtensions
 {
-    public static StringBuilder AppendIf(this StringBuilder builder, string str, bool condition)
+    public static StringBuilder AppendIf(this StringBuilder Builder, string Str, bool Condition)
     {
-        if (condition) builder.Append(str);
+        if (Condition) Builder.Append(Str);
 
-        return builder;
+        return Builder;
     }
 }

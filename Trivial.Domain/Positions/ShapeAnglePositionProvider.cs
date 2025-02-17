@@ -6,23 +6,23 @@ namespace Trivial.Domain.Positions;
 
 public class ShapeAnglePositionProvider : IPositionProvider
 {
-    public ShapeAnglePositionProvider(float angle, float offsetX = 0, float offsetY = 0)
+    public ShapeAnglePositionProvider(float Angle, float OffsetX = 0, float OffsetY = 0)
     {
-        Angle = angle;
-        OffsetX = offsetX;
-        OffsetY = offsetY;
+        this.Angle = Angle;
+        this.OffsetX = OffsetX;
+        this.OffsetY = OffsetY;
     }
 
     public float Angle { get; }
     public float OffsetX { get; }
     public float OffsetY { get; }
     
-    public Vector2? GetPosition(Model model)
+    public Vector2? GetPosition(Model Model)
     {
-        if (model is not IHasShape ihs)
+        if (Model is not IHasShape t_Ihs)
             throw new DiagramsException("ShapeAnglePositionProvider requires an IHasShape model");
         
-        var shape = ihs.GetShape();
-        return shape.GetPointAtAngle(Angle)! + new Vector2(OffsetX, OffsetY);
+        var t_Shape = t_Ihs.GetShape();
+        return t_Shape.GetPointAtAngle(Angle)! + new Vector2(OffsetX, OffsetY);
     }
 }

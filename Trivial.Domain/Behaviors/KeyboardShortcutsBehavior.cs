@@ -8,35 +8,35 @@ namespace Trivial.Domain.Behaviors;
 
 public class KeyboardShortcutsBehavior : Behavior
 {
-    private readonly Dictionary<string, Func<Diagram, ValueTask>> _shortcuts;
+    private readonly Dictionary<string, Func<Diagram, ValueTask>> m_Shortcuts;
 
-    public KeyboardShortcutsBehavior(Diagram diagram) : base(diagram)
+    public KeyboardShortcutsBehavior(Diagram Diagram) : base(Diagram)
     {
-        _shortcuts = new Dictionary<string, Func<Diagram, ValueTask>>();
+        m_Shortcuts = new Dictionary<string, Func<Diagram, ValueTask>>();
         SetShortcut("Delete", false, false, false, KeyboardShortcutsDefaults.DeleteSelection);
         SetShortcut("g", true, false, true, KeyboardShortcutsDefaults.Grouping);
 
-        Diagram.KeyDown += OnDiagramKeyDown;
+        base.Diagram.KeyDown += OnDiagramKeyDown;
     }
 
-    public void SetShortcut(string key, bool ctrl, bool shift, bool alt, Func<Diagram, ValueTask> action)
+    public void SetShortcut(string Key, bool Ctrl, bool Shift, bool Alt, Func<Diagram, ValueTask> Action)
     {
-        var k = KeysUtils.GetStringRepresentation(ctrl, shift, alt, key);
-        _shortcuts[k] = action;
+        var t_K = KeysUtils.GetStringRepresentation(Ctrl, Shift, Alt, Key);
+        m_Shortcuts[t_K] = Action;
     }
 
-    public bool RemoveShortcut(string key, bool ctrl, bool shift, bool alt)
+    public bool RemoveShortcut(string Key, bool Ctrl, bool Shift, bool Alt)
     {
-        var k = KeysUtils.GetStringRepresentation(ctrl, shift, alt, key);
-        return _shortcuts.Remove(k);
+        var t_K = KeysUtils.GetStringRepresentation(Ctrl, Shift, Alt, Key);
+        return m_Shortcuts.Remove(t_K);
     }
 
-    private async void OnDiagramKeyDown(KeyboardEventArgs e)
+    private async void OnDiagramKeyDown(KeyboardEventArgs E)
     {
-        var k = KeysUtils.GetStringRepresentation(e.CtrlKey, e.ShiftKey, e.AltKey, e.Key);
-        if (_shortcuts.TryGetValue(k, out var action))
+        var t_K = KeysUtils.GetStringRepresentation(E.CtrlKey, E.ShiftKey, E.AltKey, E.Key);
+        if (m_Shortcuts.TryGetValue(t_K, out var t_Action))
         {
-            await action(Diagram);
+            await t_Action(Diagram);
         }
     }
 

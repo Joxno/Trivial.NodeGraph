@@ -9,30 +9,30 @@ namespace Trivial.Domain.Models;
 
 public class NodeModel : MovableModel, IHasBounds, IHasShape, ILinkable
 {
-    private readonly List<PortModel> _ports = new();
-    private readonly List<BaseLinkModel> _links = new();
-    private Size? _size;
+    private readonly List<PortModel> m_Ports = new();
+    private readonly List<BaseLinkModel> m_Links = new();
+    private Size? m_Size;
 
     public event Action<NodeModel>? SizeChanged;
     public event Action<NodeModel>? Moving;
 
-    public NodeModel(Vector2? position = null) : base(position)
+    public NodeModel(Vector2? Position = null) : base(Position)
     {
     }
 
-    public NodeModel(string id, Vector2? position = null) : base(id, position)
+    public NodeModel(string Id, Vector2? Position = null) : base(Id, Position)
     {
     }
 
     public Size? Size
     {
-        get => _size;
+        get => m_Size;
         set
         {
-            if (value?.Equals(_size) == true)
+            if (value?.Equals(m_Size) == true)
                 return;
 
-            _size = value;
+            m_Size = value;
             SizeChanged?.Invoke(this);
         }
     }
@@ -41,26 +41,26 @@ public class NodeModel : MovableModel, IHasBounds, IHasShape, ILinkable
     public GroupModel? Group { get; internal set; }
     public string? Title { get; set; }
 
-    public IReadOnlyList<PortModel> Ports => _ports;
-    public IReadOnlyList<BaseLinkModel> Links => _links;
-    public IEnumerable<BaseLinkModel> PortLinks => Ports.SelectMany(p => p.Links);
+    public IReadOnlyList<PortModel> Ports => m_Ports;
+    public IReadOnlyList<BaseLinkModel> Links => m_Links;
+    public IEnumerable<BaseLinkModel> PortLinks => Ports.SelectMany(P => P.Links);
 
     #region Ports
 
-    public PortModel AddPort(PortModel port)
+    public PortModel AddPort(PortModel Port)
     {
-        _ports.Add(port);
-        return port;
+        m_Ports.Add(Port);
+        return Port;
     }
 
-    public PortModel AddPort(PortAlignment alignment = PortAlignment.Bottom)
-        => AddPort(new PortModel(this, alignment, Position));
+    public PortModel AddPort(PortAlignment Alignment = PortAlignment.Bottom)
+        => AddPort(new PortModel(this, Alignment, Position));
 
-    public PortModel? GetPort(PortAlignment alignment) => Ports.FirstOrDefault(p => p.Alignment == alignment);
+    public PortModel? GetPort(PortAlignment Alignment) => Ports.FirstOrDefault(P => P.Alignment == Alignment);
 
-    public T? GetPort<T>(PortAlignment alignment) where T : PortModel => (T?)GetPort(alignment);
+    public T? GetPort<T>(PortAlignment Alignment) where T : PortModel => (T?)GetPort(Alignment);
 
-    public bool RemovePort(PortModel port) => _ports.Remove(port);
+    public bool RemovePort(PortModel Port) => m_Ports.Remove(Port);
 
     #endregion
 
@@ -69,86 +69,86 @@ public class NodeModel : MovableModel, IHasBounds, IHasShape, ILinkable
     public void RefreshAll()
     {
         Refresh();
-        _ports.ForEach(p => p.RefreshAll());
+        m_Ports.ForEach(P => P.RefreshAll());
     }
 
     public void RefreshLinks()
     {
-        foreach (var link in Links)
+        foreach (var t_Link in Links)
         {
-            link.Refresh();
-            link.RefreshLinks();
+            t_Link.Refresh();
+            t_Link.RefreshLinks();
         }
     }
 
     public void ReinitializePorts()
     {
-        foreach (var port in Ports)
+        foreach (var t_Port in Ports)
         {
-            port.Initialized = false;
-            port.Refresh();
+            t_Port.Initialized = false;
+            t_Port.Refresh();
         }
     }
 
     #endregion
 
-    public override void SetPosition(float x, float y)
+    public override void SetPosition(float X, float Y)
     {
-        var deltaX = x - Position.X;
-        var deltaY = y - Position.Y;
-        base.SetPosition(x, y);
+        var t_DeltaX = X - Position.X;
+        var t_DeltaY = Y - Position.Y;
+        base.SetPosition(X, Y);
 
-        UpdatePortPositions(deltaX, deltaY);
+        UpdatePortPositions(t_DeltaX, t_DeltaY);
         Refresh();
         RefreshLinks();
         Moving?.Invoke(this);
     }
 
-    public virtual void UpdatePositionSilently(float deltaX, float deltaY)
+    public virtual void UpdatePositionSilently(float DeltaX, float DeltaY)
     {
-        base.SetPosition(Position.X + deltaX, Position.Y + deltaY);
-        UpdatePortPositions(deltaX, deltaY);
+        base.SetPosition(Position.X + DeltaX, Position.Y + DeltaY);
+        UpdatePortPositions(DeltaX, DeltaY);
         Refresh();
     }
 
     public Rectangle? GetBounds() => GetBounds(false);
 
-    public Rectangle? GetBounds(bool includePorts)
+    public Rectangle? GetBounds(bool IncludePorts)
     {
         if (Size == null)
             return null;
 
-        if (!includePorts)
+        if (!IncludePorts)
             return new Rectangle(Position, Size);
 
-        var leftPort = GetPort(PortAlignment.Left);
-        var topPort = GetPort(PortAlignment.Top);
-        var rightPort = GetPort(PortAlignment.Right);
-        var bottomPort = GetPort(PortAlignment.Bottom);
+        var t_LeftPort = GetPort(PortAlignment.Left);
+        var t_TopPort = GetPort(PortAlignment.Top);
+        var t_RightPort = GetPort(PortAlignment.Right);
+        var t_BottomPort = GetPort(PortAlignment.Bottom);
 
-        var left = leftPort == null ? Position.X : MathF.Min(Position.X, leftPort.Position.X);
-        var top = topPort == null ? Position.Y : MathF.Min(Position.Y, topPort.Position.Y);
-        var right = rightPort == null
+        var t_Left = t_LeftPort == null ? Position.X : MathF.Min(Position.X, t_LeftPort.Position.X);
+        var t_Top = t_TopPort == null ? Position.Y : MathF.Min(Position.Y, t_TopPort.Position.Y);
+        var t_Right = t_RightPort == null
             ? Position.X + Size!.Width
-            : MathF.Max(rightPort.Position.X + rightPort.Size.Width, Position.X + Size!.Width);
-        var bottom = bottomPort == null
+            : MathF.Max(t_RightPort.Position.X + t_RightPort.Size.Width, Position.X + Size!.Width);
+        var t_Bottom = t_BottomPort == null
             ? Position.Y + Size!.Height
-            : MathF.Max(bottomPort.Position.Y + bottomPort.Size.Height, Position.Y + Size!.Height);
+            : MathF.Max(t_BottomPort.Position.Y + t_BottomPort.Size.Height, Position.Y + Size!.Height);
 
-        return new Rectangle(left, top, right, bottom);
+        return new Rectangle(t_Left, t_Top, t_Right, t_Bottom);
     }
 
     public virtual IShape GetShape() => Shapes.Rectangle(this);
 
-    public virtual bool CanAttachTo(ILinkable other) => other is not PortModel && other is not BaseLinkModel;
+    public virtual bool CanAttachTo(ILinkable Other) => Other is not PortModel && Other is not BaseLinkModel;
 
-    private void UpdatePortPositions(float deltaX, float deltaY)
+    private void UpdatePortPositions(float DeltaX, float DeltaY)
     {
         // Save some JS calls and update ports directly here
-        foreach (var port in _ports)
+        foreach (var t_Port in m_Ports)
         {
-            port.Position = new Vector2(port.Position.X + deltaX, port.Position.Y + deltaY);
-            port.RefreshLinks();
+            t_Port.Position = new Vector2(t_Port.Position.X + DeltaX, t_Port.Position.Y + DeltaY);
+            t_Port.RefreshLinks();
         }
     }
 
@@ -157,7 +157,7 @@ public class NodeModel : MovableModel, IHasBounds, IHasShape, ILinkable
         Moving?.Invoke(this);
     }
 
-    void ILinkable.AddLink(BaseLinkModel link) => _links.Add(link);
+    void ILinkable.AddLink(BaseLinkModel Link) => m_Links.Add(Link);
 
-    void ILinkable.RemoveLink(BaseLinkModel link) => _links.Remove(link);
+    void ILinkable.RemoveLink(BaseLinkModel Link) => m_Links.Remove(Link);
 }

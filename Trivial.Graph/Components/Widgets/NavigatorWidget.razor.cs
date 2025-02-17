@@ -11,15 +11,15 @@ namespace Trivial.Graph.Components.Widgets;
 
 public partial class NavigatorWidget : IDisposable
 {
-    private float _x;
-    private float _y;
-    private float _width;
-    private float _height;
-    private float _scaledMargin;
-    private float _vX;
-    private float _vY;
-    private float _vWidth;
-    private float _vHeight;
+    private float m_X;
+    private float m_Y;
+    private float m_Width;
+    private float m_Height;
+    private float m_ScaledMargin;
+    private float m_VX;
+    private float m_VY;
+    private float m_VWidth;
+    private float m_VHeight;
 
     [CascadingParameter] public BlazorDiagram BlazorDiagram { get; set; } = null!;
     [Parameter] public bool UseNodeShape { get; set; } = true;
@@ -41,11 +41,11 @@ public partial class NavigatorWidget : IDisposable
         BlazorDiagram.Groups.Added -= OnNodeAdded;
         BlazorDiagram.Groups.Removed -= OnNodeRemoved;
 
-        foreach (var node in BlazorDiagram.Nodes)
-            node.Changed -= OnNodeChanged;
+        foreach (var t_Node in BlazorDiagram.Nodes)
+            t_Node.Changed -= OnNodeChanged;
 
-        foreach (var group in BlazorDiagram.Groups)
-            group.Changed -= OnNodeChanged;
+        foreach (var t_Group in BlazorDiagram.Groups)
+            t_Group.Changed -= OnNodeChanged;
     }
 
     protected override void OnInitialized()
@@ -56,16 +56,16 @@ public partial class NavigatorWidget : IDisposable
         BlazorDiagram.Groups.Added += OnNodeAdded;
         BlazorDiagram.Groups.Removed += OnNodeRemoved;
 
-        foreach (var node in BlazorDiagram.Nodes)
-            node.Changed += OnNodeChanged;
+        foreach (var t_Node in BlazorDiagram.Nodes)
+            t_Node.Changed += OnNodeChanged;
 
-        foreach (var group in BlazorDiagram.Groups)
-            group.Changed += OnNodeChanged;
+        foreach (var t_Group in BlazorDiagram.Groups)
+            t_Group.Changed += OnNodeChanged;
     }
 
-    private void OnNodeAdded(NodeModel node) => node.Changed += OnNodeChanged;
+    private void OnNodeAdded(NodeModel Node) => Node.Changed += OnNodeChanged;
 
-    private void OnNodeRemoved(NodeModel node) => node.Changed -= OnNodeChanged;
+    private void OnNodeRemoved(NodeModel Node) => Node.Changed -= OnNodeChanged;
 
     private void OnNodeChanged(Model _) => Refresh();
 
@@ -74,84 +74,84 @@ public partial class NavigatorWidget : IDisposable
         if (BlazorDiagram.Container == null)
             return;
 
-        _vX = -BlazorDiagram.Pan.X / BlazorDiagram.Zoom;
-        _vY = -BlazorDiagram.Pan.Y / BlazorDiagram.Zoom;
-        _vWidth = BlazorDiagram.Container.Width / BlazorDiagram.Zoom;
-        _vHeight = BlazorDiagram.Container.Height / BlazorDiagram.Zoom;
+        m_VX = -BlazorDiagram.Pan.X / BlazorDiagram.Zoom;
+        m_VY = -BlazorDiagram.Pan.Y / BlazorDiagram.Zoom;
+        m_VWidth = BlazorDiagram.Container.Width / BlazorDiagram.Zoom;
+        m_VHeight = BlazorDiagram.Container.Height / BlazorDiagram.Zoom;
 
-        var minX = _vX;
-        var minY = _vY;
-        var maxX = _vX + _vWidth;
-        var maxY = _vY + _vHeight;
+        var t_MinX = m_VX;
+        var t_MinY = m_VY;
+        var t_MaxX = m_VX + m_VWidth;
+        var t_MaxY = m_VY + m_VHeight;
 
-        foreach (var node in BlazorDiagram.Nodes.Union(BlazorDiagram.Groups))
+        foreach (var t_Node in BlazorDiagram.Nodes.Union(BlazorDiagram.Groups))
         {
-            if (node.Size == null)
+            if (t_Node.Size == null)
                 continue;
 
-            minX = MathF.Min(minX, node.Position.X);
-            minY = MathF.Min(minY, node.Position.Y);
-            maxX = MathF.Max(maxX, node.Position.X + node.Size.Width);
-            maxY = MathF.Max(maxY, node.Position.Y + node.Size.Height);
+            t_MinX = MathF.Min(t_MinX, t_Node.Position.X);
+            t_MinY = MathF.Min(t_MinY, t_Node.Position.Y);
+            t_MaxX = MathF.Max(t_MaxX, t_Node.Position.X + t_Node.Size.Width);
+            t_MaxY = MathF.Max(t_MaxY, t_Node.Position.Y + t_Node.Size.Height);
         }
 
-        var width = maxX - minX;
-        var height = maxY - minY;
-        var scaledWidth = width / Width;
-        var scaledHeight = height / Height;
-        var scale = MathF.Max(scaledWidth, scaledHeight);
-        var viewWidth = scale * Width;
-        var viewHeight = scale * Height;
+        var t_Width = t_MaxX - t_MinX;
+        var t_Height = t_MaxY - t_MinY;
+        var t_ScaledWidth = t_Width / Width;
+        var t_ScaledHeight = t_Height / Height;
+        var t_Scale = MathF.Max(t_ScaledWidth, t_ScaledHeight);
+        var t_ViewWidth = t_Scale * Width;
+        var t_ViewHeight = t_Scale * Height;
 
-        _scaledMargin = Margin * scale;
-        _x = minX - (viewWidth - width) / 2 - _scaledMargin;
-        _y = minY - (viewHeight - height) / 2 - _scaledMargin;
-        _width = viewWidth + _scaledMargin * 2;
-        _height = viewHeight + _scaledMargin * 2;
+        m_ScaledMargin = Margin * t_Scale;
+        m_X = t_MinX - (t_ViewWidth - t_Width) / 2 - m_ScaledMargin;
+        m_Y = t_MinY - (t_ViewHeight - t_Height) / 2 - m_ScaledMargin;
+        m_Width = t_ViewWidth + m_ScaledMargin * 2;
+        m_Height = t_ViewHeight + m_ScaledMargin * 2;
         InvokeAsync(StateHasChanged);
     }
 
-    private RenderFragment GetNodeRenderFragment(NodeModel node)
+    private RenderFragment GetNodeRenderFragment(NodeModel Node)
     {
-        return builder =>
+        return Builder =>
         {
             if (UseNodeShape)
             {
-                var shape = node.GetShape();
-                if (shape is Ellipse ellipse)
+                var t_Shape = Node.GetShape();
+                if (t_Shape is Ellipse t_Ellipse)
                 {
-                    RenderEllipse(node, builder, ellipse);
+                    RenderEllipse(Node, Builder, t_Ellipse);
                     return;
                 }
             }
             
-            RenderRect(node, builder);
+            RenderRect(Node, Builder);
         };
     }
 
-    private void RenderRect(NodeModel node, RenderTreeBuilder builder)
+    private void RenderRect(NodeModel Node, RenderTreeBuilder Builder)
     {
-        builder.OpenElement(0, "rect");
-        builder.SetKey(node);
-        builder.AddAttribute(1, "class", "navigator-node");
-        builder.AddAttribute(2, "fill", NodeColor);
-        builder.AddAttribute(2, "x", node.Position.X.ToInvariantString());
-        builder.AddAttribute(2, "y", node.Position.Y.ToInvariantString());
-        builder.AddAttribute(2, "width", node.Size!.Width.ToInvariantString());
-        builder.AddAttribute(2, "height", node.Size.Height.ToInvariantString());
-        builder.CloseElement();
+        Builder.OpenElement(0, "rect");
+        Builder.SetKey(Node);
+        Builder.AddAttribute(1, "class", "navigator-node");
+        Builder.AddAttribute(2, "fill", NodeColor);
+        Builder.AddAttribute(2, "x", Node.Position.X.ToInvariantString());
+        Builder.AddAttribute(2, "y", Node.Position.Y.ToInvariantString());
+        Builder.AddAttribute(2, "width", Node.Size!.Width.ToInvariantString());
+        Builder.AddAttribute(2, "height", Node.Size.Height.ToInvariantString());
+        Builder.CloseElement();
     }
 
-    private void RenderEllipse(NodeModel node, RenderTreeBuilder builder, Ellipse ellipse)
+    private void RenderEllipse(NodeModel Node, RenderTreeBuilder Builder, Ellipse Ellipse)
     {
-        builder.OpenElement(0, "ellipse");
-        builder.SetKey(node);
-        builder.AddAttribute(1, "class", "navigator-node");
-        builder.AddAttribute(2, "fill", NodeColor);
-        builder.AddAttribute(2, "cx", ellipse.Cx.ToInvariantString());
-        builder.AddAttribute(2, "cy", ellipse.Cy.ToInvariantString());
-        builder.AddAttribute(2, "rx",ellipse.Rx.ToInvariantString());
-        builder.AddAttribute(2, "ry", ellipse.Ry.ToInvariantString());
-        builder.CloseElement();
+        Builder.OpenElement(0, "ellipse");
+        Builder.SetKey(Node);
+        Builder.AddAttribute(1, "class", "navigator-node");
+        Builder.AddAttribute(2, "fill", NodeColor);
+        Builder.AddAttribute(2, "cx", Ellipse.Cx.ToInvariantString());
+        Builder.AddAttribute(2, "cy", Ellipse.Cy.ToInvariantString());
+        Builder.AddAttribute(2, "rx",Ellipse.Rx.ToInvariantString());
+        Builder.AddAttribute(2, "ry", Ellipse.Ry.ToInvariantString());
+        Builder.CloseElement();
     }
 }

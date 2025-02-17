@@ -8,16 +8,16 @@ public class BoundaryControl : Control
 {
     public Rectangle Bounds { get; private set; } = Rectangle.Zero;
     
-    public override Vector2? GetPosition(Model model)
+    public override Vector2? GetPosition(Model Model)
     {
-        if (model is not IHasBounds hb)
+        if (Model is not IHasBounds t_Hb)
             return null;
 
-        var bounds = hb.GetBounds();
-        if (bounds == null)
+        var t_Bounds = t_Hb.GetBounds();
+        if (t_Bounds == null)
             return null;
 
-        Bounds = bounds.Inflate(10, 10);
+        Bounds = t_Bounds.Inflate(10, 10);
         return Bounds.NorthWest;
     }
 }

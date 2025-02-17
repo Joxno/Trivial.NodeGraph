@@ -10,7 +10,7 @@ namespace Trivial.Graph.Components.Renderers;
 
 public class LinkRenderer : ComponentBase, IDisposable
 {
-    private bool _shouldRender = true;
+    private bool m_ShouldRender = true;
 
     [CascadingParameter] public BlazorDiagram BlazorDiagram { get; set; } = null!;
 
@@ -32,62 +32,62 @@ public class LinkRenderer : ComponentBase, IDisposable
 
     protected override bool ShouldRender()
     {
-        if (!_shouldRender)
+        if (!m_ShouldRender)
             return false;
 
-        _shouldRender = false;
+        m_ShouldRender = false;
         return true;
     }
 
-    protected override void BuildRenderTree(RenderTreeBuilder builder)
+    protected override void BuildRenderTree(RenderTreeBuilder Builder)
     {
         if (!Link.Visible)
             return;
         
-        var componentType = BlazorDiagram.GetComponent(Link) ?? typeof(LinkWidget);
-        var classes = new StringBuilder()
+        var t_ComponentType = BlazorDiagram.GetComponent(Link) ?? typeof(LinkWidget);
+        var t_Classes = new StringBuilder()
             .Append("diagram-link")
             .AppendIf(" attached", Link.IsAttached)
             .ToString();
 
-        builder.OpenElement(0, "g");
-        builder.AddAttribute(1, "class", classes);
-        builder.AddAttribute(2, "data-link-id", Link.Id);
-        builder.AddAttribute(3, "onpointerdown", EventCallback.Factory.Create<PointerEventArgs>(this, OnPointerDown));
-        builder.AddEventStopPropagationAttribute(4, "onpointerdown", true);
-        builder.AddAttribute(5, "onpointerup", EventCallback.Factory.Create<PointerEventArgs>(this, OnPointerUp));
-        builder.AddEventStopPropagationAttribute(6, "onpointerup", true);
-        builder.AddAttribute(7, "onmouseenter", EventCallback.Factory.Create<MouseEventArgs>(this, OnMouseEnter));
-        builder.AddAttribute(8, "onmouseleave", EventCallback.Factory.Create<MouseEventArgs>(this, OnMouseLeave));
-        builder.OpenComponent(9, componentType);
-        builder.AddAttribute(10, "Link", Link);
-        builder.CloseComponent();
-        builder.CloseElement();
+        Builder.OpenElement(0, "g");
+        Builder.AddAttribute(1, "class", t_Classes);
+        Builder.AddAttribute(2, "data-link-id", Link.Id);
+        Builder.AddAttribute(3, "onpointerdown", EventCallback.Factory.Create<PointerEventArgs>(this, OnPointerDown));
+        Builder.AddEventStopPropagationAttribute(4, "onpointerdown", true);
+        Builder.AddAttribute(5, "onpointerup", EventCallback.Factory.Create<PointerEventArgs>(this, OnPointerUp));
+        Builder.AddEventStopPropagationAttribute(6, "onpointerup", true);
+        Builder.AddAttribute(7, "onmouseenter", EventCallback.Factory.Create<MouseEventArgs>(this, OnMouseEnter));
+        Builder.AddAttribute(8, "onmouseleave", EventCallback.Factory.Create<MouseEventArgs>(this, OnMouseLeave));
+        Builder.OpenComponent(9, t_ComponentType);
+        Builder.AddAttribute(10, "Link", Link);
+        Builder.CloseComponent();
+        Builder.CloseElement();
     }
 
     private void OnLinkChanged(Model _)
     {
-        _shouldRender = true;
+        m_ShouldRender = true;
         InvokeAsync(StateHasChanged);
     }
 
-    private void OnPointerDown(PointerEventArgs e)
+    private void OnPointerDown(PointerEventArgs E)
     {
-        BlazorDiagram.TriggerPointerDown(Link, e.ToCore());
+        BlazorDiagram.TriggerPointerDown(Link, E.ToCore());
     }
 
-    private void OnPointerUp(PointerEventArgs e)
+    private void OnPointerUp(PointerEventArgs E)
     {
-        BlazorDiagram.TriggerPointerUp(Link, e.ToCore());
+        BlazorDiagram.TriggerPointerUp(Link, E.ToCore());
     }
 
-    private void OnMouseEnter(MouseEventArgs e)
+    private void OnMouseEnter(MouseEventArgs E)
     {
-        BlazorDiagram.TriggerPointerEnter(Link, e.ToCore());
+        BlazorDiagram.TriggerPointerEnter(Link, E.ToCore());
     }
 
-    private void OnMouseLeave(MouseEventArgs e)
+    private void OnMouseLeave(MouseEventArgs E)
     {
-        BlazorDiagram.TriggerPointerLeave(Link, e.ToCore());
+        BlazorDiagram.TriggerPointerLeave(Link, E.ToCore());
     }
 }

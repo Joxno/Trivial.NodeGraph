@@ -6,45 +6,45 @@ namespace Trivial.Domain.Behaviors;
 
 public class ZoomBehavior : Behavior
 {
-    public ZoomBehavior(Diagram diagram) : base(diagram)
+    public ZoomBehavior(Diagram Diagram) : base(Diagram)
     {
-        Diagram.Wheel += Diagram_Wheel;
+        base.Diagram.Wheel += Diagram_Wheel;
     }
 
-    private void Diagram_Wheel(WheelEventArgs e)
+    private void Diagram_Wheel(WheelEventArgs E)
     {
-        if (Diagram.Container == null || e.DeltaY == 0)
+        if (Diagram.Container == null || E.DeltaY == 0)
             return;
 
         if (!Diagram.Options.Zoom.Enabled)
             return;
 
-        var scale = Diagram.Options.Zoom.ScaleFactor;
-        var oldZoom = Diagram.Zoom;
-        var deltaY = Diagram.Options.Zoom.Inverse ? e.DeltaY * -1 : e.DeltaY;
-        var newZoom = deltaY > 0 ? oldZoom * scale : oldZoom / scale;
-        newZoom = Math.Clamp(newZoom, Diagram.Options.Zoom.Minimum, Diagram.Options.Zoom.Maximum);
+        var t_Scale = Diagram.Options.Zoom.ScaleFactor;
+        var t_OldZoom = Diagram.Zoom;
+        var t_DeltaY = Diagram.Options.Zoom.Inverse ? E.DeltaY * -1 : E.DeltaY;
+        var t_NewZoom = t_DeltaY > 0 ? t_OldZoom * t_Scale : t_OldZoom / t_Scale;
+        t_NewZoom = Math.Clamp(t_NewZoom, Diagram.Options.Zoom.Minimum, Diagram.Options.Zoom.Maximum);
 
-        if (newZoom < 0 || newZoom == Diagram.Zoom)
+        if (t_NewZoom < 0 || t_NewZoom == Diagram.Zoom)
             return;
 
         // Other algorithms (based only on the changes in the zoom) don't work for our case
         // This solution is taken as is from react-diagrams (ZoomCanvasAction)
-        var clientWidth = Diagram.Container.Width;
-        var clientHeight = Diagram.Container.Height;
-        var widthDiff = clientWidth * newZoom - clientWidth * oldZoom;
-        var heightDiff = clientHeight * newZoom - clientHeight * oldZoom;
-        var clientX = e.ClientX - Diagram.Container.Left;
-        var clientY = e.ClientY - Diagram.Container.Top;
-        var xFactor = (clientX - Diagram.Pan.X) / oldZoom / clientWidth;
-        var yFactor = (clientY - Diagram.Pan.Y) / oldZoom / clientHeight;
-        var newPanX = Diagram.Pan.X - widthDiff * xFactor;
-        var newPanY = Diagram.Pan.Y - heightDiff * yFactor;
+        var t_ClientWidth = Diagram.Container.Width;
+        var t_ClientHeight = Diagram.Container.Height;
+        var t_WidthDiff = t_ClientWidth * t_NewZoom - t_ClientWidth * t_OldZoom;
+        var t_HeightDiff = t_ClientHeight * t_NewZoom - t_ClientHeight * t_OldZoom;
+        var t_ClientX = E.ClientX - Diagram.Container.Left;
+        var t_ClientY = E.ClientY - Diagram.Container.Top;
+        var t_XFactor = (t_ClientX - Diagram.Pan.X) / t_OldZoom / t_ClientWidth;
+        var t_YFactor = (t_ClientY - Diagram.Pan.Y) / t_OldZoom / t_ClientHeight;
+        var t_NewPanX = Diagram.Pan.X - t_WidthDiff * t_XFactor;
+        var t_NewPanY = Diagram.Pan.Y - t_HeightDiff * t_YFactor;
 
         Diagram.Batch(() =>
         {
-            Diagram.SetPan(newPanX, newPanY);
-            Diagram.SetZoom(newZoom);
+            Diagram.SetPan(t_NewPanX, t_NewPanY);
+            Diagram.SetZoom(t_NewZoom);
         });
     }
 

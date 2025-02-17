@@ -8,11 +8,11 @@ namespace Trivial.Graph;
 
 public class BlazorDiagram : Diagram
 {
-    private readonly Dictionary<Type, Type> _componentsMapping;
+    private readonly Dictionary<Type, Type> m_ComponentsMapping;
 
-    public BlazorDiagram(BlazorDiagramOptions? options = null, bool registerDefaultBehaviors = true) : base(registerDefaultBehaviors)
+    public BlazorDiagram(BlazorDiagramOptions? Options = null, bool RegisterDefaultBehaviors = true) : base(RegisterDefaultBehaviors)
     {
-        _componentsMapping = new Dictionary<Type, Type>
+        m_ComponentsMapping = new Dictionary<Type, Type>
         {
             [typeof(RemoveControl)] = typeof(RemoveControlWidget),
             [typeof(BoundaryControl)] = typeof(BoundaryControlWidget),
@@ -20,48 +20,48 @@ public class BlazorDiagram : Diagram
             [typeof(ArrowHeadControl)] = typeof(ArrowHeadControlWidget)
         };
 
-        Options = options ?? new BlazorDiagramOptions();
+        this.Options = Options ?? new BlazorDiagramOptions();
     }
 
     public override BlazorDiagramOptions Options { get; }
 
-    public void RegisterComponent<TModel, TComponent>(bool replace = false)
+    public void RegisterComponent<TModel, TComponent>(bool Replace = false)
     {
-        RegisterComponent(typeof(TModel), typeof(TComponent), replace);
+        RegisterComponent(typeof(TModel), typeof(TComponent), Replace);
     }
 
-    public void RegisterComponent(Type modelType, Type componentType, bool replace = false)
+    public void RegisterComponent(Type ModelType, Type ComponentType, bool Replace = false)
     {
-        if (!replace && _componentsMapping.ContainsKey(modelType))
-            throw new Exception($"Component already registered for model '{modelType.Name}'.");
+        if (!Replace && m_ComponentsMapping.ContainsKey(ModelType))
+            throw new Exception($"Component already registered for model '{ModelType.Name}'.");
 
-        _componentsMapping[modelType] = componentType;
+        m_ComponentsMapping[ModelType] = ComponentType;
     }
 
-    public Type? GetComponent(Type modelType, bool checkSubclasses = true)
+    public Type? GetComponent(Type ModelType, bool CheckSubclasses = true)
     {
-        if (_componentsMapping.ContainsKey(modelType))
-            return _componentsMapping[modelType];
+        if (m_ComponentsMapping.ContainsKey(ModelType))
+            return m_ComponentsMapping[ModelType];
 
-        if (!checkSubclasses)
+        if (!CheckSubclasses)
             return null;
         
-        foreach (var rmt in _componentsMapping.Keys)
+        foreach (var t_Rmt in m_ComponentsMapping.Keys)
         {
-            if (modelType.IsSubclassOf(rmt))
-                return _componentsMapping[rmt];
+            if (ModelType.IsSubclassOf(t_Rmt))
+                return m_ComponentsMapping[t_Rmt];
         }
 
         return null;
     }
 
-    public Type? GetComponent<TModel>(bool checkSubclasses = true)
+    public Type? GetComponent<TModel>(bool CheckSubclasses = true)
     {
-        return GetComponent(typeof(TModel), checkSubclasses);
+        return GetComponent(typeof(TModel), CheckSubclasses);
     }
 
-    public Type? GetComponent(Model model, bool checkSubclasses = true)
+    public Type? GetComponent(Model Model, bool CheckSubclasses = true)
     {
-        return GetComponent(model.GetType(), checkSubclasses);
+        return GetComponent(Model.GetType(), CheckSubclasses);
     }
 }

@@ -6,15 +6,15 @@ namespace Trivial.Domain;
 
 public class PathGeneratorResult
 {
-    public PathGeneratorResult(SvgPath fullPath, SvgPath[] paths, float? sourceMarkerAngle = null, Vector2? sourceMarkerPosition = null,
-        float? targetMarkerAngle = null, Vector2? targetMarkerPosition = null)
+    public PathGeneratorResult(SvgPath FullPath, SvgPath[] Paths, float? SourceMarkerAngle = null, Vector2? SourceMarkerPosition = null,
+        float? TargetMarkerAngle = null, Vector2? TargetMarkerPosition = null)
     {
-        FullPath = fullPath;
-        Paths = paths;
-        SourceMarkerAngle = sourceMarkerAngle;
-        SourceMarkerPosition = sourceMarkerPosition;
-        TargetMarkerAngle = targetMarkerAngle;
-        TargetMarkerPosition = targetMarkerPosition;
+        this.FullPath = FullPath;
+        this.Paths = Paths;
+        this.SourceMarkerAngle = SourceMarkerAngle;
+        this.SourceMarkerPosition = SourceMarkerPosition;
+        this.TargetMarkerAngle = TargetMarkerAngle;
+        this.TargetMarkerPosition = TargetMarkerPosition;
     }
 
     public SvgPath FullPath { get; }

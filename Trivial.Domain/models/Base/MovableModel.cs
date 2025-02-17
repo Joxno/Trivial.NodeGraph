@@ -10,19 +10,19 @@ public abstract class MovableModel : SelectableModel
 {
     public event Action<MovableModel>? Moved;
     
-    public MovableModel(Vector2? position = null)
+    public MovableModel(Vector2? Position = null)
     {
-        Position = position ?? Vector2.Zero;
+        this.Position = Position ?? Vector2.Zero;
     }
 
-    public MovableModel(string id, Vector2? position = null) : base(id)
+    public MovableModel(string Id, Vector2? Position = null) : base(Id)
     {
-        Position = position ?? Vector2.Zero;
+        this.Position = Position ?? Vector2.Zero;
     }
 
     public Vector2 Position { get; set; }
 
-    public virtual void SetPosition(float x, float y) => Position = new Vector2(x, y);
+    public virtual void SetPosition(float X, float Y) => Position = new Vector2(X, Y);
 
     /// <summary>
     /// Only use this if you know what you're doing

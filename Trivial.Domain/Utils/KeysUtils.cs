@@ -4,15 +4,15 @@ namespace Trivial.Domain.Utils;
 
 public static class KeysUtils
 {
-    public static string GetStringRepresentation(bool ctrl, bool shift, bool alt, string key)
+    public static string GetStringRepresentation(bool Ctrl, bool Shift, bool Alt, string Key)
     {
-        var sb = new StringBuilder();
+        var t_Sb = new StringBuilder();
 
-        if (ctrl) sb.Append("Ctrl+");
-        if (shift) sb.Append("Shift+");
-        if (alt) sb.Append("Alt+");
-        sb.Append(key);
+        if (Ctrl) t_Sb.Append("Ctrl+");
+        if (Shift) t_Sb.Append("Shift+");
+        if (Alt) t_Sb.Append("Alt+");
+        t_Sb.Append(Key);
 
-        return sb.ToString();
+        return t_Sb.ToString();
     }
 }

@@ -11,30 +11,30 @@ namespace Trivial.Domain.Controls.Default;
 
 public class DragNewLinkControl : ExecutableControl
 {
-    private readonly IPositionProvider _positionProvider;
+    private readonly IPositionProvider m_PositionProvider;
 
-    public DragNewLinkControl(float x, float y, float offsetX = 0, float offsetY = 0)
-        : this(new BoundsBasedPositionProvider(x, y, offsetX, offsetY))
+    public DragNewLinkControl(float X, float Y, float OffsetX = 0, float OffsetY = 0)
+        : this(new BoundsBasedPositionProvider(X, Y, OffsetX, OffsetY))
     {
     }
 
-    public DragNewLinkControl(IPositionProvider positionProvider)
+    public DragNewLinkControl(IPositionProvider PositionProvider)
     {
-        _positionProvider = positionProvider;
+        m_PositionProvider = PositionProvider;
     }
 
-    public override Vector2? GetPosition(Model model) => _positionProvider.GetPosition(model);
+    public override Vector2? GetPosition(Model Model) => m_PositionProvider.GetPosition(Model);
 
-    public override ValueTask OnPointerDown(Diagram diagram, Model model, PointerEventArgs e)
+    public override ValueTask OnPointerDown(Diagram Diagram, Model Model, PointerEventArgs E)
     {
-        if (model is not NodeModel node || node.Locked)
+        if (Model is not NodeModel t_Node || t_Node.Locked)
             return ValueTask.CompletedTask;
         
-        var behavior = diagram.GetBehavior<DragNewLinkBehavior>();
-        if (behavior == null)
+        var t_Behavior = Diagram.GetBehavior<DragNewLinkBehavior>();
+        if (t_Behavior == null)
             throw new DiagramsException($"DragNewLinkBehavior was not found");
 
-        behavior.StartFrom(node, e.ClientX, e.ClientY);
+        t_Behavior.StartFrom(t_Node, E.ClientX, E.ClientY);
         return ValueTask.CompletedTask;
     }
 }

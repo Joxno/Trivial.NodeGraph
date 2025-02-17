@@ -7,42 +7,42 @@ namespace Trivial.Domain.Extensions;
 
 public static class DiagramExtensions
 {
-    public static Rectangle GetBounds(this IEnumerable<NodeModel> nodes)
+    public static Rectangle GetBounds(this IEnumerable<NodeModel> Nodes)
     {
-        if (!nodes.Any())
+        if (!Nodes.Any())
             return Rectangle.Zero;
 
-        var minX = float.MaxValue;
-        var maxX = float.MinValue;
-        var minY = float.MaxValue;
-        var maxY = float.MinValue;
+        var t_MinX = float.MaxValue;
+        var t_MaxX = float.MinValue;
+        var t_MinY = float.MaxValue;
+        var t_MaxY = float.MinValue;
 
-        foreach (var node in nodes)
+        foreach (var t_Node in Nodes)
         {
-            if (node.Size == null) // Ignore nodes that didn't get a size yet
+            if (t_Node.Size == null) // Ignore nodes that didn't get a size yet
                 continue;
 
-            var trX = node.Position.X + node.Size!.Width;
-            var bY = node.Position.Y + node.Size.Height;
+            var t_TrX = t_Node.Position.X + t_Node.Size!.Width;
+            var t_BY = t_Node.Position.Y + t_Node.Size.Height;
 
-            if (node.Position.X < minX)
+            if (t_Node.Position.X < t_MinX)
             {
-                minX = node.Position.X;
+                t_MinX = t_Node.Position.X;
             }
-            if (trX > maxX)
+            if (t_TrX > t_MaxX)
             {
-                maxX = trX;
+                t_MaxX = t_TrX;
             }
-            if (node.Position.Y < minY)
+            if (t_Node.Position.Y < t_MinY)
             {
-                minY = node.Position.Y;
+                t_MinY = t_Node.Position.Y;
             }
-            if (bY > maxY)
+            if (t_BY > t_MaxY)
             {
-                maxY = bY;
+                t_MaxY = t_BY;
             }
         }
 
-        return new Rectangle(minX, minY, maxX, maxY);
+        return new Rectangle(t_MinX, t_MinY, t_MaxX, t_MaxY);
     }
 }

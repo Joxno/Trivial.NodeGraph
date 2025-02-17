@@ -4,9 +4,9 @@ namespace Trivial.Domain;
 
 public abstract class Behavior : IDisposable
 {
-    public Behavior(Diagram diagram)
+    public Behavior(Diagram Diagram)
     {
-        Diagram = diagram;
+        this.Diagram = Diagram;
     }
 
     protected Diagram Diagram { get; }

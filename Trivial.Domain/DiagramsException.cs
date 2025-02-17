@@ -4,7 +4,7 @@ namespace Trivial.Domain;
 
 public class DiagramsException : Exception
 {
-    public DiagramsException(string? message) : base(message)
+    public DiagramsException(string? Message) : base(Message)
     {
     }
 
@@ -12,7 +12,7 @@ public class DiagramsException : Exception
     {
     }
 
-    public DiagramsException(string? message, Exception? innerException) : base(message, innerException)
+    public DiagramsException(string? Message, Exception? InnerException) : base(Message, InnerException)
     {
     }
 }

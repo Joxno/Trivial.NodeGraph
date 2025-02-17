@@ -6,20 +6,20 @@ namespace Trivial.Domain.Models;
 
 public class LinkLabelModel : Model
 {
-    public LinkLabelModel(BaseLinkModel parent, string id, string content, float? distance = null, Vector2? offset = null) : base(id)
+    public LinkLabelModel(BaseLinkModel Parent, string Id, string Content, float? Distance = null, Vector2? Offset = null) : base(Id)
     {
-        Parent = parent;
-        Content = content;
-        Distance = distance;
-        Offset = offset;
+        this.Parent = Parent;
+        this.Content = Content;
+        this.Distance = Distance;
+        this.Offset = Offset;
     }
 
-    public LinkLabelModel(BaseLinkModel parent, string content, float? distance = null, Vector2? offset = null)
+    public LinkLabelModel(BaseLinkModel Parent, string Content, float? Distance = null, Vector2? Offset = null)
     {
-        Parent = parent;
-        Content = content;
-        Distance = distance;
-        Offset = offset;
+        this.Parent = Parent;
+        this.Content = Content;
+        this.Distance = Distance;
+        this.Offset = Offset;
     }
 
     public BaseLinkModel Parent { get; }

@@ -4,7 +4,7 @@ namespace Trivial.Graph;
 
 public class BlazorDiagramsException : Exception
 {
-    public BlazorDiagramsException(string? message) : base(message)
+    public BlazorDiagramsException(string? Message) : base(Message)
     {
     }
 }

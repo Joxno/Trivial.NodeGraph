@@ -7,65 +7,65 @@ namespace Trivial.Domain.Behaviors;
 
 public static class KeyboardShortcutsDefaults
 {
-    public static async ValueTask DeleteSelection(Diagram diagram)
+    public static async ValueTask DeleteSelection(Diagram Diagram)
     {
-        var wasSuspended = diagram.SuspendRefresh;
-        if (!wasSuspended) diagram.SuspendRefresh = true;
+        var t_WasSuspended = Diagram.SuspendRefresh;
+        if (!t_WasSuspended) Diagram.SuspendRefresh = true;
 
-        foreach (var sm in diagram.GetSelectedModels().ToArray())
+        foreach (var t_Sm in Diagram.GetSelectedModels().ToArray())
         {
-            if (sm.Locked)
+            if (t_Sm.Locked)
                 continue;
 
-            if (sm is GroupModel group && (await diagram.Options.Constraints.ShouldDeleteGroup(group)))
+            if (t_Sm is GroupModel t_Group && (await Diagram.Options.Constraints.ShouldDeleteGroup(t_Group)))
             {
-                diagram.Groups.Delete(group);
+                Diagram.Groups.Delete(t_Group);
             }
-            else if (sm is NodeModel node && (await diagram.Options.Constraints.ShouldDeleteNode(node)))
+            else if (t_Sm is NodeModel t_Node && (await Diagram.Options.Constraints.ShouldDeleteNode(t_Node)))
             {
-                diagram.Nodes.Remove(node);
+                Diagram.Nodes.Remove(t_Node);
             }
-            else if (sm is BaseLinkModel link && (await diagram.Options.Constraints.ShouldDeleteLink(link)))
+            else if (t_Sm is BaseLinkModel t_Link && (await Diagram.Options.Constraints.ShouldDeleteLink(t_Link)))
             {
-                diagram.Links.Remove(link);
+                Diagram.Links.Remove(t_Link);
             }
         }
 
-        if (!wasSuspended)
+        if (!t_WasSuspended)
         {
-            diagram.SuspendRefresh = false;
-            diagram.Refresh();
+            Diagram.SuspendRefresh = false;
+            Diagram.Refresh();
         }
     }
 
-    public static ValueTask Grouping(Diagram diagram)
+    public static ValueTask Grouping(Diagram Diagram)
     {
-        if (!diagram.Options.Groups.Enabled)
+        if (!Diagram.Options.Groups.Enabled)
             return ValueTask.CompletedTask;
 
-        if (!diagram.GetSelectedModels().Any())
+        if (!Diagram.GetSelectedModels().Any())
             return ValueTask.CompletedTask;
 
-        var selectedNodes = diagram.Nodes.Where(n => n.Selected).ToArray();
-        var nodesWithGroup = selectedNodes.Where(n => n.Group != null).ToArray();
-        if (nodesWithGroup.Length > 0)
+        var t_SelectedNodes = Diagram.Nodes.Where(N => N.Selected).ToArray();
+        var t_NodesWithGroup = t_SelectedNodes.Where(N => N.Group != null).ToArray();
+        if (t_NodesWithGroup.Length > 0)
         {
             // Ungroup
-            foreach (var group in nodesWithGroup.GroupBy(n => n.Group!).Select(g => g.Key))
+            foreach (var t_Group in t_NodesWithGroup.GroupBy(N => N.Group!).Select(G => G.Key))
             {
-                diagram.Groups.Remove(group);
+                Diagram.Groups.Remove(t_Group);
             }
         }
         else
         {
             // Group
-            if (selectedNodes.Length < 2)
+            if (t_SelectedNodes.Length < 2)
                 return ValueTask.CompletedTask;
 
-            if (selectedNodes.Any(n => n.Group != null))
+            if (t_SelectedNodes.Any(N => N.Group != null))
                 return ValueTask.CompletedTask;
 
-            diagram.Groups.Group(selectedNodes);
+            Diagram.Groups.Group(t_SelectedNodes);
         }
 
         return ValueTask.CompletedTask;

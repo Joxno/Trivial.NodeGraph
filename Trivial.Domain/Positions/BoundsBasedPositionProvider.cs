@@ -6,12 +6,12 @@ namespace Trivial.Domain.Positions;
 
 public class BoundsBasedPositionProvider : IPositionProvider
 {
-    public BoundsBasedPositionProvider(float x, float y, float offsetX = 0, float offsetY = 0)
+    public BoundsBasedPositionProvider(float X, float Y, float OffsetX = 0, float OffsetY = 0)
     {
-        X = x;
-        Y = y;
-        OffsetX = offsetX;
-        OffsetY = offsetY;
+        this.X = X;
+        this.Y = Y;
+        this.OffsetX = OffsetX;
+        this.OffsetY = OffsetY;
     }
 
     public float X { get; }
@@ -19,15 +19,15 @@ public class BoundsBasedPositionProvider : IPositionProvider
     public float OffsetX { get; }
     public float OffsetY { get; }
 
-    public Vector2? GetPosition(Model model)
+    public Vector2? GetPosition(Model Model)
     {
-        if (model is not IHasBounds ihb)
+        if (Model is not IHasBounds t_Ihb)
             throw new DiagramsException("BoundsBasedPositionProvider requires an IHasBounds model");
         
-        var bounds = ihb.GetBounds();
-        if (bounds == null)
+        var t_Bounds = t_Ihb.GetBounds();
+        if (t_Bounds == null)
             return null;
         
-        return new Vector2(bounds.Left + X * bounds.Width + OffsetX, bounds.Top + Y * bounds.Height + OffsetY);
+        return new Vector2(t_Bounds.Left + X * t_Bounds.Width + OffsetX, t_Bounds.Top + Y * t_Bounds.Height + OffsetY);
     }
 }

@@ -4,10 +4,10 @@ public record Size
 {
     public static Size Zero { get; } = new(0, 0);
 
-    public Size(float width, float height)
+    public Size(float Width, float Height)
     {
-        Width = width;
-        Height = height;
+        this.Width = Width;
+        this.Height = Height;
     }
 
     public float Width { get; init; }

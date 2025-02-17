@@ -9,15 +9,15 @@
 @if (Group is SvgGroupModel)
 {
     <g class="children" transform="translate(@((-Group.Position.X).ToInvariantString()) @((-Group.Position.Y).ToInvariantString()))">
-        @foreach (var node in Group.Children)
+        @foreach (var t_Node in Group.Children)
         {
-            if (node is GroupModel g)
+            if (t_Node is GroupModel t_G)
             {
-                <GroupRenderer @key="g.Id" Group="g"></GroupRenderer>
+                <GroupRenderer @key="t_G.Id" Group="t_G"></GroupRenderer>
             }
             else
             {
-                <NodeRenderer @key="node.Id" Node="node"></NodeRenderer>
+                <NodeRenderer @key="t_Node.Id" Node="t_Node"></NodeRenderer>
             }
         }
     </g>
@@ -25,15 +25,15 @@
 else
 {
     <div class="children" style="top: @((-Group.Position.Y).ToInvariantString())px; left: @((-Group.Position.X).ToInvariantString())px">
-        @foreach (var node in Group.Children)
+        @foreach (var t_Node in Group.Children)
         {
-            if (node is GroupModel g)
+            if (t_Node is GroupModel t_G)
             {
-                <GroupRenderer @key="g.Id" Group="g"></GroupRenderer>
+                <GroupRenderer @key="t_G.Id" Group="t_G"></GroupRenderer>
             }
             else
             {
-                <NodeRenderer @key="node.Id" Node="node"></NodeRenderer>
+                <NodeRenderer @key="t_Node.Id" Node="t_Node"></NodeRenderer>
             }
         }
     </div>

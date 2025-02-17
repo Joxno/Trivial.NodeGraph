@@ -8,7 +8,7 @@ namespace Trivial.Domain.Options;
 
 public class DiagramLinkOptions
 {
-    private float _snappingRadius = 50;
+    private float m_SnappingRadius = 50;
 
     public Router DefaultRouter { get; set; } = new NormalRouter();
     public PathGenerator DefaultPathGenerator { get; set; } = new SmoothPathGenerator();
@@ -17,34 +17,34 @@ public class DiagramLinkOptions
 
     public float SnappingRadius
     {
-        get => _snappingRadius;
+        get => m_SnappingRadius;
         set
         {
             if (value <= 0)
                 throw new ArgumentException($"SnappingRadius must be greater than zero");
 
-            _snappingRadius = value;
+            m_SnappingRadius = value;
         }
     }
 
-    public LinkFactory Factory { get; set; } = (diagram, source, targetAnchor) =>
+    public LinkFactory Factory { get; set; } = (Diagram, Source, TargetAnchor) =>
     {
-        Anchor sourceAnchor = source switch
+        Anchor t_SourceAnchor = Source switch
         {
-            NodeModel node => new ShapeIntersectionAnchor(node),
-            PortModel port => new SinglePortAnchor(port),
+            NodeModel t_Node => new ShapeIntersectionAnchor(t_Node),
+            PortModel t_Port => new SinglePortAnchor(t_Port),
             _ => throw new NotImplementedException()
         };
-        return new LinkModel(sourceAnchor, targetAnchor);
+        return new LinkModel(t_SourceAnchor, TargetAnchor);
     };
 
-    public AnchorFactory TargetAnchorFactory { get; set; } = (diagram, link, model) =>
+    public AnchorFactory TargetAnchorFactory { get; set; } = (Diagram, Link, Model) =>
     {
-        return model switch
+        return Model switch
         {
-            NodeModel node => new ShapeIntersectionAnchor(node),
-            PortModel port => new SinglePortAnchor(port),
-            _ => throw new ArgumentOutOfRangeException(nameof(model), model, null)
+            NodeModel t_Node => new ShapeIntersectionAnchor(t_Node),
+            PortModel t_Port => new SinglePortAnchor(t_Port),
+            _ => throw new ArgumentOutOfRangeException(nameof(Model), Model, null)
         };
     };
 }

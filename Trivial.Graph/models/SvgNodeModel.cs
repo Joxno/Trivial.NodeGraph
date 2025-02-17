@@ -6,11 +6,11 @@ namespace Trivial.Graph.Models;
 
 public class SvgNodeModel : NodeModel
 {
-    public SvgNodeModel(Vector2? position = null) : base(position)
+    public SvgNodeModel(Vector2? Position = null) : base(Position)
     {
     }
 
-    public SvgNodeModel(string id, Vector2? position = null) : base(id, position)
+    public SvgNodeModel(string Id, Vector2? Position = null) : base(Id, Position)
     {
     }
 }

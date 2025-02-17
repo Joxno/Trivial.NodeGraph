@@ -6,57 +6,57 @@ namespace Trivial.Domain.Controls;
 
 public class ControlsLayer
 {
-    private readonly Dictionary<Model, ControlsContainer> _containers;
+    private readonly Dictionary<Model, ControlsContainer> m_Containers;
 
     public event Action<Model>? ChangeCaused;
 
     public ControlsLayer()
     {
-        _containers = new Dictionary<Model, ControlsContainer>();
+        m_Containers = new Dictionary<Model, ControlsContainer>();
     }
 
-    public IReadOnlyCollection<Model> Models => _containers.Keys;
+    public IReadOnlyCollection<Model> Models => m_Containers.Keys;
 
-    public ControlsContainer AddFor(Model model, ControlsType type = ControlsType.OnSelection)
+    public ControlsContainer AddFor(Model Model, ControlsType Type = ControlsType.OnSelection)
     {
-        if (_containers.ContainsKey(model))
-            return _containers[model];
+        if (m_Containers.ContainsKey(Model))
+            return m_Containers[Model];
         
-        var container = new ControlsContainer(model, type);
-        container.VisibilityChanged += OnVisibilityChanged;
-        container.ControlsChanged += RefreshIfVisible;
-        model.Changed += RefreshIfVisible;
-        _containers.Add(model, container);
-        return container;
+        var t_Container = new ControlsContainer(Model, Type);
+        t_Container.VisibilityChanged += OnVisibilityChanged;
+        t_Container.ControlsChanged += RefreshIfVisible;
+        Model.Changed += RefreshIfVisible;
+        m_Containers.Add(Model, t_Container);
+        return t_Container;
     }
 
-    public ControlsContainer? GetFor(Model model)
+    public ControlsContainer? GetFor(Model Model)
     {
-        return _containers.TryGetValue(model, out var container) ? container : null;
+        return m_Containers.TryGetValue(Model, out var t_Container) ? t_Container : null;
     }
 
-    public bool RemoveFor(Model model)
+    public bool RemoveFor(Model Model)
     {
-        if (!_containers.TryGetValue(model, out var container))
+        if (!m_Containers.TryGetValue(Model, out var t_Container))
             return false;
         
-        container.VisibilityChanged -= OnVisibilityChanged;
-        container.ControlsChanged -= RefreshIfVisible;
-        model.Changed -= RefreshIfVisible;
-        _containers.Remove(model);
-        ChangeCaused?.Invoke(model);
+        t_Container.VisibilityChanged -= OnVisibilityChanged;
+        t_Container.ControlsChanged -= RefreshIfVisible;
+        Model.Changed -= RefreshIfVisible;
+        m_Containers.Remove(Model);
+        ChangeCaused?.Invoke(Model);
         return true;
     }
 
-    public bool AreVisibleFor(Model model) => GetFor(model)?.Visible ?? false;
+    public bool AreVisibleFor(Model Model) => GetFor(Model)?.Visible ?? false;
 
-    private void RefreshIfVisible(Model cause)
+    private void RefreshIfVisible(Model Cause)
     {
-        if (!AreVisibleFor(cause))
+        if (!AreVisibleFor(Cause))
             return;
         
-        ChangeCaused?.Invoke(cause);
+        ChangeCaused?.Invoke(Cause);
     }
 
-    private void OnVisibilityChanged(Model cause) => ChangeCaused?.Invoke(cause);
+    private void OnVisibilityChanged(Model Cause) => ChangeCaused?.Invoke(Cause);
 }

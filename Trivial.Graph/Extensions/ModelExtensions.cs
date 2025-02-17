@@ -5,8 +5,8 @@ namespace Trivial.Graph.Extensions;
 
 public static class ModelExtensions
 {
-    public static bool IsSvg(this Model model)
+    public static bool IsSvg(this Model Model)
     {
-        return model is SvgNodeModel or SvgGroupModel or BaseLinkModel;
+        return Model is SvgNodeModel or SvgGroupModel or BaseLinkModel;
     }
 }

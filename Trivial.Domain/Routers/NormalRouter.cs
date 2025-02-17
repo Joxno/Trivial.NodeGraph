@@ -7,8 +7,8 @@ namespace Trivial.Domain.Routers;
 
 public class NormalRouter : Router
 {
-    public override Vector2[] GetRoute(Diagram diagram, BaseLinkModel link)
+    public override Vector2[] GetRoute(Diagram Diagram, BaseLinkModel Link)
     {
-        return link.Vertices.Select(v => v.Position).ToArray();
+        return Link.Vertices.Select(V => V.Position).ToArray();
     }
 }

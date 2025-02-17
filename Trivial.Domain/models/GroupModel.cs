@@ -8,28 +8,28 @@ namespace Trivial.Domain.Models;
 
 public class GroupModel : NodeModel
 {
-    private readonly List<NodeModel> _children;
+    private readonly List<NodeModel> m_Children;
 
-    public GroupModel(IEnumerable<NodeModel> children, byte padding = 30, bool autoSize = true)
+    public GroupModel(IEnumerable<NodeModel> Children, byte Padding = 30, bool AutoSize = true)
     {
-        _children = new List<NodeModel>();
+        m_Children = new List<NodeModel>();
 
         Size = Size.Zero;
-        Padding = padding;
-        AutoSize = autoSize;
-        Initialize(children);
+        this.Padding = Padding;
+        this.AutoSize = AutoSize;
+        Initialize(Children);
     }
 
-    public IReadOnlyList<NodeModel> Children => _children;
+    public IReadOnlyList<NodeModel> Children => m_Children;
     public byte Padding { get; }
     public bool AutoSize { get; }
 
-    public void AddChild(NodeModel child)
+    public void AddChild(NodeModel Child)
     {
-        _children.Add(child);
-        child.Group = this;
-        child.SizeChanged += OnNodeChanged;
-        child.Moving += OnNodeChanged;
+        m_Children.Add(Child);
+        Child.Group = this;
+        Child.SizeChanged += OnNodeChanged;
+        Child.Moving += OnNodeChanged;
 
         if (UpdateDimensions())
         {
@@ -37,14 +37,14 @@ public class GroupModel : NodeModel
         }
     }
 
-    public void RemoveChild(NodeModel child)
+    public void RemoveChild(NodeModel Child)
     {
-        if (!_children.Remove(child))
+        if (!m_Children.Remove(Child))
             return;
 
-        child.Group = null;
-        child.SizeChanged -= OnNodeChanged;
-        child.Moving -= OnNodeChanged;
+        Child.Group = null;
+        Child.SizeChanged -= OnNodeChanged;
+        Child.Moving -= OnNodeChanged;
 
         if (UpdateDimensions())
         {
@@ -53,58 +53,58 @@ public class GroupModel : NodeModel
         }
     }
 
-    public override void SetPosition(float x, float y)
+    public override void SetPosition(float X, float Y)
     {
-        var deltaX = x - Position.X;
-        var deltaY = y - Position.Y;
-        base.SetPosition(x, y);
+        var t_DeltaX = X - Position.X;
+        var t_DeltaY = Y - Position.Y;
+        base.SetPosition(X, Y);
 
-        foreach (var node in Children)
+        foreach (var t_Node in Children)
         {
-            node.UpdatePositionSilently(deltaX, deltaY);
-            node.RefreshLinks();
+            t_Node.UpdatePositionSilently(t_DeltaX, t_DeltaY);
+            t_Node.RefreshLinks();
         }
 
         Refresh();
         RefreshLinks();
     }
 
-    public override void UpdatePositionSilently(float deltaX, float deltaY)
+    public override void UpdatePositionSilently(float DeltaX, float DeltaY)
     {
-        base.UpdatePositionSilently(deltaX, deltaY);
+        base.UpdatePositionSilently(DeltaX, DeltaY);
 
-        foreach (var child in Children)
-            child.UpdatePositionSilently(deltaX, deltaY);
+        foreach (var t_Child in Children)
+            t_Child.UpdatePositionSilently(DeltaX, DeltaY);
 
         Refresh();
     }
 
     public void Ungroup()
     {
-        foreach (var child in Children)
+        foreach (var t_Child in Children)
         {
-            child.Group = null;
-            child.SizeChanged -= OnNodeChanged;
-            child.Moving -= OnNodeChanged;
+            t_Child.Group = null;
+            t_Child.SizeChanged -= OnNodeChanged;
+            t_Child.Moving -= OnNodeChanged;
         }
 
-        _children.Clear();
+        m_Children.Clear();
     }
 
-    private void Initialize(IEnumerable<NodeModel> children)
+    private void Initialize(IEnumerable<NodeModel> Children)
     {
-        foreach (var child in children)
+        foreach (var t_Child in Children)
         {
-            _children.Add(child);
-            child.Group = this; 
-            child.SizeChanged += OnNodeChanged;
-            child.Moving += OnNodeChanged;
+            m_Children.Add(t_Child);
+            t_Child.Group = this; 
+            t_Child.SizeChanged += OnNodeChanged;
+            t_Child.Moving += OnNodeChanged;
         }
 
         UpdateDimensions();
     }
 
-    private void OnNodeChanged(NodeModel node)
+    private void OnNodeChanged(NodeModel Node)
     {
         if (UpdateDimensions())
         {
@@ -117,19 +117,19 @@ public class GroupModel : NodeModel
         if (Children.Count == 0)
             return true;
 
-        if (Children.Any(n => n.Size == null))
+        if (Children.Any(N => N.Size == null))
             return false;
 
-        var bounds = Children.GetBounds();
+        var t_Bounds = Children.GetBounds();
 
-        var newPosition = new Vector2(bounds.Left - Padding, bounds.Top - Padding);
-        if (!Position.Equals(newPosition))
+        var t_NewPosition = new Vector2(t_Bounds.Left - Padding, t_Bounds.Top - Padding);
+        if (!Position.Equals(t_NewPosition))
         {
-            Position = newPosition;
+            Position = t_NewPosition;
             TriggerMoving();
         }
 
-        Size = new Size(bounds.Width + Padding * 2, bounds.Height + Padding * 2);
+        Size = new Size(t_Bounds.Width + Padding * 2, t_Bounds.Height + Padding * 2);
         return true;
     }
 }

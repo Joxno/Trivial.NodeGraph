@@ -2,36 +2,36 @@
      style="@Style"
      width="@Width.ToInvariantString()"
      height="@Height.ToInvariantString()"
-     viewBox="@(FormattableString.Invariant($"{_x} {_y} {_width} {_height}"))">
+     viewBox="@(FormattableString.Invariant($"{m_X} {m_Y} {m_Width} {m_Height}"))">
 
-    @foreach (var group in BlazorDiagram.Groups)
+    @foreach (var t_Group in BlazorDiagram.Groups)
     {
-        if (group.Size == null)
+        if (t_Group.Size == null)
             continue;
 
-        <rect @key="group"
+        <rect @key="t_Group"
               class="navigator-group"
-              x="@group.Position.X.ToInvariantString()"
-              y="@group.Position.Y.ToInvariantString()"
-              width="@group.Size.Width.ToInvariantString()"
-              height="@group.Size.Height.ToInvariantString()"
+              x="@t_Group.Position.X.ToInvariantString()"
+              y="@t_Group.Position.Y.ToInvariantString()"
+              width="@t_Group.Size.Width.ToInvariantString()"
+              height="@t_Group.Size.Height.ToInvariantString()"
               fill="@GroupColor">
         </rect>
     }
 
-    @foreach (var node in BlazorDiagram.Nodes)
+    @foreach (var t_Node in BlazorDiagram.Nodes)
     {
-        if (node.Size == null)
+        if (t_Node.Size == null)
             continue;
 
-        @GetNodeRenderFragment(node)
+        @GetNodeRenderFragment(t_Node)
     }
 
     <rect class="navigator-current-view"
-          x="@(_vX.ToInvariantString())"
-          y="@(_vY.ToInvariantString())"
-          width="@_vWidth.ToInvariantString()"
-          height="@_vHeight.ToInvariantString()"
+          x="@(m_VX.ToInvariantString())"
+          y="@(m_VY.ToInvariantString())"
+          width="@m_VWidth.ToInvariantString()"
+          height="@m_VHeight.ToInvariantString()"
           fill="none"
           stroke="@ViewStrokeColor"
           stroke-width="@ViewStrokeWidth">

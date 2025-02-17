@@ -11,7 +11,7 @@ namespace Trivial.Graph.Components.Renderers;
 
 public class LinkVertexRenderer : ComponentBase, IDisposable
 {
-    private bool _shouldRender = true;
+    private bool m_ShouldRender = true;
 
     [CascadingParameter] public BlazorDiagram BlazorDiagram { get; set; } = null!;
     [Parameter] public LinkVertexModel Vertex { get; set; } = null!;
@@ -32,62 +32,62 @@ public class LinkVertexRenderer : ComponentBase, IDisposable
 
     protected override bool ShouldRender()
     {
-        if (!_shouldRender) return false;
+        if (!m_ShouldRender) return false;
 
-        _shouldRender = false;
+        m_ShouldRender = false;
         return true;
     }
 
-    protected override void BuildRenderTree(RenderTreeBuilder builder)
+    protected override void BuildRenderTree(RenderTreeBuilder Builder)
     {
-        var componentType = BlazorDiagram.GetComponent(Vertex);
+        var t_ComponentType = BlazorDiagram.GetComponent(Vertex);
 
-        builder.OpenElement(0, "g");
-        builder.AddAttribute(1, "class", "diagram-link-vertex");
-        builder.AddAttribute(4, "cursor", "move");
-        builder.AddAttribute(5, "ondblclick", value: EventCallback.Factory.Create<MouseEventArgs>(this, OnfloatClick));
-        builder.AddAttribute(6, "onpointerdown", EventCallback.Factory.Create<PointerEventArgs>(this, OnPointerDown));
-        builder.AddAttribute(7, "onpointerup", EventCallback.Factory.Create<PointerEventArgs>(this, OnPointerUp));
-        builder.AddEventStopPropagationAttribute(8, "onpointerdown", true);
-        builder.AddEventStopPropagationAttribute(9, "onpointerup", true);
+        Builder.OpenElement(0, "g");
+        Builder.AddAttribute(1, "class", "diagram-link-vertex");
+        Builder.AddAttribute(4, "cursor", "move");
+        Builder.AddAttribute(5, "ondblclick", value: EventCallback.Factory.Create<MouseEventArgs>(this, OnfloatClick));
+        Builder.AddAttribute(6, "onpointerdown", EventCallback.Factory.Create<PointerEventArgs>(this, OnPointerDown));
+        Builder.AddAttribute(7, "onpointerup", EventCallback.Factory.Create<PointerEventArgs>(this, OnPointerUp));
+        Builder.AddEventStopPropagationAttribute(8, "onpointerdown", true);
+        Builder.AddEventStopPropagationAttribute(9, "onpointerup", true);
 
-        if (componentType == null)
+        if (t_ComponentType == null)
         {
-            builder.OpenElement(10, "circle");
-            builder.AddAttribute(11, "cx", Vertex.Position.X.ToInvariantString());
-            builder.AddAttribute(12, "cy", Vertex.Position.Y.ToInvariantString());
-            builder.AddAttribute(13, "r", "5");
-            builder.AddAttribute(14, "fill", ColorToUse);
-            builder.CloseElement();
+            Builder.OpenElement(10, "circle");
+            Builder.AddAttribute(11, "cx", Vertex.Position.X.ToInvariantString());
+            Builder.AddAttribute(12, "cy", Vertex.Position.Y.ToInvariantString());
+            Builder.AddAttribute(13, "r", "5");
+            Builder.AddAttribute(14, "fill", ColorToUse);
+            Builder.CloseElement();
         }
         else
         {
-            builder.OpenComponent(15, componentType);
-            builder.AddAttribute(16, "Vertex", Vertex);
-            builder.AddAttribute(17, "Color", ColorToUse);
-            builder.CloseComponent();
+            Builder.OpenComponent(15, t_ComponentType);
+            Builder.AddAttribute(16, "Vertex", Vertex);
+            Builder.AddAttribute(17, "Color", ColorToUse);
+            Builder.CloseComponent();
         }
 
-        builder.CloseElement();
+        Builder.CloseElement();
     }
 
     private void OnVertexChanged(Model _)
     {
-        _shouldRender = true;
+        m_ShouldRender = true;
         InvokeAsync(StateHasChanged);
     }
 
-    private void OnPointerDown(PointerEventArgs e)
+    private void OnPointerDown(PointerEventArgs E)
     {
-        BlazorDiagram.TriggerPointerDown(Vertex, e.ToCore());
+        BlazorDiagram.TriggerPointerDown(Vertex, E.ToCore());
     }
 
-    private void OnPointerUp(PointerEventArgs e)
+    private void OnPointerUp(PointerEventArgs E)
     {
-        BlazorDiagram.TriggerPointerUp(Vertex, e.ToCore());
+        BlazorDiagram.TriggerPointerUp(Vertex, E.ToCore());
     }
 
-    private void OnfloatClick(MouseEventArgs e)
+    private void OnfloatClick(MouseEventArgs E)
     {
         Vertex.Parent.Vertices.Remove(Vertex);
         Vertex.Parent.Refresh();

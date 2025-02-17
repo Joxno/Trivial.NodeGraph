@@ -1,65 +1,65 @@
 ﻿@using Trivial.Domain.Behaviors;
 
 @{
-    var color = Link.Selected ? Link.SelectedColor ?? BlazorDiagram.Options.Links.DefaultSelectedColor : Link.Color ?? BlazorDiagram.Options.Links.DefaultColor;
-    var result = Link.PathGeneratorResult;
-    if (result == null)
+    var t_Color = Link.Selected ? Link.SelectedColor ?? BlazorDiagram.Options.Links.DefaultSelectedColor : Link.Color ?? BlazorDiagram.Options.Links.DefaultColor;
+    var t_Result = Link.PathGeneratorResult;
+    if (t_Result == null)
         return;
 
-    var dnlb = BlazorDiagram.GetBehavior<DragNewLinkBehavior>();
-    var d = result.FullPath.ToString();
+    var t_Dnlb = BlazorDiagram.GetBehavior<DragNewLinkBehavior>();
+    var t_D = t_Result.FullPath.ToString();
 }
 
-<path d="@d"
+<path d="@t_D"
       stroke-width="@Link.Width.ToInvariantString()"
       fill="none"
-      stroke="@color" />
+      stroke="@t_Color" />
 
-@if (dnlb!.OngoingLink == null || dnlb.OngoingLink != Link)
+@if (t_Dnlb!.OngoingLink == null || t_Dnlb.OngoingLink != Link)
 {
     @if (Link.Vertices.Count == 0)
     {
-        @GetSelectionHelperPath(color, d, 0)
+        @GetSelectionHelperPath(t_Color, t_D, 0)
     }
     else
     {
-        @for (var i = 0; i < result.Paths.Length; i++)
+        @for (var t_I = 0; t_I < t_Result.Paths.Length; t_I++)
         {
-            d = result.Paths[i].ToString();
-            var index = i;
-            @GetSelectionHelperPath(color, d, index)
+            t_D = t_Result.Paths[t_I].ToString();
+            var t_Index = t_I;
+            @GetSelectionHelperPath(t_Color, t_D, t_Index)
         }
     }
 }
 
-@if (Link.SourceMarker != null && result.SourceMarkerAngle != null && result.SourceMarkerPosition != null)
+@if (Link.SourceMarker != null && t_Result.SourceMarkerAngle != null && t_Result.SourceMarkerPosition != null)
 {
-    <g transform="@(FormattableString.Invariant($"translate({result.SourceMarkerPosition.Value.X}, {result.SourceMarkerPosition.Value.Y}) rotate({result.SourceMarkerAngle})"))">
-        <path d="@Link.SourceMarker.Path" fill="@color"></path>
+    <g transform="@(FormattableString.Invariant($"translate({t_Result.SourceMarkerPosition.Value.X}, {t_Result.SourceMarkerPosition.Value.Y}) rotate({t_Result.SourceMarkerAngle})"))">
+        <path d="@Link.SourceMarker.Path" fill="@t_Color"></path>
     </g>
 }
 
-@if (Link.TargetMarker != null && result.TargetMarkerAngle != null && result.TargetMarkerPosition != null)
+@if (Link.TargetMarker != null && t_Result.TargetMarkerAngle != null && t_Result.TargetMarkerPosition != null)
 {
-    <g transform="@(FormattableString.Invariant($"translate({result.TargetMarkerPosition.Value.X}, {result.TargetMarkerPosition.Value.Y}) rotate({result.TargetMarkerAngle})"))">
-        <path d="@Link.TargetMarker.Path" fill="@color"></path>
+    <g transform="@(FormattableString.Invariant($"translate({t_Result.TargetMarkerPosition.Value.X}, {t_Result.TargetMarkerPosition.Value.Y}) rotate({t_Result.TargetMarkerAngle})"))">
+        <path d="@Link.TargetMarker.Path" fill="@t_Color"></path>
     </g>
 }
 
 @if (Link.Vertices.Count > 0)
 {
-    var selectedColor = Link.SelectedColor ?? BlazorDiagram.Options.Links.DefaultSelectedColor;
-    var normalColor = Link.Color ?? BlazorDiagram.Options.Links.DefaultColor;
-    @foreach (var vertex in Link.Vertices)
+    var t_SelectedColor = Link.SelectedColor ?? BlazorDiagram.Options.Links.DefaultSelectedColor;
+    var t_NormalColor = Link.Color ?? BlazorDiagram.Options.Links.DefaultColor;
+    @foreach (var t_Vertex in Link.Vertices)
     {
-        <LinkVertexRenderer @key="vertex.Id"
-                    Vertex="vertex"
-                    Color="@normalColor"
-                    SelectedColor="@selectedColor" />
+        <LinkVertexRenderer @key="t_Vertex.Id"
+                    Vertex="t_Vertex"
+                    Color="@t_NormalColor"
+                    SelectedColor="@t_SelectedColor" />
     }
 }
 
-@foreach (var label in Link.Labels)
+@foreach (var t_Label in Link.Labels)
 {
-    <LinkLabelRenderer @key="label.Id" Label="@label" Path="@result.FullPath" />
+    <LinkLabelRenderer @key="t_Label.Id" Label="@t_Label" Path="@t_Result.FullPath" />
 }

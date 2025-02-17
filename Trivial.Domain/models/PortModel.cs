@@ -7,24 +7,24 @@ namespace Trivial.Domain.Models;
 
 public class PortModel : Model, IHasBounds, IHasShape, ILinkable
 {
-    private readonly List<BaseLinkModel> _links = new(4);
+    private readonly List<BaseLinkModel> m_Links = new(4);
 
-    public PortModel(NodeModel parent, PortAlignment alignment = PortAlignment.Bottom, Vector2? position = null,
-        Size? size = null)
+    public PortModel(NodeModel Parent, PortAlignment Alignment = PortAlignment.Bottom, Vector2? Position = null,
+        Size? Size = null)
     {
-        Parent = parent;
-        Alignment = alignment;
-        Position = position ?? Vector2.Zero;
-        Size = size ?? Size.Zero;
+        this.Parent = Parent;
+        this.Alignment = Alignment;
+        this.Position = Position ?? Vector2.Zero;
+        this.Size = Size ?? Size.Zero;
     }
 
-    public PortModel(string id, NodeModel parent, PortAlignment alignment = PortAlignment.Bottom,
-        Vector2? position = null, Size? size = null) : base(id)
+    public PortModel(string Id, NodeModel Parent, PortAlignment Alignment = PortAlignment.Bottom,
+        Vector2? Position = null, Size? Size = null) : base(Id)
     {
-        Parent = parent;
-        Alignment = alignment;
-        Position = position ?? Vector2.Zero;
-        Size = size ?? Size.Zero;
+        this.Parent = Parent;
+        this.Alignment = Alignment;
+        this.Position = Position ?? Vector2.Zero;
+        this.Size = Size ?? Size.Zero;
     }
 
     public NodeModel Parent { get; }
@@ -32,7 +32,7 @@ public class PortModel : Model, IHasBounds, IHasShape, ILinkable
     public Vector2 Position { get; set; }
     public Vector2 MiddlePosition => new(Position.X + (Size.Width / 2), Position.Y + (Size.Height / 2));
     public Size Size { get; set; }
-    public IReadOnlyList<BaseLinkModel> Links => _links;
+    public IReadOnlyList<BaseLinkModel> Links => m_Links;
     /// <summary>
     /// If set to false, a call to Refresh() will force the port to update its position/size
     /// </summary>
@@ -46,10 +46,10 @@ public class PortModel : Model, IHasBounds, IHasShape, ILinkable
 
     public void RefreshLinks()
     {
-        foreach (var link in Links)
+        foreach (var t_Link in Links)
         {
-            link.Refresh();
-            link.RefreshLinks();
+            t_Link.Refresh();
+            t_Link.RefreshLinks();
         }
     }
 
@@ -59,13 +59,13 @@ public class PortModel : Model, IHasBounds, IHasShape, ILinkable
 
     public virtual IShape GetShape() => Shapes.Circle(this);
 
-    public virtual bool CanAttachTo(ILinkable other)
+    public virtual bool CanAttachTo(ILinkable Other)
     {
         // Todo: remove in order to support same node links
-        return other is PortModel port && port != this && !port.Locked && Parent != port.Parent;
+        return Other is PortModel t_Port && t_Port != this && !t_Port.Locked && Parent != t_Port.Parent;
     }
 
-    void ILinkable.AddLink(BaseLinkModel link) => _links.Add(link);
+    void ILinkable.AddLink(BaseLinkModel Link) => m_Links.Add(Link);
 
-    void ILinkable.RemoveLink(BaseLinkModel link) => _links.Remove(link);
+    void ILinkable.RemoveLink(BaseLinkModel Link) => m_Links.Remove(Link);
 }

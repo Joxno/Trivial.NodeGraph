@@ -5,27 +5,27 @@ namespace Trivial.Domain.Behaviors;
 
 public class SelectionBehavior : Behavior
 {
-    public SelectionBehavior(Diagram diagram) : base(diagram)
+    public SelectionBehavior(Diagram Diagram) : base(Diagram)
     {
-        Diagram.PointerDown += OnPointerDown;
+        base.Diagram.PointerDown += OnPointerDown;
     }
 
-    private void OnPointerDown(Model? model, PointerEventArgs e)
+    private void OnPointerDown(Model? Model, PointerEventArgs E)
     {
-        var ctrlKey = e.CtrlKey;
-        switch (model)
+        var t_CtrlKey = E.CtrlKey;
+        switch (Model)
         {
             case null:
                 Diagram.UnselectAll();
                 break;
-            case SelectableModel sm when ctrlKey && sm.Selected:
-                Diagram.UnselectModel(sm);
+            case SelectableModel t_Sm when t_CtrlKey && t_Sm.Selected:
+                Diagram.UnselectModel(t_Sm);
                 break;
-            case SelectableModel sm:
+            case SelectableModel t_Sm:
             {
-                if (!sm.Selected)
+                if (!t_Sm.Selected)
                 {
-                    Diagram.SelectModel(sm, !ctrlKey || !Diagram.Options.AllowMultiSelection);
+                    Diagram.SelectModel(t_Sm, !t_CtrlKey || !Diagram.Options.AllowMultiSelection);
                 }
 
                 break;

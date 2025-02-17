@@ -9,58 +9,58 @@ namespace Trivial.Graph.Algorithms;
 
 public static class LinksReconnectionAlgorithms
 {
-    public static void ReconnectLinksToClosestPorts(this Diagram diagram)
+    public static void ReconnectLinksToClosestPorts(this Diagram Diagram)
     {
         // Only refresh ports once
-        var modelsToRefresh = new HashSet<Model>();
+        var t_ModelsToRefresh = new HashSet<Model>();
 
-        foreach (var link in diagram.Links.ToArray())
+        foreach (var t_Link in Diagram.Links.ToArray())
         {
-            if (link.Source is not SinglePortAnchor spa1 || link.Target is not SinglePortAnchor spa2)
+            if (t_Link.Source is not SinglePortAnchor t_Spa1 || t_Link.Target is not SinglePortAnchor t_Spa2)
                 continue;
 
-            var sourcePorts = spa1.Port.Parent.Ports;
-            var targetPorts = spa2.Port.Parent.Ports;
+            var t_SourcePorts = t_Spa1.Port.Parent.Ports;
+            var t_TargetPorts = t_Spa2.Port.Parent.Ports;
 
             // Find the ports with minimal distance
-            var minDistance = float.MaxValue;
-            var minSourcePort = spa1.Port;
-            var minTargetPort = spa2.Port;
-            foreach (var sourcePort in sourcePorts)
+            var t_MinDistance = float.MaxValue;
+            var t_MinSourcePort = t_Spa1.Port;
+            var t_MinTargetPort = t_Spa2.Port;
+            foreach (var t_SourcePort in t_SourcePorts)
             {
-                foreach (var targetPort in targetPorts)
+                foreach (var t_TargetPort in t_TargetPorts)
                 {
-                    var distance = sourcePort.Position.DistanceTo(targetPort.Position);
-                    if (distance < minDistance)
+                    var t_Distance = t_SourcePort.Position.DistanceTo(t_TargetPort.Position);
+                    if (t_Distance < t_MinDistance)
                     {
-                        minDistance = distance;
-                        minSourcePort = sourcePort;
-                        minTargetPort = targetPort;
+                        t_MinDistance = t_Distance;
+                        t_MinSourcePort = t_SourcePort;
+                        t_MinTargetPort = t_TargetPort;
                     }
                 }
             }
 
             // Reconnect
-            if (spa1.Port != minSourcePort)
+            if (t_Spa1.Port != t_MinSourcePort)
             {
-                modelsToRefresh.Add(spa1.Port);
-                modelsToRefresh.Add(minSourcePort);
-                link.SetSource(new SinglePortAnchor(minSourcePort));
-                modelsToRefresh.Add(link);
+                t_ModelsToRefresh.Add(t_Spa1.Port);
+                t_ModelsToRefresh.Add(t_MinSourcePort);
+                t_Link.SetSource(new SinglePortAnchor(t_MinSourcePort));
+                t_ModelsToRefresh.Add(t_Link);
             }
 
-            if (spa2.Port != minTargetPort)
+            if (t_Spa2.Port != t_MinTargetPort)
             {
-                modelsToRefresh.Add(spa2.Port);
-                modelsToRefresh.Add(minTargetPort);
-                link.SetTarget(new SinglePortAnchor(minTargetPort));
-                modelsToRefresh.Add(link);
+                t_ModelsToRefresh.Add(t_Spa2.Port);
+                t_ModelsToRefresh.Add(t_MinTargetPort);
+                t_Link.SetTarget(new SinglePortAnchor(t_MinTargetPort));
+                t_ModelsToRefresh.Add(t_Link);
             }
         }
 
-        foreach (var model in modelsToRefresh)
+        foreach (var t_Model in t_ModelsToRefresh)
         {
-            model.Refresh();
+            t_Model.Refresh();
         }
     }
 }

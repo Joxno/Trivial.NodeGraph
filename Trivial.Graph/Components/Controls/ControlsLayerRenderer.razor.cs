@@ -13,7 +13,7 @@ namespace Trivial.Graph.Components.Controls;
 
 public partial class ControlsLayerRenderer : IDisposable
 {
-    private bool _shouldRender;
+    private bool m_ShouldRender;
 
     [CascadingParameter] public BlazorDiagram BlazorDiagram { get; set; } = null!;
 
@@ -31,58 +31,58 @@ public partial class ControlsLayerRenderer : IDisposable
 
     protected override bool ShouldRender()
     {
-        if (!_shouldRender)
+        if (!m_ShouldRender)
             return false;
 
-        _shouldRender = false;
+        m_ShouldRender = false;
         return true;
     }
 
-    private void OnControlsChangeCaused(Model cause)
+    private void OnControlsChangeCaused(Model Cause)
     {
-        if (Svg != cause.IsSvg())
+        if (Svg != Cause.IsSvg())
             return;
 
-        _shouldRender = true;
+        m_ShouldRender = true;
         InvokeAsync(StateHasChanged);
     }
 
-    private RenderFragment RenderControl(Model model, Control control, Vector2 position, bool svg)
+    private RenderFragment RenderControl(Model Model, Control Control, Vector2 Position, bool Svg)
     {
-        var componentType = BlazorDiagram.GetComponent(control.GetType());
-        if (componentType == null)
+        var t_ComponentType = BlazorDiagram.GetComponent(Control.GetType());
+        if (t_ComponentType == null)
             throw new BlazorDiagramsException(
-                $"A component couldn't be found for the user action {control.GetType().Name}");
+                $"A component couldn't be found for the user action {Control.GetType().Name}");
 
-        return builder =>
+        return Builder =>
         {
-            builder.OpenElement(0, svg ? "g" : "div");
-            builder.AddAttribute(1, "class",
-                $"{(control is ExecutableControl ? "executable " : "")}diagram-control {control.GetType().Name}");
-            if (svg)
-                builder.AddAttribute(2, "transform",
-                    $"translate({position.X.ToInvariantString()} {position.Y.ToInvariantString()})");
+            Builder.OpenElement(0, Svg ? "g" : "div");
+            Builder.AddAttribute(1, "class",
+                $"{(Control is ExecutableControl ? "executable " : "")}diagram-control {Control.GetType().Name}");
+            if (Svg)
+                Builder.AddAttribute(2, "transform",
+                    $"translate({Position.X.ToInvariantString()} {Position.Y.ToInvariantString()})");
             else
-                builder.AddAttribute(2, "style",
-                    $"top: {position.Y.ToInvariantString()}px; left: {position.X.ToInvariantString()}px");
+                Builder.AddAttribute(2, "style",
+                    $"top: {Position.Y.ToInvariantString()}px; left: {Position.X.ToInvariantString()}px");
 
-            if (control is ExecutableControl ec)
+            if (Control is ExecutableControl t_Ec)
             {
-                builder.AddAttribute(3, "onpointerdown",
-                    EventCallback.Factory.Create<PointerEventArgs>(this, e => OnPointerDown(e, model, ec)));
-                builder.AddEventStopPropagationAttribute(4, "onpointerdown", true);
+                Builder.AddAttribute(3, "onpointerdown",
+                    EventCallback.Factory.Create<PointerEventArgs>(this, E => OnPointerDown(E, Model, t_Ec)));
+                Builder.AddEventStopPropagationAttribute(4, "onpointerdown", true);
             }
 
-            builder.OpenComponent(5, componentType);
-            builder.AddAttribute(6, "Control", control);
-            builder.AddAttribute(7, "Model", model);
-            builder.CloseComponent();
-            builder.CloseElement();
+            Builder.OpenComponent(5, t_ComponentType);
+            Builder.AddAttribute(6, "Control", Control);
+            Builder.AddAttribute(7, "Model", Model);
+            Builder.CloseComponent();
+            Builder.CloseElement();
         };
     }
 
-    private async Task OnPointerDown(PointerEventArgs e, Model model, ExecutableControl control)
+    private async Task OnPointerDown(PointerEventArgs E, Model Model, ExecutableControl Control)
     {
-        if (e.Button == 0 || e.Buttons == 1) await control.OnPointerDown(BlazorDiagram, model, e.ToCore());
+        if (E.Button == 0 || E.Buttons == 1) await Control.OnPointerDown(BlazorDiagram, Model, E.ToCore());
     }
 }

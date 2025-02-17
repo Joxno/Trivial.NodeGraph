@@ -18,95 +18,95 @@ public class Rectangle : IShape
     public float Left { get; }
 
     [JsonConstructor]
-    public Rectangle(float left, float top, float right, float bottom)
+    public Rectangle(float Left, float Top, float Right, float Bottom)
     {
-        Left = left;
-        Top = top;
-        Right = right;
-        Bottom = bottom;
-        Width = MathF.Abs(Left - Right);
-        Height = MathF.Abs(Top - Bottom);
+        this.Left = Left;
+        this.Top = Top;
+        this.Right = Right;
+        this.Bottom = Bottom;
+        Width = MathF.Abs(this.Left - this.Right);
+        Height = MathF.Abs(this.Top - this.Bottom);
     }
 
-    public Rectangle(Vector2 position, Size size)
+    public Rectangle(Vector2 Position, Size Size)
     {
-        ArgumentNullException.ThrowIfNull(position, nameof(position));
-        ArgumentNullException.ThrowIfNull(size, nameof(size));
+        ArgumentNullException.ThrowIfNull(Position, nameof(Position));
+        ArgumentNullException.ThrowIfNull(Size, nameof(Size));
 
-        Left = position.X;
-        Top = position.Y;
-        Right = Left + size.Width;
-        Bottom = Top + size.Height;
-        Width = size.Width;
-        Height = size.Height;
+        Left = Position.X;
+        Top = Position.Y;
+        Right = Left + Size.Width;
+        Bottom = Top + Size.Height;
+        Width = Size.Width;
+        Height = Size.Height;
     }
 
-    public bool Overlap(Rectangle r)
-        => Left < r.Right && Right > r.Left && Top < r.Bottom && Bottom > r.Top;
+    public bool Overlap(Rectangle R)
+        => Left < R.Right && Right > R.Left && Top < R.Bottom && Bottom > R.Top;
 
-    public bool Intersects(Rectangle r)
+    public bool Intersects(Rectangle R)
     {
-        var thisX = Left;
-        var thisY = Top;
-        var thisW = Width;
-        var thisH = Height;
-        var rectX = r.Left;
-        var rectY = r.Top;
-        var rectW = r.Width;
-        var rectH = r.Height;
-        return rectX < thisX + thisW && thisX < rectX + rectW && rectY < thisY + thisH && thisY < rectY + rectH;
+        var t_ThisX = Left;
+        var t_ThisY = Top;
+        var t_ThisW = Width;
+        var t_ThisH = Height;
+        var t_RectX = R.Left;
+        var t_RectY = R.Top;
+        var t_RectW = R.Width;
+        var t_RectH = R.Height;
+        return t_RectX < t_ThisX + t_ThisW && t_ThisX < t_RectX + t_RectW && t_RectY < t_ThisY + t_ThisH && t_ThisY < t_RectY + t_RectH;
     }
 
-    public Rectangle Inflate(float horizontal, float vertical)
-        => new(Left - horizontal, Top - vertical, Right + horizontal, Bottom + vertical);
+    public Rectangle Inflate(float Horizontal, float Vertical)
+        => new(Left - Horizontal, Top - Vertical, Right + Horizontal, Bottom + Vertical);
 
-    public Rectangle Union(Rectangle r)
+    public Rectangle Union(Rectangle R)
     {
-        var x1 = MathF.Min(Left, r.Left);
-        var x2 = MathF.Max(Left + Width, r.Left + r.Width);
-        var y1 = MathF.Min(Top, r.Top);
-        var y2 = MathF.Max(Top + Height, r.Top + r.Height);
-        return new(x1, y1, x2, y2);
+        var t_X1 = MathF.Min(Left, R.Left);
+        var t_X2 = MathF.Max(Left + Width, R.Left + R.Width);
+        var t_Y1 = MathF.Min(Top, R.Top);
+        var t_Y2 = MathF.Max(Top + Height, R.Top + R.Height);
+        return new(t_X1, t_Y1, t_X2, t_Y2);
     }
 
-    public bool ContainsPoint(Vector2 point) => ContainsPoint(point.X, point.Y);
+    public bool ContainsPoint(Vector2 Point) => ContainsPoint(Point.X, Point.Y);
 
-    public bool ContainsPoint(float x, float y)
-        => x >= Left && x <= Right && y >= Top && y <= Bottom;
+    public bool ContainsPoint(float X, float Y)
+        => X >= Left && X <= Right && Y >= Top && Y <= Bottom;
 
-    public IEnumerable<Vector2> GetIntersectionsWithLine(Line line)
+    public IEnumerable<Vector2> GetIntersectionsWithLine(Line Line)
     {
-        var borders = new[] {
+        var t_Borders = new[] {
             new Line(NorthWest, NorthEast),
             new Line(NorthEast, SouthEast),
             new Line(SouthWest, SouthEast),
             new Line(NorthWest, SouthWest)
         };
 
-        for (var i = 0; i < borders.Length; i++)
+        for (var t_I = 0; t_I < t_Borders.Length; t_I++)
         {
-            var intersectionPt = borders[i].GetIntersection(line);
-            if (intersectionPt != null)
-                yield return intersectionPt.Value;
+            var t_IntersectionPt = t_Borders[t_I].GetIntersection(Line);
+            if (t_IntersectionPt != null)
+                yield return t_IntersectionPt.Value;
         }
     }
 
-    public Vector2? GetPointAtAngle(float a)
+    public Vector2? GetPointAtAngle(float A)
     {
-        var vx = MathF.Cos(a * MathF.PI / 180);
-        var vy = MathF.Sin(a * MathF.PI / 180);
-        var px = Left + Width / 2;
-        var py = Top + Height / 2;
-        float? t1 = (Left - px) / vx; // left
-        float? t2 = (Right - px) / vx; // right
-        float? t3 = (Top - py) / vy; // top
-        float? t4 = (Bottom - py) / vy; // bottom
-        var t = (new[] { t1, t2, t3, t4 }).Where(n => n.HasValue && float.IsFinite(n.Value) && n.Value > 0).DefaultIfEmpty(null).Min();
-        if (t == null) return null;
+        var t_Vx = MathF.Cos(A * MathF.PI / 180);
+        var t_Vy = MathF.Sin(A * MathF.PI / 180);
+        var t_Px = Left + Width / 2;
+        var t_Py = Top + Height / 2;
+        float? t_T1 = (Left - t_Px) / t_Vx; // left
+        float? t_T2 = (Right - t_Px) / t_Vx; // right
+        float? t_T3 = (Top - t_Py) / t_Vy; // top
+        float? t_T4 = (Bottom - t_Py) / t_Vy; // bottom
+        var t_T = (new[] { t_T1, t_T2, t_T3, t_T4 }).Where(N => N.HasValue && float.IsFinite(N.Value) && N.Value > 0).DefaultIfEmpty(null).Min();
+        if (t_T == null) return null;
 
-        var x = px + t.Value * vx;
-        var y = py + t.Value * vy;
-        return new Vector2(x, y);
+        var t_X = t_Px + t_T.Value * t_Vx;
+        var t_Y = t_Py + t_T.Value * t_Vy;
+        return new Vector2(t_X, t_Y);
     }
 
     public Vector2 Center => new(Left + Width / 2, Top + Height / 2);
@@ -119,10 +119,10 @@ public class Rectangle : IShape
     public Vector2 South => new(Left + Width / 2, Bottom);
     public Vector2 West => new(Left, Top + Height / 2);
 
-    public bool Equals(Rectangle? other)
+    public bool Equals(Rectangle? Other)
     {
-        return other != null && Left == other.Left && Right == other.Right && Top == other.Top &&
-            Bottom == other.Bottom && Width == other.Width && Height == other.Height;
+        return Other != null && Left == Other.Left && Right == Other.Right && Top == Other.Top &&
+            Bottom == Other.Bottom && Width == Other.Width && Height == Other.Height;
     }
 
     public override string ToString()

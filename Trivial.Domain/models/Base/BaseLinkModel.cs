@@ -10,22 +10,22 @@ namespace Trivial.Domain.Models.Base;
 
 public abstract class BaseLinkModel : SelectableModel, IHasBounds, ILinkable
 {
-    private readonly List<BaseLinkModel> _links = new();
+    private readonly List<BaseLinkModel> m_Links = new();
 
     public event Action<BaseLinkModel, Anchor, Anchor>? SourceChanged;
     public event Action<BaseLinkModel, Anchor, Anchor>? TargetChanged;
     public event Action<BaseLinkModel>? TargetAttached;
 
-    protected BaseLinkModel(Anchor source, Anchor target)
+    protected BaseLinkModel(Anchor Source, Anchor Target)
     {
-        Source = source;
-        Target = target;
+        this.Source = Source;
+        this.Target = Target;
     }
 
-    protected BaseLinkModel(string id, Anchor source, Anchor target) : base(id)
+    protected BaseLinkModel(string Id, Anchor Source, Anchor Target) : base(Id)
     {
-        Source = source;
-        Target = target;
+        this.Source = Source;
+        this.Target = Target;
     }
 
     public Anchor Source { get; private set; }
@@ -41,7 +41,7 @@ public abstract class BaseLinkModel : SelectableModel, IHasBounds, ILinkable
     public bool Segmentable { get; set; } = false;
     public List<LinkVertexModel> Vertices { get; } = new();
     public List<LinkLabelModel> Labels { get; } = new();
-    public IReadOnlyList<BaseLinkModel> Links => _links;
+    public IReadOnlyList<BaseLinkModel> Links => m_Links;
 
     public override void Refresh()
     {
@@ -51,46 +51,46 @@ public abstract class BaseLinkModel : SelectableModel, IHasBounds, ILinkable
 
     public void RefreshLinks()
     {
-        foreach (var link in Links)
+        foreach (var t_Link in Links)
         {
-            link.Refresh();
+            t_Link.Refresh();
         }
     }
 
-    public LinkLabelModel AddLabel(string content, float? distance = null, Vector2? offset = null)
+    public LinkLabelModel AddLabel(string Content, float? Distance = null, Vector2? Offset = null)
     {
-        var label = new LinkLabelModel(this, content, distance, offset);
-        Labels.Add(label);
-        return label;
+        var t_Label = new LinkLabelModel(this, Content, Distance, Offset);
+        Labels.Add(t_Label);
+        return t_Label;
     }
 
-    public LinkVertexModel AddVertex(Vector2? position = null)
+    public LinkVertexModel AddVertex(Vector2? Position = null)
     {
-        var vertex = new LinkVertexModel(this, position);
-        Vertices.Add(vertex);
-        return vertex;
+        var t_Vertex = new LinkVertexModel(this, Position);
+        Vertices.Add(t_Vertex);
+        return t_Vertex;
     }
 
-    public void SetSource(Anchor anchor)
+    public void SetSource(Anchor Anchor)
     {
-        ArgumentNullException.ThrowIfNull(anchor, nameof(anchor));
+        ArgumentNullException.ThrowIfNull(Anchor, nameof(Anchor));
 
-        if (Source == anchor)
+        if (Source == Anchor)
             return;
 
-        var old = Source;
-        Source = anchor;
-        SourceChanged?.Invoke(this, old, Source);
+        var t_Old = Source;
+        Source = Anchor;
+        SourceChanged?.Invoke(this, t_Old, Source);
     }
 
-    public void SetTarget(Anchor anchor)
+    public void SetTarget(Anchor Anchor)
     {
-        if (Target == anchor)
+        if (Target == Anchor)
             return;
 
-        var old = Target;
-        Target = anchor;
-        TargetChanged?.Invoke(this, old, Target);
+        var t_Old = Target;
+        Target = Anchor;
+        TargetChanged?.Invoke(this, t_Old, Target);
     }
 
     public Rectangle? GetBounds()
@@ -98,22 +98,22 @@ public abstract class BaseLinkModel : SelectableModel, IHasBounds, ILinkable
         if (PathGeneratorResult == null)
             return null;
 
-        var minX = float.PositiveInfinity;
-        var minY = float.PositiveInfinity;
-        var maxX = float.NegativeInfinity;
-        var maxY = float.NegativeInfinity;
+        var t_MinX = float.PositiveInfinity;
+        var t_MinY = float.PositiveInfinity;
+        var t_MaxX = float.NegativeInfinity;
+        var t_MaxY = float.NegativeInfinity;
 
-        var path = PathGeneratorResult.FullPath;
-        var bbox = path.GetBBox();
-        minX = MathF.Min(minX, (float)bbox.Left);
-        minY = MathF.Min(minY, (float)bbox.Top);
-        maxX = MathF.Max(maxX, (float)bbox.Right);
-        maxY = MathF.Max(maxY, (float)bbox.Bottom);
+        var t_Path = PathGeneratorResult.FullPath;
+        var t_Bbox = t_Path.GetBBox();
+        t_MinX = MathF.Min(t_MinX, (float)t_Bbox.Left);
+        t_MinY = MathF.Min(t_MinY, (float)t_Bbox.Top);
+        t_MaxX = MathF.Max(t_MaxX, (float)t_Bbox.Right);
+        t_MaxY = MathF.Max(t_MaxY, (float)t_Bbox.Bottom);
 
-        return new Rectangle(minX, minY, maxX, maxY);
+        return new Rectangle(t_MinX, t_MinY, t_MaxX, t_MaxY);
     }
 
-    public bool CanAttachTo(ILinkable other) => true;
+    public bool CanAttachTo(ILinkable Other) => true;
 
     /// <summary>
     /// Triggers the TargetAttached event
@@ -124,15 +124,15 @@ public abstract class BaseLinkModel : SelectableModel, IHasBounds, ILinkable
     {
         if (Diagram != null)
         {
-            var router = Router ?? Diagram.Options.Links.DefaultRouter;
-            var pathGenerator = PathGenerator ?? Diagram.Options.Links.DefaultPathGenerator;
-            var route = router.GetRoute(Diagram, this);
-            var source = Source.GetPosition(this, route);
-            var target = Target.GetPosition(this, route);
-            if (source != null && target != null)
+            var t_Router = Router ?? Diagram.Options.Links.DefaultRouter;
+            var t_PathGenerator = PathGenerator ?? Diagram.Options.Links.DefaultPathGenerator;
+            var t_Route = t_Router.GetRoute(Diagram, this);
+            var t_Source = Source.GetPosition(this, t_Route);
+            var t_Target = Target.GetPosition(this, t_Route);
+            if (t_Source != null && t_Target != null)
             {
-                Route = route;
-                PathGeneratorResult = pathGenerator.GetResult(Diagram, this, route, source.Value, target.Value);
+                Route = t_Route;
+                PathGeneratorResult = t_PathGenerator.GetResult(Diagram, this, t_Route, t_Source.Value, t_Target.Value);
                 return;
             }
         }
@@ -141,7 +141,7 @@ public abstract class BaseLinkModel : SelectableModel, IHasBounds, ILinkable
         PathGeneratorResult = null;
     }
 
-    void ILinkable.AddLink(BaseLinkModel link) => _links.Add(link);
+    void ILinkable.AddLink(BaseLinkModel Link) => m_Links.Add(Link);
 
-    void ILinkable.RemoveLink(BaseLinkModel link) => _links.Remove(link);
+    void ILinkable.RemoveLink(BaseLinkModel Link) => m_Links.Remove(Link);
 }

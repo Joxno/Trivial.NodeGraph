@@ -17,8 +17,8 @@ namespace Trivial.Domain;
 
 public abstract class Diagram
 {
-    private readonly Dictionary<Type, Behavior> _behaviors;
-    private readonly List<SelectableModel> _orderedSelectables;
+    private readonly Dictionary<Type, Behavior> m_Behaviors;
+    private readonly List<SelectableModel> m_OrderedSelectables;
 
     public event Action<Model?, PointerEventArgs>? PointerDown;
     public event Action<Model?, PointerEventArgs>? PointerMove;
@@ -36,10 +36,10 @@ public abstract class Diagram
     public event Action? ContainerChanged;
     public event Action? Changed;
 
-    protected Diagram(bool registerDefaultBehaviors = true)
+    protected Diagram(bool RegisterDefaultBehaviors = true)
     {
-        _behaviors = new Dictionary<Type, Behavior>();
-        _orderedSelectables = new List<SelectableModel>();
+        m_Behaviors = new Dictionary<Type, Behavior>();
+        m_OrderedSelectables = new List<SelectableModel>();
 
         Nodes = new NodeLayer(this);
         Links = new LinkLayer(this);
@@ -54,7 +54,7 @@ public abstract class Diagram
         Links.Removed += OnSelectableRemoved;
         Groups.Removed += OnSelectableRemoved;
 
-        if (!registerDefaultBehaviors)
+        if (!RegisterDefaultBehaviors)
             return;
 
         RegisterBehavior(new SelectionBehavior(this));
@@ -78,7 +78,7 @@ public abstract class Diagram
     public float Zoom { get; private set; } = 1;
     public bool SuspendRefresh { get; set; }
     public bool SuspendSorting { get; set; }
-    public IReadOnlyList<SelectableModel> OrderedSelectables => _orderedSelectables;
+    public IReadOnlyList<SelectableModel> OrderedSelectables => m_OrderedSelectables;
 
     public void Refresh()
     {
@@ -88,18 +88,18 @@ public abstract class Diagram
         Changed?.Invoke();
     }
 
-    public void Batch(Action action)
+    public void Batch(Action Action)
     {
         if (SuspendRefresh)
         {
             // If it's already suspended, just execute the action and leave it suspended
             // It's probably handled by an outer batch
-            action();
+            Action();
             return;
         }
 
         SuspendRefresh = true;
-        action();
+        Action();
         SuspendRefresh = false;
         Refresh();
     }
@@ -108,62 +108,62 @@ public abstract class Diagram
 
     public IEnumerable<SelectableModel> GetSelectedModels()
     {
-        foreach (var node in Nodes)
+        foreach (var t_Node in Nodes)
         {
-            if (node.Selected)
-                yield return node;
+            if (t_Node.Selected)
+                yield return t_Node;
         }
 
-        foreach (var link in Links)
+        foreach (var t_Link in Links)
         {
-            if (link.Selected)
-                yield return link;
+            if (t_Link.Selected)
+                yield return t_Link;
 
-            foreach (var vertex in link.Vertices)
+            foreach (var t_Vertex in t_Link.Vertices)
             {
-                if (vertex.Selected)
-                    yield return vertex;
+                if (t_Vertex.Selected)
+                    yield return t_Vertex;
             }
         }
 
-        foreach (var group in Groups)
+        foreach (var t_Group in Groups)
         {
-            if (group.Selected)
-                yield return group;
+            if (t_Group.Selected)
+                yield return t_Group;
         }
     }
 
-    public void SelectModel(SelectableModel model, bool unselectOthers)
+    public void SelectModel(SelectableModel Model, bool UnselectOthers)
     {
-        if (model.Selected)
+        if (Model.Selected)
             return;
 
-        if (unselectOthers)
+        if (UnselectOthers)
             UnselectAll();
 
-        model.Selected = true;
-        model.Refresh();
-        SelectionChanged?.Invoke(model);
+        Model.Selected = true;
+        Model.Refresh();
+        SelectionChanged?.Invoke(Model);
     }
 
-    public void UnselectModel(SelectableModel model)
+    public void UnselectModel(SelectableModel Model)
     {
-        if (!model.Selected)
+        if (!Model.Selected)
             return;
 
-        model.Selected = false;
-        model.Refresh();
-        SelectionChanged?.Invoke(model);
+        Model.Selected = false;
+        Model.Refresh();
+        SelectionChanged?.Invoke(Model);
     }
 
     public void UnselectAll()
     {
-        foreach (var model in GetSelectedModels())
+        foreach (var t_Model in GetSelectedModels())
         {
-            model.Selected = false;
-            model.Refresh();
+            t_Model.Selected = false;
+            t_Model.Refresh();
             // Todo: will result in many events, maybe one event for all of them?
-            SelectionChanged?.Invoke(model);
+            SelectionChanged?.Invoke(t_Model);
         }
     }
 
@@ -171,209 +171,209 @@ public abstract class Diagram
 
     #region Behaviors
 
-    public void RegisterBehavior(Behavior behavior)
+    public void RegisterBehavior(Behavior Behavior)
     {
-        var type = behavior.GetType();
-        if (_behaviors.ContainsKey(type))
-            throw new Exception($"Behavior '{type.Name}' already registered");
+        var t_Type = Behavior.GetType();
+        if (m_Behaviors.ContainsKey(t_Type))
+            throw new Exception($"Behavior '{t_Type.Name}' already registered");
 
-        _behaviors.Add(type, behavior);
+        m_Behaviors.Add(t_Type, Behavior);
     }
 
     public T? GetBehavior<T>() where T : Behavior
     {
-        var type = typeof(T);
-        return (T?)(_behaviors.ContainsKey(type) ? _behaviors[type] : null);
+        var t_Type = typeof(T);
+        return (T?)(m_Behaviors.ContainsKey(t_Type) ? m_Behaviors[t_Type] : null);
     }
 
     public void UnregisterBehavior<T>() where T : Behavior
     {
-        var type = typeof(T);
-        if (!_behaviors.ContainsKey(type))
+        var t_Type = typeof(T);
+        if (!m_Behaviors.ContainsKey(t_Type))
             return;
 
-        _behaviors[type].Dispose();
-        _behaviors.Remove(type);
+        m_Behaviors[t_Type].Dispose();
+        m_Behaviors.Remove(t_Type);
     }
 
     #endregion
 
-    public void ZoomToFit(float margin = 10)
+    public void ZoomToFit(float Margin = 10)
     {
         if (Container == null || Nodes.Count == 0)
             return;
 
-        var selectedNodes = Nodes.Where(s => s.Selected);
-        var nodesToUse = selectedNodes.Any() ? selectedNodes : Nodes;
-        var bounds = nodesToUse.GetBounds();
-        var width = bounds.Width + 2 * margin;
-        var height = bounds.Height + 2 * margin;
-        var minX = bounds.Left - margin;
-        var minY = bounds.Top - margin;
+        var t_SelectedNodes = Nodes.Where(S => S.Selected);
+        var t_NodesToUse = t_SelectedNodes.Any() ? t_SelectedNodes : Nodes;
+        var t_Bounds = t_NodesToUse.GetBounds();
+        var t_Width = t_Bounds.Width + 2 * Margin;
+        var t_Height = t_Bounds.Height + 2 * Margin;
+        var t_MinX = t_Bounds.Left - Margin;
+        var t_MinY = t_Bounds.Top - Margin;
 
         SuspendRefresh = true;
 
-        var xf = Container.Width / width;
-        var yf = Container.Height / height;
-        SetZoom(MathF.Min(xf, yf));
+        var t_Xf = Container.Width / t_Width;
+        var t_Yf = Container.Height / t_Height;
+        SetZoom(MathF.Min(t_Xf, t_Yf));
 
-        var nx = Container.Left + Pan.X + minX * Zoom;
-        var ny = Container.Top + Pan.Y + minY * Zoom;
-        UpdatePan(Container.Left - nx, Container.Top - ny);
+        var t_Nx = Container.Left + Pan.X + t_MinX * Zoom;
+        var t_Ny = Container.Top + Pan.Y + t_MinY * Zoom;
+        UpdatePan(Container.Left - t_Nx, Container.Top - t_Ny);
 
         SuspendRefresh = false;
         Refresh();
     }
 
-    public void SetPan(float x, float y)
+    public void SetPan(float X, float Y)
     {
-        Pan = new Vector2(x, y);
+        Pan = new Vector2(X, Y);
         PanChanged?.Invoke();
         Refresh();
     }
 
-    public void UpdatePan(float deltaX, float deltaY)
+    public void UpdatePan(float DeltaX, float DeltaY)
     {
-        Pan += new Vector2(deltaX, deltaY);
+        Pan += new Vector2(DeltaX, DeltaY);
         PanChanged?.Invoke();
         Refresh();
     }
 
-    public void SetZoom(float newZoom)
+    public void SetZoom(float NewZoom)
     {
-        if (newZoom <= 0)
-            throw new ArgumentException($"{nameof(newZoom)} cannot be equal or lower than 0");
+        if (NewZoom <= 0)
+            throw new ArgumentException($"{nameof(NewZoom)} cannot be equal or lower than 0");
 
-        if (newZoom < Options.Zoom.Minimum)
-            newZoom = Options.Zoom.Minimum;
+        if (NewZoom < Options.Zoom.Minimum)
+            NewZoom = Options.Zoom.Minimum;
 
-        Zoom = newZoom;
+        Zoom = NewZoom;
         ZoomChanged?.Invoke();
         Refresh();
     }
 
-    public void SetContainer(Rectangle newRect)
+    public void SetContainer(Rectangle NewRect)
     {
-        if (newRect.Equals(Container))
+        if (NewRect.Equals(Container))
             return;
 
-        Container = newRect;
+        Container = NewRect;
         ContainerChanged?.Invoke();
         Refresh();
     }
 
-    public Vector2 GetRelativeMousePoint(float clientX, float clientY)
+    public Vector2 GetRelativeMousePoint(float ClientX, float ClientY)
     {
         if (Container == null)
             throw new Exception(
                 "Container not available. Make sure you're not using this method before the diagram is fully loaded");
 
-        return new Vector2((clientX - Container.Left - Pan.X) / Zoom, (clientY - Container.Top - Pan.Y) / Zoom);
+        return new Vector2((ClientX - Container.Left - Pan.X) / Zoom, (ClientY - Container.Top - Pan.Y) / Zoom);
     }
 
-    public Vector2 GetRelativePoint(float clientX, float clientY)
+    public Vector2 GetRelativePoint(float ClientX, float ClientY)
     {
         if (Container == null)
             throw new Exception(
                 "Container not available. Make sure you're not using this method before the diagram is fully loaded");
 
-        return new Vector2(clientX - Container.Left, clientY - Container.Top);
+        return new Vector2(ClientX - Container.Left, ClientY - Container.Top);
     }
 
-    public Vector2 GetScreenPoint(float clientX, float clientY)
+    public Vector2 GetScreenPoint(float ClientX, float ClientY)
     {
         if (Container == null)
             throw new Exception(
                 "Container not available. Make sure you're not using this method before the diagram is fully loaded");
 
-        return new Vector2(Zoom * clientX + Container.Left + Pan.X, Zoom * clientY + Container.Top + Pan.Y);
+        return new Vector2(Zoom * ClientX + Container.Left + Pan.X, Zoom * ClientY + Container.Top + Pan.Y);
     }
 
     #region Ordering
 
-    public void SendToBack(SelectableModel model)
+    public void SendToBack(SelectableModel Model)
     {
-        var minOrder = GetMinOrder();
-        if (model.Order == minOrder)
+        var t_MinOrder = GetMinOrder();
+        if (Model.Order == t_MinOrder)
             return;
 
-        if (!_orderedSelectables.Remove(model))
+        if (!m_OrderedSelectables.Remove(Model))
             return;
 
-        _orderedSelectables.Insert(0, model);
+        m_OrderedSelectables.Insert(0, Model);
 
         // Todo: can optimize this by only updating the order of items before model
         Batch(() =>
         {
             SuspendSorting = true;
-            for (var i = 0; i < _orderedSelectables.Count; i++)
+            for (var t_I = 0; t_I < m_OrderedSelectables.Count; t_I++)
             {
-                _orderedSelectables[i].Order = i + 1;
+                m_OrderedSelectables[t_I].Order = t_I + 1;
             }
             SuspendSorting = false;
         });
     }
 
-    public void SendToFront(SelectableModel model)
+    public void SendToFront(SelectableModel Model)
     {
-        var maxOrder = GetMaxOrder();
-        if (model.Order == maxOrder)
+        var t_MaxOrder = GetMaxOrder();
+        if (Model.Order == t_MaxOrder)
             return;
 
-        if (!_orderedSelectables.Remove(model))
+        if (!m_OrderedSelectables.Remove(Model))
             return;
 
-        _orderedSelectables.Add(model);
+        m_OrderedSelectables.Add(Model);
 
         SuspendSorting = true;
-        model.Order = maxOrder + 1;
+        Model.Order = t_MaxOrder + 1;
         SuspendSorting = false;
         Refresh();
     }
 
     public int GetMinOrder()
     {
-        return _orderedSelectables.Count > 0 ? _orderedSelectables[0].Order : 0;
+        return m_OrderedSelectables.Count > 0 ? m_OrderedSelectables[0].Order : 0;
     }
 
     public int GetMaxOrder()
     {
-        return _orderedSelectables.Count > 0 ? _orderedSelectables[^1].Order : 0;
+        return m_OrderedSelectables.Count > 0 ? m_OrderedSelectables[^1].Order : 0;
     }
 
     /// <summary>
     /// Sorts the list of selectables based on their order
     /// </summary>
-    public void RefreshOrders(bool refresh = true)
+    public void RefreshOrders(bool Refresh = true)
     {
-        _orderedSelectables.Sort((a, b) => a.Order.CompareTo(b.Order));
+        m_OrderedSelectables.Sort((A, B) => A.Order.CompareTo(B.Order));
         
-        if (refresh)
+        if (Refresh)
         {
-            Refresh();
+            this.Refresh();
         }
     }
 
-    private void OnSelectableAdded(SelectableModel model)
+    private void OnSelectableAdded(SelectableModel Model)
     {
-        var maxOrder = GetMaxOrder();
-        _orderedSelectables.Add(model);
+        var t_MaxOrder = GetMaxOrder();
+        m_OrderedSelectables.Add(Model);
 
-        if (model.Order == 0)
+        if (Model.Order == 0)
         {
-            model.Order = maxOrder + 1;
+            Model.Order = t_MaxOrder + 1;
         }
 
-        model.OrderChanged += OnModelOrderChanged;
+        Model.OrderChanged += OnModelOrderChanged;
     }
 
-    private void OnSelectableRemoved(SelectableModel model)
+    private void OnSelectableRemoved(SelectableModel Model)
     {
-        model.OrderChanged -= OnModelOrderChanged;
-        _orderedSelectables.Remove(model);
+        Model.OrderChanged -= OnModelOrderChanged;
+        m_OrderedSelectables.Remove(Model);
     }
 
-    private void OnModelOrderChanged(Model model)
+    private void OnModelOrderChanged(Model Model)
     {
         if (SuspendSorting)
             return;
@@ -385,23 +385,23 @@ public abstract class Diagram
 
     #region Events
 
-    public void TriggerPointerDown(Model? model, PointerEventArgs e) => PointerDown?.Invoke(model, e);
+    public void TriggerPointerDown(Model? Model, PointerEventArgs E) => PointerDown?.Invoke(Model, E);
 
-    public void TriggerPointerMove(Model? model, PointerEventArgs e) => PointerMove?.Invoke(model, e);
+    public void TriggerPointerMove(Model? Model, PointerEventArgs E) => PointerMove?.Invoke(Model, E);
 
-    public void TriggerPointerUp(Model? model, PointerEventArgs e) => PointerUp?.Invoke(model, e);
+    public void TriggerPointerUp(Model? Model, PointerEventArgs E) => PointerUp?.Invoke(Model, E);
 
-    public void TriggerPointerEnter(Model? model, PointerEventArgs e) => PointerEnter?.Invoke(model, e);
+    public void TriggerPointerEnter(Model? Model, PointerEventArgs E) => PointerEnter?.Invoke(Model, E);
 
-    public void TriggerPointerLeave(Model? model, PointerEventArgs e) => PointerLeave?.Invoke(model, e);
+    public void TriggerPointerLeave(Model? Model, PointerEventArgs E) => PointerLeave?.Invoke(Model, E);
 
-    public void TriggerKeyDown(KeyboardEventArgs e) => KeyDown?.Invoke(e);
+    public void TriggerKeyDown(KeyboardEventArgs E) => KeyDown?.Invoke(E);
 
-    public void TriggerWheel(WheelEventArgs e) => Wheel?.Invoke(e);
+    public void TriggerWheel(WheelEventArgs E) => Wheel?.Invoke(E);
 
-    public void TriggerPointerClick(Model? model, PointerEventArgs e) => PointerClick?.Invoke(model, e);
+    public void TriggerPointerClick(Model? Model, PointerEventArgs E) => PointerClick?.Invoke(Model, E);
 
-    public void TriggerPointerfloatClick(Model? model, PointerEventArgs e) => PointerfloatClick?.Invoke(model, e);
+    public void TriggerPointerfloatClick(Model? Model, PointerEventArgs E) => PointerfloatClick?.Invoke(Model, E);
 
     #endregion
 }

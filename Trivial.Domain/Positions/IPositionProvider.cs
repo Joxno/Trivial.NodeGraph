@@ -6,5 +6,5 @@ namespace Trivial.Domain.Positions;
 
 public interface IPositionProvider
 {
-    public Vector2? GetPosition(Model model);
+    public Vector2? GetPosition(Model Model);
 }

@@ -120,87 +120,87 @@ namespace Trivial.Domain.Geometry;
     /// <summary>
     /// Get open-ended Bezier Spline Control Points.
     /// </summary>
-    /// <param name="knots">Input Knot Bezier spline points.</param>
-    /// <param name="firstControlPoints">Output First Control points array of knots.Length - 1 length.</param>
-    /// <param name="secondControlPoints">Output Second Control points array of knots.Length - 1 length.</param>
-    /// <exception cref="ArgumentNullException"><paramref name="knots"/> parameter must be not null.</exception>
-    /// <exception cref="ArgumentException"><paramref name="knots"/> array must containg at least two points.</exception>
-    public static void GetCurveControlPoints(Vector2[] knots, out Vector2[] firstControlPoints, out Vector2[] secondControlPoints)
+    /// <param name="Knots">Input Knot Bezier spline points.</param>
+    /// <param name="FirstControlPoints">Output First Control points array of knots.Length - 1 length.</param>
+    /// <param name="SecondControlPoints">Output Second Control points array of knots.Length - 1 length.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="Knots"/> parameter must be not null.</exception>
+    /// <exception cref="ArgumentException"><paramref name="Knots"/> array must containg at least two points.</exception>
+    public static void GetCurveControlPoints(Vector2[] Knots, out Vector2[] FirstControlPoints, out Vector2[] SecondControlPoints)
     {
-        if (knots == null)
-            throw new ArgumentNullException("knots");
-        int n = knots.Length - 1;
-        if (n < 1)
-            throw new ArgumentException("At least two knot points required", "knots");
-        if (n == 1)
+        if (Knots == null)
+            throw new ArgumentNullException("Knots");
+        int t_N = Knots.Length - 1;
+        if (t_N < 1)
+            throw new ArgumentException("At least two knot points required", "Knots");
+        if (t_N == 1)
         { // Special case: Bezier curve should be a straight line.
-            firstControlPoints = new Vector2[1];
+            FirstControlPoints = new Vector2[1];
             // 3P1 = 2P0 + P3
-            firstControlPoints[0] = new Vector2((2 * knots[0].X + knots[1].X) / 3, (2 * knots[0].Y + knots[1].Y) / 3);
+            FirstControlPoints[0] = new Vector2((2 * Knots[0].X + Knots[1].X) / 3, (2 * Knots[0].Y + Knots[1].Y) / 3);
 
-            secondControlPoints = new Vector2[1];
+            SecondControlPoints = new Vector2[1];
             // P2 = 2P1 – P0
-            secondControlPoints[0] = new Vector2(2 * firstControlPoints[0].X - knots[0].X, 2 * firstControlPoints[0].Y - knots[0].Y);
+            SecondControlPoints[0] = new Vector2(2 * FirstControlPoints[0].X - Knots[0].X, 2 * FirstControlPoints[0].Y - Knots[0].Y);
             return;
         }
 
         // Calculate first Bezier control points
         // Right hand side vector
-        float[] rhs = new float[n];
+        float[] t_Rhs = new float[t_N];
 
         // Set right hand side X values
-        for (int i = 1; i < n - 1; ++i)
-            rhs[i] = 4 * knots[i].X + 2 * knots[i + 1].X;
-        rhs[0] = knots[0].X + 2 * knots[1].X;
-        rhs[n - 1] = (8 * knots[n - 1].X + knots[n].X) / 2.0f;
+        for (int t_I = 1; t_I < t_N - 1; ++t_I)
+            t_Rhs[t_I] = 4 * Knots[t_I].X + 2 * Knots[t_I + 1].X;
+        t_Rhs[0] = Knots[0].X + 2 * Knots[1].X;
+        t_Rhs[t_N - 1] = (8 * Knots[t_N - 1].X + Knots[t_N].X) / 2.0f;
         // Get first control points X-values
-        float[] x = GetFirstControlPoints(rhs);
+        float[] t_X = GetFirstControlPoints(t_Rhs);
 
         // Set right hand side Y values
-        for (int i = 1; i < n - 1; ++i)
-            rhs[i] = 4 * knots[i].Y + 2 * knots[i + 1].Y;
-        rhs[0] = knots[0].Y + 2 * knots[1].Y;
-        rhs[n - 1] = (8 * knots[n - 1].Y + knots[n].Y) / 2.0f;
+        for (int t_I = 1; t_I < t_N - 1; ++t_I)
+            t_Rhs[t_I] = 4 * Knots[t_I].Y + 2 * Knots[t_I + 1].Y;
+        t_Rhs[0] = Knots[0].Y + 2 * Knots[1].Y;
+        t_Rhs[t_N - 1] = (8 * Knots[t_N - 1].Y + Knots[t_N].Y) / 2.0f;
         // Get first control points Y-values
-        float[] y = GetFirstControlPoints(rhs);
+        float[] t_Y = GetFirstControlPoints(t_Rhs);
 
         // Fill output arrays.
-        firstControlPoints = new Vector2[n];
-        secondControlPoints = new Vector2[n];
-        for (int i = 0; i < n; ++i)
+        FirstControlPoints = new Vector2[t_N];
+        SecondControlPoints = new Vector2[t_N];
+        for (int t_I = 0; t_I < t_N; ++t_I)
         {
             // First control point
-            firstControlPoints[i] = new Vector2(x[i], y[i]);
+            FirstControlPoints[t_I] = new Vector2(t_X[t_I], t_Y[t_I]);
             // Second control point
-            if (i < n - 1)
-                secondControlPoints[i] = new Vector2(2 * knots[i + 1].X - x[i + 1], 2 * knots[i + 1].Y - y[i + 1]);
+            if (t_I < t_N - 1)
+                SecondControlPoints[t_I] = new Vector2(2 * Knots[t_I + 1].X - t_X[t_I + 1], 2 * Knots[t_I + 1].Y - t_Y[t_I + 1]);
             else
-                secondControlPoints[i] = new Vector2((knots[n].X + x[n - 1]) / 2, (knots[n].Y + y[n - 1]) / 2);
+                SecondControlPoints[t_I] = new Vector2((Knots[t_N].X + t_X[t_N - 1]) / 2, (Knots[t_N].Y + t_Y[t_N - 1]) / 2);
         }
     }
 
     /// <summary>
     /// Solves a tridiagonal system for one of coordinates (x or y) of first Bezier control points.
     /// </summary>
-    /// <param name="rhs">Right hand side vector.</param>
+    /// <param name="Rhs">Right hand side vector.</param>
     /// <returns>Solution vector.</returns>
-    private static float[] GetFirstControlPoints(float[] rhs)
+    private static float[] GetFirstControlPoints(float[] Rhs)
     {
-        int n = rhs.Length;
-        float[] x = new float[n]; // Solution vector.
-        float[] tmp = new float[n]; // Temp workspace.
+        int t_N = Rhs.Length;
+        float[] t_X = new float[t_N]; // Solution vector.
+        float[] t_Tmp = new float[t_N]; // Temp workspace.
 
-        float b = 2.0f;
-        x[0] = rhs[0] / b;
-        for (int i = 1; i < n; i++) // Decomposition and forward substitution.
+        float t_B = 2.0f;
+        t_X[0] = Rhs[0] / t_B;
+        for (int t_I = 1; t_I < t_N; t_I++) // Decomposition and forward substitution.
         {
-            tmp[i] = 1 / b;
-            b = (i < n - 1 ? 4.0f : 3.5f) - tmp[i];
-            x[i] = (rhs[i] - x[i - 1]) / b;
+            t_Tmp[t_I] = 1 / t_B;
+            t_B = (t_I < t_N - 1 ? 4.0f : 3.5f) - t_Tmp[t_I];
+            t_X[t_I] = (Rhs[t_I] - t_X[t_I - 1]) / t_B;
         }
-        for (int i = 1; i < n; i++)
-            x[n - i - 1] -= tmp[n - i] * x[n - i]; // Backsubstitution.
+        for (int t_I = 1; t_I < t_N; t_I++)
+            t_X[t_N - t_I - 1] -= t_Tmp[t_N - t_I] * t_X[t_N - t_I]; // Backsubstitution.
 
-        return x;
+        return t_X;
     }
 }

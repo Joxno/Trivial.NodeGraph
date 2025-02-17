@@ -7,10 +7,10 @@ namespace Trivial.Graph.Components.Widgets;
 
 public partial class GridWidget : IDisposable
 {
-    private bool _visible;
-    private float _scaledSize;
-    private float _posX;
-    private float _posY;
+    private bool m_Visible;
+    private float m_ScaledSize;
+    private float m_PosX;
+    private float m_PosY;
     
     [CascadingParameter] public BlazorDiagram BlazorDiagram { get; set; } = null!;
     [Parameter] public float Size { get; set; } = 20;
@@ -32,43 +32,43 @@ public partial class GridWidget : IDisposable
 
     protected override void OnParametersSet()
     {
-        _posX = BlazorDiagram.Pan.X;
-        _posY = BlazorDiagram.Pan.Y;
-        _scaledSize = Size * BlazorDiagram.Zoom;
-        _visible = BlazorDiagram.Zoom > ZoomThreshold;
+        m_PosX = BlazorDiagram.Pan.X;
+        m_PosY = BlazorDiagram.Pan.Y;
+        m_ScaledSize = Size * BlazorDiagram.Zoom;
+        m_Visible = BlazorDiagram.Zoom > ZoomThreshold;
     }
 
     private void RefreshPosition()
     {
-        _posX = BlazorDiagram.Pan.X;
-        _posY = BlazorDiagram.Pan.Y;
-        _scaledSize = Size * BlazorDiagram.Zoom;
-        _visible = BlazorDiagram.Zoom > ZoomThreshold;
+        m_PosX = BlazorDiagram.Pan.X;
+        m_PosY = BlazorDiagram.Pan.Y;
+        m_ScaledSize = Size * BlazorDiagram.Zoom;
+        m_Visible = BlazorDiagram.Zoom > ZoomThreshold;
         InvokeAsync(StateHasChanged);
     }
 
     private string GenerateStyle()
     {
-        var sb = new StringBuilder();
+        var t_Sb = new StringBuilder();
 
-        sb.Append($"background-color: {BackgroundColor};");
-        sb.Append($"background-size: {_scaledSize.ToInvariantString()}px {_scaledSize.ToInvariantString()}px;");
-        sb.Append($"background-position-x: {_posX.ToInvariantString()}px;");
-        sb.Append($"background-position-y: {_posY.ToInvariantString()}px;");
+        t_Sb.Append($"background-color: {BackgroundColor};");
+        t_Sb.Append($"background-size: {m_ScaledSize.ToInvariantString()}px {m_ScaledSize.ToInvariantString()}px;");
+        t_Sb.Append($"background-position-x: {m_PosX.ToInvariantString()}px;");
+        t_Sb.Append($"background-position-y: {m_PosY.ToInvariantString()}px;");
 
         switch (Mode)
         {
             case GridMode.Line:
-                sb.Append("background-image: linear-gradient(rgb(211, 211, 211) 1px, transparent 1px), linear-gradient(90deg, rgb(211, 211, 211) 1px, transparent 1px);");
+                t_Sb.Append("background-image: linear-gradient(rgb(211, 211, 211) 1px, transparent 1px), linear-gradient(90deg, rgb(211, 211, 211) 1px, transparent 1px);");
                 break;
             case GridMode.Point:
-                sb.Append("background-image: radial-gradient(circle at 0 0, rgb(129, 129, 129) 1px, transparent 1px);");
+                t_Sb.Append("background-image: radial-gradient(circle at 0 0, rgb(129, 129, 129) 1px, transparent 1px);");
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
         
-        return sb.ToString();
+        return t_Sb.ToString();
     }
 }
 

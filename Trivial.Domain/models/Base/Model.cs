@@ -4,13 +4,13 @@ namespace Trivial.Domain.Models.Base;
 
 public abstract class Model
 {
-    private bool _visible = true;
+    private bool m_Visible = true;
     
     protected Model() : this(Guid.NewGuid().ToString()) { }
 
-    protected Model(string id)
+    protected Model(string Id)
     {
-        Id = id;
+        this.Id = Id;
     }
 
     public event Action<Model>? Changed;
@@ -20,13 +20,13 @@ public abstract class Model
     public bool Locked { get; set; }
     public bool Visible
     {
-        get => _visible;
+        get => m_Visible;
         set
         {
-            if (_visible == value)
+            if (m_Visible == value)
                 return;
 
-            _visible = value;
+            m_Visible = value;
             VisibilityChanged?.Invoke(this);
         }
     }

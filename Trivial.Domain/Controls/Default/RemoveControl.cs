@@ -10,57 +10,57 @@ namespace Trivial.Domain.Controls.Default;
 
 public class RemoveControl : ExecutableControl
 {
-    private readonly IPositionProvider _positionProvider;
+    private readonly IPositionProvider m_PositionProvider;
 
-    public RemoveControl(float x, float y, float offsetX = 0, float offsetY = 0)
-        : this(new BoundsBasedPositionProvider(x, y, offsetX, offsetY))
+    public RemoveControl(float X, float Y, float OffsetX = 0, float OffsetY = 0)
+        : this(new BoundsBasedPositionProvider(X, Y, OffsetX, OffsetY))
     {
     }
 
-    public RemoveControl(IPositionProvider positionProvider)
+    public RemoveControl(IPositionProvider PositionProvider)
     {
-        _positionProvider = positionProvider;
+        m_PositionProvider = PositionProvider;
     }
 
-    public override Vector2? GetPosition(Model model) => _positionProvider.GetPosition(model);
+    public override Vector2? GetPosition(Model Model) => m_PositionProvider.GetPosition(Model);
 
-    public override async ValueTask OnPointerDown(Diagram diagram, Model model, PointerEventArgs _)
+    public override async ValueTask OnPointerDown(Diagram Diagram, Model Model, PointerEventArgs _)
     {
-        if (await ShouldDeleteModel(diagram, model))
+        if (await ShouldDeleteModel(Diagram, Model))
         {
-            DeleteModel(diagram, model);
+            DeleteModel(Diagram, Model);
         }
     }
 
-    private static void DeleteModel(Diagram diagram, Model model)
+    private static void DeleteModel(Diagram Diagram, Model Model)
     {
-       switch (model)
+       switch (Model)
         {
-            case GroupModel group:
-                diagram.Groups.Delete(group);
+            case GroupModel t_Group:
+                Diagram.Groups.Delete(t_Group);
                 return;
-            case NodeModel node:
-                diagram.Nodes.Remove(node);
+            case NodeModel t_Node:
+                Diagram.Nodes.Remove(t_Node);
                 return;
 
-            case BaseLinkModel link:
-                diagram.Links.Remove(link);
+            case BaseLinkModel t_Link:
+                Diagram.Links.Remove(t_Link);
                 return;
         }
     }
 
-    private static async ValueTask<bool> ShouldDeleteModel(Diagram diagram, Model model)
+    private static async ValueTask<bool> ShouldDeleteModel(Diagram Diagram, Model Model)
     {
-        if (model.Locked)
+        if (Model.Locked)
         {
             return false;
         }
 
-        return model switch
+        return Model switch
         {
-            GroupModel group => await diagram.Options.Constraints.ShouldDeleteGroup.Invoke(group),
-            NodeModel node => await diagram.Options.Constraints.ShouldDeleteNode.Invoke(node),
-            BaseLinkModel link => await diagram.Options.Constraints.ShouldDeleteLink.Invoke(link),
+            GroupModel t_Group => await Diagram.Options.Constraints.ShouldDeleteGroup.Invoke(t_Group),
+            NodeModel t_Node => await Diagram.Options.Constraints.ShouldDeleteNode.Invoke(t_Node),
+            BaseLinkModel t_Link => await Diagram.Options.Constraints.ShouldDeleteLink.Invoke(t_Link),
             _ => false,
         };
     }

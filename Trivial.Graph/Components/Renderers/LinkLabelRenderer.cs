@@ -28,27 +28,27 @@ public class LinkLabelRenderer : ComponentBase, IDisposable
         Label.VisibilityChanged += OnLabelChanged;
     }
 
-    protected override void BuildRenderTree(RenderTreeBuilder builder)
+    protected override void BuildRenderTree(RenderTreeBuilder Builder)
     {
         if (!Label.Visible)
             return;
         
-        var position = FindPosition();
-        if (position == null)
+        var t_Position = FindPosition();
+        if (t_Position == null)
             return;
         
-        var componentType = BlazorDiagram.GetComponent(Label) ?? typeof(DefaultLinkLabelWidget);
+        var t_ComponentType = BlazorDiagram.GetComponent(Label) ?? typeof(DefaultLinkLabelWidget);
 
-        builder.OpenElement(0, "foreignObject");
-        builder.AddAttribute(1, "class", "diagram-link-label");
-        builder.AddAttribute(2, "x", (position.Value.X + (Label.Offset?.X ?? 0)).ToInvariantString());
-        builder.AddAttribute(3, "y", (position.Value.Y + (Label.Offset?.Y ?? 0)).ToInvariantString());
+        Builder.OpenElement(0, "foreignObject");
+        Builder.AddAttribute(1, "class", "diagram-link-label");
+        Builder.AddAttribute(2, "x", (t_Position.Value.X + (Label.Offset?.X ?? 0)).ToInvariantString());
+        Builder.AddAttribute(3, "y", (t_Position.Value.Y + (Label.Offset?.Y ?? 0)).ToInvariantString());
         
-        builder.OpenComponent(4, componentType);
-        builder.AddAttribute(5, "Label", Label);
-        builder.CloseComponent();
+        Builder.OpenComponent(4, t_ComponentType);
+        Builder.AddAttribute(5, "Label", Label);
+        Builder.CloseComponent();
         
-        builder.CloseElement();
+        Builder.CloseElement();
     }
 
     private void OnLabelChanged(Model _)
@@ -58,16 +58,16 @@ public class LinkLabelRenderer : ComponentBase, IDisposable
 
     private Vector2? FindPosition()
     {
-        var totalLength = Path.Length;
-        var length = Label.Distance switch
+        var t_TotalLength = Path.Length;
+        var t_Length = Label.Distance switch
         {
-            <= 1 and >= 0 => Label.Distance.Value * totalLength,
+            <= 1 and >= 0 => Label.Distance.Value * t_TotalLength,
             > 1 => Label.Distance.Value,
-            < 0 => totalLength + Label.Distance.Value,
-            _ => totalLength * (Label.Parent.Labels.IndexOf(Label) + 1) / (Label.Parent.Labels.Count + 1)
+            < 0 => t_TotalLength + Label.Distance.Value,
+            _ => t_TotalLength * (Label.Parent.Labels.IndexOf(Label) + 1) / (Label.Parent.Labels.Count + 1)
         };
 
-        var pt = Path.GetPointAtLength(length);
-        return new Vector2((float)pt.X, (float)pt.Y);
+        var t_Pt = Path.GetPointAtLength(t_Length);
+        return new Vector2((float)t_Pt.X, (float)t_Pt.Y);
     }
 }

@@ -4,8 +4,8 @@ using Trivial.Domain.Models.Base;
 
 namespace Trivial.Domain;
 
-public delegate BaseLinkModel? LinkFactory(Diagram diagram, ILinkable source, Anchor targetAnchor);
+public delegate BaseLinkModel? LinkFactory(Diagram Diagram, ILinkable Source, Anchor TargetAnchor);
 
-public delegate Anchor AnchorFactory(Diagram diagram, BaseLinkModel link, ILinkable model);
+public delegate Anchor AnchorFactory(Diagram Diagram, BaseLinkModel Link, ILinkable Model);
 
-public delegate GroupModel GroupFactory(Diagram diagram, NodeModel[] children);
+public delegate GroupModel GroupFactory(Diagram Diagram, NodeModel[] Children);

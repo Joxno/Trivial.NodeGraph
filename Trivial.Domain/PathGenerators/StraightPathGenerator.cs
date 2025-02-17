@@ -9,82 +9,82 @@ namespace Trivial.Domain.PathGenerators;
 
 public class StraightPathGenerator : PathGenerator
 {
-    private readonly float _radius;
+    private readonly float m_Radius;
 
-    public StraightPathGenerator(float radius = 0)
+    public StraightPathGenerator(float Radius = 0)
     {
-        _radius = radius;
+        m_Radius = Radius;
     }
 
-    public override PathGeneratorResult GetResult(Diagram diagram, BaseLinkModel link, Vector2[] route, Vector2 source, Vector2 target)
+    public override PathGeneratorResult GetResult(Diagram Diagram, BaseLinkModel Link, Vector2[] Route, Vector2 Source, Vector2 Target)
     {
-        route = ConcatRouteAndSourceAndTarget(route, source, target);
+        Route = ConcatRouteAndSourceAndTarget(Route, Source, Target);
 
-        float? sourceAngle = null;
-        float? targetAngle = null;
+        float? t_SourceAngle = null;
+        float? t_TargetAngle = null;
 
-        if (link.SourceMarker != null)
+        if (Link.SourceMarker != null)
         {
-            sourceAngle = AdjustRouteForSourceMarker(route, link.SourceMarker.Width);
+            t_SourceAngle = AdjustRouteForSourceMarker(Route, Link.SourceMarker.Width);
         }
 
-        if (link.TargetMarker != null)
+        if (Link.TargetMarker != null)
         {
-            targetAngle = AdjustRouteForTargetMarker(route, link.TargetMarker.Width);
+            t_TargetAngle = AdjustRouteForTargetMarker(Route, Link.TargetMarker.Width);
         }
 
-        var paths = link.Vertices.Count > 0 ? new SvgPath[route.Length - 1] : null;
-        var fullPath = new SvgPath().AddMoveTo(route[0].X, route[0].Y);
-        float? secondDist = null;
-        var lastPt = route[0];
+        var t_Paths = Link.Vertices.Count > 0 ? new SvgPath[Route.Length - 1] : null;
+        var t_FullPath = new SvgPath().AddMoveTo(Route[0].X, Route[0].Y);
+        float? t_SecondDist = null;
+        var t_LastPt = Route[0];
 
-        for (var i = 0; i < route.Length - 1; i++)
+        for (var t_I = 0; t_I < Route.Length - 1; t_I++)
         {
-            if (_radius > 0 && i > 0)
+            if (m_Radius > 0 && t_I > 0)
             {
-                var previous = route[i - 1];
-                var current = route[i];
-                var next = route[i + 1];
+                var t_Previous = Route[t_I - 1];
+                var t_Current = Route[t_I];
+                var t_Next = Route[t_I + 1];
 
-                float? firstDist = secondDist ?? (current.DistanceTo(previous) / 2);
-                secondDist = current.DistanceTo(next) / 2;
+                float? t_FirstDist = t_SecondDist ?? (t_Current.DistanceTo(t_Previous) / 2);
+                t_SecondDist = t_Current.DistanceTo(t_Next) / 2;
 
-                var p1 = -MathF.Min(_radius, firstDist.Value);
-                var p2 = -MathF.Min(_radius, secondDist.Value);
+                var t_P1 = -MathF.Min(m_Radius, t_FirstDist.Value);
+                var t_P2 = -MathF.Min(m_Radius, t_SecondDist.Value);
 
-                var fp = current.Lerp(previous, p1);
-                var sp = current.Lerp(next, p2);
+                var t_Fp = t_Current.Lerp(t_Previous, t_P1);
+                var t_Sp = t_Current.Lerp(t_Next, t_P2);
 
-                fullPath.AddLineTo(fp.X, fp.Y).AddQuadraticBezierCurve(current.X, current.Y, sp.X, sp.Y);
+                t_FullPath.AddLineTo(t_Fp.X, t_Fp.Y).AddQuadraticBezierCurve(t_Current.X, t_Current.Y, t_Sp.X, t_Sp.Y);
 
-                if (paths != null)
+                if (t_Paths != null)
                 {
-                    paths[i - 1] = new SvgPath().AddMoveTo(lastPt.X, lastPt.Y).AddLineTo(fp.X, fp.Y).AddQuadraticBezierCurve(current.X, current.Y, sp.X, sp.Y);
+                    t_Paths[t_I - 1] = new SvgPath().AddMoveTo(t_LastPt.X, t_LastPt.Y).AddLineTo(t_Fp.X, t_Fp.Y).AddQuadraticBezierCurve(t_Current.X, t_Current.Y, t_Sp.X, t_Sp.Y);
                 }
 
-                lastPt = sp;
+                t_LastPt = t_Sp;
 
-                if (i == route.Length - 2)
+                if (t_I == Route.Length - 2)
                 {
-                    fullPath.AddLineTo(route[^1].X, route[^1].Y);
+                    t_FullPath.AddLineTo(Route[^1].X, Route[^1].Y);
 
-                    if (paths != null)
+                    if (t_Paths != null)
                     {
-                        paths[i] = new SvgPath().AddMoveTo(lastPt.X, lastPt.Y).AddLineTo(route[^1].X, route[^1].Y);
+                        t_Paths[t_I] = new SvgPath().AddMoveTo(t_LastPt.X, t_LastPt.Y).AddLineTo(Route[^1].X, Route[^1].Y);
                     }
                 }
             }
-            else if (_radius == 0 || route.Length == 2)
+            else if (m_Radius == 0 || Route.Length == 2)
             {
-                fullPath.AddLineTo(route[i + 1].X, route[i + 1].Y);
+                t_FullPath.AddLineTo(Route[t_I + 1].X, Route[t_I + 1].Y);
 
-                if (paths != null)
+                if (t_Paths != null)
                 {
-                    paths[i] = new SvgPath().AddMoveTo(route[i].X, route[i].Y).AddLineTo(route[i + 1].X, route[i + 1].Y);
+                    t_Paths[t_I] = new SvgPath().AddMoveTo(Route[t_I].X, Route[t_I].Y).AddLineTo(Route[t_I + 1].X, Route[t_I + 1].Y);
                 }
             }
         }
 
-        return new PathGeneratorResult(fullPath, paths ?? Array.Empty<SvgPath>(), sourceAngle, route[0], targetAngle, route[^1]);
+        return new PathGeneratorResult(t_FullPath, t_Paths ?? Array.Empty<SvgPath>(), t_SourceAngle, Route[0], t_TargetAngle, Route[^1]);
     }
 }

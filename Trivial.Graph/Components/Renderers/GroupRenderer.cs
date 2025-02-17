@@ -13,9 +13,9 @@ namespace Trivial.Graph.Components.Renderers;
 
 public class GroupRenderer : ComponentBase, IDisposable
 {
-    private bool _isSvg;
-    private Size? _lastSize;
-    private bool _shouldRender = true;
+    private bool m_IsSvg;
+    private Size? m_LastSize;
+    private bool m_ShouldRender = true;
 
     [CascadingParameter] public BlazorDiagram BlazorDiagram { get; set; } = null!;
 
@@ -37,21 +37,21 @@ public class GroupRenderer : ComponentBase, IDisposable
     {
         base.OnParametersSet();
 
-        _isSvg = Group is SvgGroupModel;
+        m_IsSvg = Group is SvgGroupModel;
     }
 
     protected override bool ShouldRender()
     {
-        if (_shouldRender)
+        if (m_ShouldRender)
         {
-            _shouldRender = false;
+            m_ShouldRender = false;
             return true;
         }
 
         return false;
     }
 
-    protected override void OnAfterRender(bool firstRender)
+    protected override void OnAfterRender(bool FirstRender)
     {
         if (Size.Zero.Equals(Group.Size))
             return;
@@ -59,86 +59,86 @@ public class GroupRenderer : ComponentBase, IDisposable
         // Update the port positions (and links) when the size of the group changes
         // This will save us some JS trips as well as useless rerenders
 
-        if (_lastSize == null || !_lastSize.Equals(Group.Size))
+        if (m_LastSize == null || !m_LastSize.Equals(Group.Size))
         {
             Group.ReinitializePorts();
             Group.RefreshLinks();
-            _lastSize = Group.Size;
+            m_LastSize = Group.Size;
         }
     }
 
     private void OnGroupChanged(Model _)
     {
-        _shouldRender = true;
+        m_ShouldRender = true;
         InvokeAsync(StateHasChanged);
     }
 
-    private static string GenerateStyle(float top, float left, float width, float height)
+    private static string GenerateStyle(float Top, float Left, float Width, float Height)
     {
-        return FormattableString.Invariant($"top: {top}px; left: {left}px; width: {width}px; height: {height}px");
+        return FormattableString.Invariant($"top: {Top}px; left: {Left}px; width: {Width}px; height: {Height}px");
     }
 
-    protected override void BuildRenderTree(RenderTreeBuilder builder)
+    protected override void BuildRenderTree(RenderTreeBuilder Builder)
     {
         if (!Group.Visible)
             return;
         
-        var componentType = BlazorDiagram.GetComponent(Group) ?? typeof(DefaultGroupWidget);
-        var classes = new StringBuilder("diagram-group")
+        var t_ComponentType = BlazorDiagram.GetComponent(Group) ?? typeof(DefaultGroupWidget);
+        var t_Classes = new StringBuilder("diagram-group")
             .AppendIf(" locked", Group.Locked)
             .AppendIf(" selected", Group.Selected)
-            .AppendIf(" default", componentType == typeof(DefaultGroupWidget));
+            .AppendIf(" default", t_ComponentType == typeof(DefaultGroupWidget));
 
-        builder.OpenElement(0, _isSvg ? "g" : "div");
-        builder.AddAttribute(1, "class", classes.ToString());
-        builder.AddAttribute(2, "data-group-id", Group.Id);
+        Builder.OpenElement(0, m_IsSvg ? "g" : "div");
+        Builder.AddAttribute(1, "class", t_Classes.ToString());
+        Builder.AddAttribute(2, "data-group-id", Group.Id);
 
-        if (_isSvg)
-            builder.AddAttribute(3, "transform",
+        if (m_IsSvg)
+            Builder.AddAttribute(3, "transform",
                 FormattableString.Invariant($"translate({Group.Position.X} {Group.Position.Y})"));
         else
-            builder.AddAttribute(3, "style",
+            Builder.AddAttribute(3, "style",
                 GenerateStyle(Group.Position.Y, Group.Position.X, Group.Size!.Width, Group.Size.Height));
 
-        builder.AddAttribute(4, "onpointerdown", EventCallback.Factory.Create<PointerEventArgs>(this, OnPointerDown));
-        builder.AddEventStopPropagationAttribute(5, "onpointerdown", true);
-        builder.AddAttribute(6, "onpointerup", EventCallback.Factory.Create<PointerEventArgs>(this, OnPointerUp));
-        builder.AddEventStopPropagationAttribute(7, "onpointerup", true);
-        builder.AddAttribute(8, "onmouseenter", EventCallback.Factory.Create<MouseEventArgs>(this, OnMouseEnter));
-        builder.AddAttribute(9, "onmouseleave", EventCallback.Factory.Create<MouseEventArgs>(this, OnMouseLeave));
+        Builder.AddAttribute(4, "onpointerdown", EventCallback.Factory.Create<PointerEventArgs>(this, OnPointerDown));
+        Builder.AddEventStopPropagationAttribute(5, "onpointerdown", true);
+        Builder.AddAttribute(6, "onpointerup", EventCallback.Factory.Create<PointerEventArgs>(this, OnPointerUp));
+        Builder.AddEventStopPropagationAttribute(7, "onpointerup", true);
+        Builder.AddAttribute(8, "onmouseenter", EventCallback.Factory.Create<MouseEventArgs>(this, OnMouseEnter));
+        Builder.AddAttribute(9, "onmouseleave", EventCallback.Factory.Create<MouseEventArgs>(this, OnMouseLeave));
 
-        if (_isSvg)
+        if (m_IsSvg)
         {
-            builder.OpenElement(10, "rect");
-            builder.AddAttribute(11, "width", Group.Size!.Width);
-            builder.AddAttribute(12, "height", Group.Size.Height);
-            builder.AddAttribute(13, "fill", "none");
-            builder.CloseElement();
+            Builder.OpenElement(10, "rect");
+            Builder.AddAttribute(11, "width", Group.Size!.Width);
+            Builder.AddAttribute(12, "height", Group.Size.Height);
+            Builder.AddAttribute(13, "fill", "none");
+            Builder.CloseElement();
         }
 
-        builder.OpenComponent(14, componentType);
-        builder.AddAttribute(15, "Group", Group);
-        builder.CloseComponent();
-        builder.CloseElement();
+        Builder.OpenComponent(14, t_ComponentType);
+        Builder.AddAttribute(15, "Group", Group);
+        Builder.CloseComponent();
+        Builder.CloseElement();
     }
 
-    private void OnPointerDown(PointerEventArgs e)
+    private void OnPointerDown(PointerEventArgs E)
     {
-        BlazorDiagram.TriggerPointerDown(Group, e.ToCore());
+        BlazorDiagram.TriggerPointerDown(Group, E.ToCore());
     }
 
-    private void OnPointerUp(PointerEventArgs e)
+    private void OnPointerUp(PointerEventArgs E)
     {
-        BlazorDiagram.TriggerPointerUp(Group, e.ToCore());
+        BlazorDiagram.TriggerPointerUp(Group, E.ToCore());
     }
 
-    private void OnMouseEnter(MouseEventArgs e)
+    private void OnMouseEnter(MouseEventArgs E)
     {
-        BlazorDiagram.TriggerPointerEnter(Group, e.ToCore());
+        BlazorDiagram.TriggerPointerEnter(Group, E.ToCore());
     }
 
-    private void OnMouseLeave(MouseEventArgs e)
+    private void OnMouseLeave(MouseEventArgs E)
     {
-        BlazorDiagram.TriggerPointerLeave(Group, e.ToCore());
+        BlazorDiagram.TriggerPointerLeave(Group, E.ToCore());
     }
 }

@@ -5,7 +5,7 @@ namespace Trivial.Graph.Models;
 
 public class SvgGroupModel : GroupModel
 {
-    public SvgGroupModel(IEnumerable<NodeModel> children, byte padding = 30, bool autoSize = true) : base(children, padding, autoSize)
+    public SvgGroupModel(IEnumerable<NodeModel> Children, byte Padding = 30, bool AutoSize = true) : base(Children, Padding, AutoSize)
     {
     }
 }

@@ -4,11 +4,11 @@ namespace Trivial.Domain.Behaviors;
 
 public class VirtualizationBehavior : Behavior
 {
-    public VirtualizationBehavior(Diagram diagram) : base(diagram)
+    public VirtualizationBehavior(Diagram Diagram) : base(Diagram)
     {
-        Diagram.ZoomChanged += CheckVisibility;
-        Diagram.PanChanged += CheckVisibility;
-        Diagram.ContainerChanged += CheckVisibility;
+        base.Diagram.ZoomChanged += CheckVisibility;
+        base.Diagram.PanChanged += CheckVisibility;
+        base.Diagram.ContainerChanged += CheckVisibility;
     }
 
     private void CheckVisibility()
@@ -21,43 +21,43 @@ public class VirtualizationBehavior : Behavior
 
         if (Diagram.Options.Virtualization.OnNodes)
         {
-            foreach (var node in Diagram.Nodes)
+            foreach (var t_Node in Diagram.Nodes)
             {
-                CheckVisibility(node);
+                CheckVisibility(t_Node);
             }
         }
 
         if (Diagram.Options.Virtualization.OnGroups)
         {
-            foreach (var group in Diagram.Groups)
+            foreach (var t_Group in Diagram.Groups)
             {
-                CheckVisibility(group);
+                CheckVisibility(t_Group);
             }
         }
 
         if (Diagram.Options.Virtualization.OnLinks)
         {
-            foreach (var link in Diagram.Links)
+            foreach (var t_Link in Diagram.Links)
             {
-                CheckVisibility(link);
+                CheckVisibility(t_Link);
             }
         }
     }
 
-    private void CheckVisibility(Model model)
+    private void CheckVisibility(Model Model)
     {
-        if (model is not IHasBounds ihb)
+        if (Model is not IHasBounds t_Ihb)
             return;
         
-        var bounds = ihb.GetBounds();
-        if (bounds == null)
+        var t_Bounds = t_Ihb.GetBounds();
+        if (t_Bounds == null)
             return;
         
-        var left = bounds.Left * Diagram.Zoom + Diagram.Pan.X;
-        var top = bounds.Top * Diagram.Zoom + Diagram.Pan.Y;
-        var right = left + bounds.Width * Diagram.Zoom;
-        var bottom = top + bounds.Height * Diagram.Zoom;
-        model.Visible = right > 0 && left < Diagram.Container!.Width && bottom > 0 && top < Diagram.Container.Height;
+        var t_Left = t_Bounds.Left * Diagram.Zoom + Diagram.Pan.X;
+        var t_Top = t_Bounds.Top * Diagram.Zoom + Diagram.Pan.Y;
+        var t_Right = t_Left + t_Bounds.Width * Diagram.Zoom;
+        var t_Bottom = t_Top + t_Bounds.Height * Diagram.Zoom;
+        Model.Visible = t_Right > 0 && t_Left < Diagram.Container!.Width && t_Bottom > 0 && t_Top < Diagram.Container.Height;
     }
 
     public override void Dispose()
