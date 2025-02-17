@@ -1,0 +1,2 @@
+dotnet build .\Trivial.Domain -p:PackageVersion="1.0.0-D$([DateTime]::UtcNow.ToString("yyMMddHHmmss"))"
+dotnet build .\Trivial.Graph -p:PackageVersion="1.0.0-D$([DateTime]::UtcNow.ToString("yyMMddHHmmss"))"

@@ -11,4 +11,32 @@
     <PackageReference Include="Trivial.Functional" Version="1.0.0-D250216223347" />
   </ItemGroup>
 
+  <PropertyGroup>
+    <PackageId>Trivial.Graph.Domain</PackageId>
+    <Description>Internal Package: Node Graph Library</Description>
+    <Version>1.0.0</Version>
+    <Authors>Sebastian Georghiou</Authors>
+    <Company>Trivial Software</Company>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageProjectUrl>https://github.com/Joxno/Trivial.NodeGraph</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Joxno/Trivial.NodeGraph</RepositoryUrl>
+    <Copyright>
+        Copyright (c) 2025 Sebastian Georghiou, Trivial Software
+        Copyright (c) 2018-2025 zHaytam, Z.Blazor.Diagrams
+    </Copyright>
+
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageVersion>$(PackageVersion)</PackageVersion>
+    <PackageOutputPath>./nupkg</PackageOutputPath>
+    <Dependencies>
+      <Group targetFramework="net9.0" />
+    </Dependencies>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="../LICENSE" Pack="true" PackagePath=""/>
+    <None Include="../README.md" Pack="true" PackagePath=""/>
+  </ItemGroup> 
+
 </Project>
