@@ -30,10 +30,7 @@ public class ControlsLayer
         return t_Container;
     }
 
-    public ControlsContainer? GetFor(Model Model)
-    {
-        return m_Containers.TryGetValue(Model, out var t_Container) ? t_Container : null;
-    }
+    public Maybe<ControlsContainer> GetFor(Model Model) => m_Containers.Retrieve(Model);
 
     public bool RemoveFor(Model Model)
     {
@@ -48,7 +45,7 @@ public class ControlsLayer
         return true;
     }
 
-    public bool AreVisibleFor(Model Model) => GetFor(Model)?.Visible ?? false;
+    public bool AreVisibleFor(Model Model) => GetFor(Model).Map(M => M.Visible).ValueOr(false);
 
     private void RefreshIfVisible(Model Cause)
     {

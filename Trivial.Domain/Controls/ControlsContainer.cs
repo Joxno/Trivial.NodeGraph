@@ -57,6 +57,8 @@ public class ControlsContainer : IReadOnlyList<Control>
         return this;
     }
 
+    public bool HasControlType(ControlsType Type) => Type.HasFlag(Type);
+
     public int Count => m_Controls.Count;
     public Control this[int Index] => m_Controls[Index];
     public IEnumerator<Control> GetEnumerator() => m_Controls.GetEnumerator();

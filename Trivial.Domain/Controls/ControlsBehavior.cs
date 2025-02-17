@@ -9,48 +9,40 @@ public class ControlsBehavior : BaseBehaviour
     {
         base.Diagram.PointerEnter += OnPointerEnter;
         base.Diagram.PointerLeave += OnPointerLeave;
+        base.Diagram.PointerDoubleClick += OnPointerDoubleClick;
         base.Diagram.SelectionChanged += OnSelectionChanged;
     }
 
-    private void OnSelectionChanged(SelectableModel Model)
-    {
-        var t_Controls = Diagram.Controls.GetFor(Model);
-        if (t_Controls is not { Type: ControlsType.OnSelection })
+    private void OnPointerDoubleClick(Model? Model, PointerEventArgs Args) => Diagram.Controls.GetFor(Model).Then(C => {
+        if (!C.HasControlType(ControlsType.OnSelection))
+            return;
+
+        C.Show();
+    });
+
+    private void OnSelectionChanged(SelectableModel Model) => Diagram.Controls.GetFor(Model).Then(C => {
+        if (!C.HasControlType(ControlsType.OnSelection))
             return;
 
         if (Model.Selected)
-        {
-            t_Controls.Show();
-        }
+            C.Show();
         else
-        {
-            t_Controls.Hide();
-        }
-    }
+            C.Hide();
+    });
 
-    private void OnPointerEnter(Model? Model, PointerEventArgs E)
-    {
-        if (Model == null)
+    private void OnPointerEnter(Model? Model, PointerEventArgs E) => Model.ToMaybe().Bind(Diagram.Controls.GetFor).Then(C => {
+        if(!C.HasControlType(ControlsType.OnHover))
             return;
-        
-        var t_Controls = Diagram.Controls.GetFor(Model);
-        if (t_Controls is not { Type: ControlsType.OnHover })
-            return;
-        
-        t_Controls.Show();
-    }
 
-    private void OnPointerLeave(Model? Model, PointerEventArgs E)
-    {
-        if (Model == null)
+        C.Show();
+    });
+
+    private void OnPointerLeave(Model? Model, PointerEventArgs E) => Model.ToMaybe().Bind(Diagram.Controls.GetFor).Then(C => {
+        if(!C.HasControlType(ControlsType.OnHover))
             return;
-        
-        var t_Controls = Diagram.Controls.GetFor(Model);
-        if (t_Controls is not { Type: ControlsType.OnHover })
-            return;
-        
-        t_Controls.Hide();
-    }
+
+        C.Hide();
+    });
 
     protected override void _OnDispose()
     {

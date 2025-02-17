@@ -1,13 +1,13 @@
 @foreach (var t_Model in BlazorDiagram.Controls.Models)
 {
     var t_Controls = BlazorDiagram.Controls.GetFor(t_Model)!;
-    if (!t_Controls.Visible || t_Controls.Count == 0)
+    if (!t_Controls.Value.Visible || t_Controls.Value.Count == 0)
         continue;
 
     if (Svg && t_Model.IsSvg())
     {
         <g class="controls" data-model-type="@t_Model.GetType().Name" data-model-id="@t_Model.Id">
-            @foreach (var t_Control in t_Controls)
+            @foreach (var t_Control in t_Controls.Value)
             {
                 var t_Position = t_Control.GetPosition(t_Model);
                 if (t_Position == null)
@@ -20,7 +20,7 @@
     else if (!Svg && !t_Model.IsSvg())
     {
         <div class="controls" data-model-type="@t_Model.GetType().Name" data-model-id="@t_Model.Id">
-            @foreach (var t_Control in t_Controls)
+            @foreach (var t_Control in t_Controls.Value)
             {
                 var t_Position = t_Control.GetPosition(t_Model);
                 if (t_Position == null)
