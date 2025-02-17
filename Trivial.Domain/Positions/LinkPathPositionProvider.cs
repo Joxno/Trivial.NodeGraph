@@ -2,6 +2,7 @@ using Trivial.Graph.Domain.Geometry;
 using Trivial.Graph.Domain.Models.Base;
 using System;
 using System.Numerics;
+using Trivial.Graph.Domain.exceptions;
 
 namespace Trivial.Graph.Domain.Positions;
 

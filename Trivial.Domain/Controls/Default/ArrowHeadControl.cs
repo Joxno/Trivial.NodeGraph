@@ -7,6 +7,7 @@ using Trivial.Graph.Domain.Positions;
 using System;
 using System.Numerics;
 using System.Threading.Tasks;
+using Trivial.Graph.Domain.exceptions;
 
 namespace Trivial.Graph.Domain.Controls.Default;
 

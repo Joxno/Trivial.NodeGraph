@@ -5,6 +5,7 @@ using Trivial.Graph.Domain.Models.Base;
 using SvgPathProperties;
 using System;
 using System.Numerics;
+using Trivial.Graph.Domain.exceptions;
 
 namespace Trivial.Graph.Domain.PathGenerators;
 

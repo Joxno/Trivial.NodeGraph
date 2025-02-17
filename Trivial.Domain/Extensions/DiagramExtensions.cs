@@ -1,7 +1,7 @@
 ﻿using Trivial.Graph.Domain.Geometry;
 using Trivial.Graph.Domain.Models;
-using System.Collections.Generic;
-using System.Linq;
+using Trivial.Graph.Domain.Behaviors;
+using Trivial.Graph.Domain.Controls;
 
 namespace Trivial.Graph.Domain.Extensions;
 
@@ -38,5 +38,18 @@ public static class DiagramExtensions
         }
 
         return new Rectangle(t_MinX, t_MinY, t_MaxX, t_MaxY);
+    }
+
+    public static void AddDefaultBehaviours(this Diagram Graph)
+    {
+        Graph.RegisterBehavior(new SelectionBehavior(Graph));
+        Graph.RegisterBehavior(new DragMovablesBehavior(Graph));
+        Graph.RegisterBehavior(new DragNewLinkBehavior(Graph));
+        Graph.RegisterBehavior(new PanBehavior(Graph));
+        Graph.RegisterBehavior(new ZoomBehavior(Graph));
+        Graph.RegisterBehavior(new EventsBehavior(Graph));
+        Graph.RegisterBehavior(new KeyboardShortcutsBehavior(Graph));
+        Graph.RegisterBehavior(new ControlsBehavior(Graph));
+        Graph.RegisterBehavior(new VirtualizationBehavior(Graph));
     }
 }

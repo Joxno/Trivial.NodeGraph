@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Trivial.Graph.Domain;
+namespace Trivial.Graph.Domain.exceptions;
 
 public class DiagramsException : Exception
 {

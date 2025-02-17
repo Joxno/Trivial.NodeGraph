@@ -2,6 +2,7 @@ using System.Numerics;
 using System.Threading.Tasks;
 using Trivial.Graph.Domain.Behaviors;
 using Trivial.Graph.Domain.Events;
+using Trivial.Graph.Domain.exceptions;
 using Trivial.Graph.Domain.Geometry;
 using Trivial.Graph.Domain.Models;
 using Trivial.Graph.Domain.Models.Base;

@@ -1,4 +1,5 @@
 using System.Numerics;
+using Trivial.Graph.Domain.exceptions;
 using Trivial.Graph.Domain.Geometry;
 using Trivial.Graph.Domain.Models.Base;
 
