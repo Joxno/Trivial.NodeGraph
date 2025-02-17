@@ -30,9 +30,6 @@ public class Rectangle : IShape
 
     public Rectangle(Vector2 Position, Size Size)
     {
-        ArgumentNullException.ThrowIfNull(Position, nameof(Position));
-        ArgumentNullException.ThrowIfNull(Size, nameof(Size));
-
         Left = Position.X;
         Top = Position.Y;
         Right = Left + Size.Width;

@@ -2,23 +2,16 @@
 
 namespace Trivial.Domain.Geometry;
 
-public class Line
+public record struct Line(Vector2 Start, Vector2 End);
+
+public static class LineExtensions
 {
-    public Line(Vector2 Start, Vector2 End)
+    public static Vector2? GetIntersection(this Line Line, Line Other)
     {
-        this.Start = Start;
-        this.End = End;
-    }
-
-    public Vector2 Start { get; }
-    public Vector2 End { get; }
-
-    public Vector2? GetIntersection(Line Line)
-    {
-        var t_Pt1Dir = new Vector2(End.X - Start.X, End.Y - Start.Y);
-        var t_Pt2Dir = new Vector2(Line.End.X - Line.Start.X, Line.End.Y - Line.Start.Y);
+        var t_Pt1Dir = new Vector2(Line.End.X - Line.Start.X, Line.End.Y - Line.Start.Y);
+        var t_Pt2Dir = new Vector2(Other.End.X - Other.Start.X, Other.End.Y - Other.Start.Y);
         var t_Det = (t_Pt1Dir.X * t_Pt2Dir.Y) - (t_Pt1Dir.Y * t_Pt2Dir.X);
-        var t_DeltaPt = new Vector2(Line.Start.X - Start.X, Line.Start.Y - Start.Y);
+        var t_DeltaPt = new Vector2(Other.Start.X - Line.Start.X, Other.Start.Y - Line.Start.Y);
         var t_Alpha = (t_DeltaPt.X * t_Pt2Dir.Y) - (t_DeltaPt.Y * t_Pt2Dir.X);
         var t_Beta = (t_DeltaPt.X * t_Pt1Dir.Y) - (t_DeltaPt.Y * t_Pt1Dir.X);
 
@@ -37,8 +30,8 @@ public class Line
                 return null;
         }
 
-        return new Vector2(Start.X + (t_Alpha * t_Pt1Dir.X / t_Det), Start.Y + (t_Alpha * t_Pt1Dir.Y / t_Det));
+        return new Vector2(Line.Start.X + (t_Alpha * t_Pt1Dir.X / t_Det), Line.Start.Y + (t_Alpha * t_Pt1Dir.Y / t_Det));
     }
 
-    public override string ToString() => $"Line from {Start} to {End}";
+    public static string ToString(this Line L) => $"Line from {L.Start} to {L.End}";
 }
