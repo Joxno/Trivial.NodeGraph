@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trivial.Graph", "Trivial.Graph\Trivial.Graph.csproj", "{E212F321-10F9-404A-A5E3-019D6806A749}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trivial.Domain", "Trivial.Domain\Trivial.Domain.csproj", "{D6A562ED-3F63-47A5-BC3E-9BE2C7C03DFA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trivial.Graph.Domain", "Trivial.Domain\Trivial.Graph.Domain.csproj", "{D6A562ED-3F63-47A5-BC3E-9BE2C7C03DFA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trivial.Tests", "Trivial.Tests\Trivial.Tests.csproj", "{966D356F-D2CF-45D4-9115-DFEE7AC425B3}"
 EndProject

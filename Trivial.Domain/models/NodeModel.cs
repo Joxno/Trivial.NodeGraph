@@ -1,11 +1,11 @@
-﻿using Trivial.Domain.Geometry;
-using Trivial.Domain.Models.Base;
+﻿using Trivial.Graph.Domain.Geometry;
+using Trivial.Graph.Domain.Models.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 
-namespace Trivial.Domain.Models;
+namespace Trivial.Graph.Domain.Models;
 
 public class NodeModel : MovableModel, IHasBounds, IHasShape, ILinkable
 {

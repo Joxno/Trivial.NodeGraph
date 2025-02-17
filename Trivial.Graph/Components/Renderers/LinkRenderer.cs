@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Text;
-using Trivial.Domain.Models.Base;
+using Trivial.Graph.Domain.Models.Base;
 using Trivial.Graph.Extensions;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;

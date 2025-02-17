@@ -1,4 +1,4 @@
-﻿namespace Trivial.Domain;
+﻿namespace Trivial.Graph.Domain;
 
 public enum MouseEventButton : long
 {

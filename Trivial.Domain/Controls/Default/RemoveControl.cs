@@ -1,12 +1,12 @@
 using System.Numerics;
 using System.Threading.Tasks;
-using Trivial.Domain.Events;
-using Trivial.Domain.Geometry;
-using Trivial.Domain.Models;
-using Trivial.Domain.Models.Base;
-using Trivial.Domain.Positions;
+using Trivial.Graph.Domain.Events;
+using Trivial.Graph.Domain.Geometry;
+using Trivial.Graph.Domain.Models;
+using Trivial.Graph.Domain.Models.Base;
+using Trivial.Graph.Domain.Positions;
 
-namespace Trivial.Domain.Controls.Default;
+namespace Trivial.Graph.Domain.Controls.Default;
 
 public class RemoveControl : ExecutableControl
 {

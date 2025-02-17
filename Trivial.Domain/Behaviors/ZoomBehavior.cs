@@ -1,8 +1,8 @@
-﻿using Trivial.Domain.Events;
+﻿using Trivial.Graph.Domain.Events;
 
 using System;
 
-namespace Trivial.Domain.Behaviors;
+namespace Trivial.Graph.Domain.Behaviors;
 
 public class ZoomBehavior : BaseBehaviour
 {

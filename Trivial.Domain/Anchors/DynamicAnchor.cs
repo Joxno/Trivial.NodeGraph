@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Linq;
 using System.Numerics;
-using Trivial.Domain.Geometry;
-using Trivial.Domain.Models;
-using Trivial.Domain.Models.Base;
-using Trivial.Domain.Positions;
+using Trivial.Graph.Domain.Geometry;
+using Trivial.Graph.Domain.Models;
+using Trivial.Graph.Domain.Models.Base;
+using Trivial.Graph.Domain.Positions;
 
-namespace Trivial.Domain.Anchors;
+namespace Trivial.Graph.Domain.Anchors;
 
 public sealed class DynamicAnchor : Anchor
 {

@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Trivial.Domain\Trivial.Domain.csproj" />
+    <ProjectReference Include="..\Trivial.Domain\Trivial.Graph.Domain.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
-using Trivial.Domain.Models;
+using Trivial.Graph.Domain.Models;
 
-namespace Trivial.Domain.Geometry;
+namespace Trivial.Graph.Domain.Geometry;
 
 public static class Shapes
 {

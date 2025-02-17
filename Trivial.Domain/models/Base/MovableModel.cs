@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Numerics;
-using Trivial.Domain.Geometry;
+using Trivial.Graph.Domain.Geometry;
 
-namespace Trivial.Domain.Models.Base;
+namespace Trivial.Graph.Domain.Models.Base;
 
 // I'm assuming that all movable models (nodes & groups for now) are also selectable,
 // I believe it makes sense since if you click to move something then you're also selecting

@@ -1,12 +1,12 @@
-﻿using Trivial.Domain.Anchors;
-using Trivial.Domain.Geometry;
+﻿using Trivial.Graph.Domain.Anchors;
+using Trivial.Graph.Domain.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
-using Trivial.Domain.PathGenerators;
-using Trivial.Domain.Routers;
+using Trivial.Graph.Domain.PathGenerators;
+using Trivial.Graph.Domain.Routers;
 
-namespace Trivial.Domain.Models.Base;
+namespace Trivial.Graph.Domain.Models.Base;
 
 public abstract class BaseLinkModel : SelectableModel, IHasBounds, ILinkable
 {

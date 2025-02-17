@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Numerics;
 
-namespace Trivial.Domain.Geometry;
+namespace Trivial.Graph.Domain.Geometry;
 
 /// <summary>
 /// Bezier Spline methods

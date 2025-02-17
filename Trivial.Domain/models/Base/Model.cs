@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Trivial.Domain.Models.Base;
+namespace Trivial.Graph.Domain.Models.Base;
 
 public abstract class Model
 {

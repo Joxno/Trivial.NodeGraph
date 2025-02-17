@@ -1,9 +1,9 @@
-﻿using Trivial.Domain.Geometry;
-using Trivial.Domain.Models.Base;
+﻿using Trivial.Graph.Domain.Geometry;
+using Trivial.Graph.Domain.Models.Base;
 using System.Collections.Generic;
 using System.Numerics;
 
-namespace Trivial.Domain.Models;
+namespace Trivial.Graph.Domain.Models;
 
 public class PortModel : Model, IHasBounds, IHasShape, ILinkable
 {

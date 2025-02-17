@@ -1,7 +1,7 @@
-﻿using Trivial.Domain.Models;
+﻿using Trivial.Graph.Domain.Models;
 using System.Linq;
 
-namespace Trivial.Domain.Layers;
+namespace Trivial.Graph.Domain.Layers;
 
 public class NodeLayer : BaseLayer<NodeModel>
 {

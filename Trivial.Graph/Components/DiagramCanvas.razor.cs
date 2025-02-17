@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Trivial.Domain.Geometry;
+using Trivial.Graph.Domain.Geometry;
 using Trivial.Graph.Extensions;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;

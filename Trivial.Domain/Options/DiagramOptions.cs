@@ -1,4 +1,4 @@
-namespace Trivial.Domain.Options;
+namespace Trivial.Graph.Domain.Options;
 
 public class DiagramOptions
 {

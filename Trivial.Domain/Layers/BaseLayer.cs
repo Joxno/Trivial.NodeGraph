@@ -1,9 +1,9 @@
-﻿using Trivial.Domain.Models.Base;
+﻿using Trivial.Graph.Domain.Models.Base;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Trivial.Domain;
+namespace Trivial.Graph.Domain;
 
 public abstract class BaseLayer<T> : IReadOnlyList<T> where T : Model
 {

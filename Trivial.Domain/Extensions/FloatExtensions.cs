@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Trivial.Domain.Extensions;
+namespace Trivial.Graph.Domain.Extensions;
 
 public static class FloatExtensions
 {

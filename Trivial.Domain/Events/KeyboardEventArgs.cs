@@ -1,3 +1,3 @@
-﻿namespace Trivial.Domain.Events;
+﻿namespace Trivial.Graph.Domain.Events;
 
 public record KeyboardEventArgs(string Key, string Code, float Location, bool CtrlKey, bool ShiftKey, bool AltKey);

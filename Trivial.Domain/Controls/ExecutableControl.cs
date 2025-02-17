@@ -1,8 +1,8 @@
-using Trivial.Domain.Events;
-using Trivial.Domain.Models.Base;
+using Trivial.Graph.Domain.Events;
+using Trivial.Graph.Domain.Models.Base;
 using System.Threading.Tasks;
 
-namespace Trivial.Domain.Controls;
+namespace Trivial.Graph.Domain.Controls;
 
 public abstract class ExecutableControl : Control
 {

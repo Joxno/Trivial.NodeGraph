@@ -1,4 +1,4 @@
-using Trivial.Domain.Models.Base;
+using Trivial.Graph.Domain.Models.Base;
 using Trivial.Graph.Models;
 
 namespace Trivial.Graph.Extensions;

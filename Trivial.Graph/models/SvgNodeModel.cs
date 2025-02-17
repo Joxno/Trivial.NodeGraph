@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
-using Trivial.Domain.Geometry;
-using Trivial.Domain.Models;
+using Trivial.Graph.Domain.Geometry;
+using Trivial.Graph.Domain.Models;
 
 namespace Trivial.Graph.Models;
 

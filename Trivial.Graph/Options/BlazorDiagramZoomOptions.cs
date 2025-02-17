@@ -1,4 +1,4 @@
-using Trivial.Domain.Options;
+using Trivial.Graph.Domain.Options;
 
 namespace Trivial.Graph.Options;
 

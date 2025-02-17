@@ -1,7 +1,7 @@
 ﻿using Trivial.Graph.Components.Controls;
-using Trivial.Domain;
-using Trivial.Domain.Controls.Default;
-using Trivial.Domain.Models.Base;
+using Trivial.Graph.Domain;
+using Trivial.Graph.Domain.Controls.Default;
+using Trivial.Graph.Domain.Models.Base;
 using Trivial.Graph.Options;
 
 namespace Trivial.Graph;

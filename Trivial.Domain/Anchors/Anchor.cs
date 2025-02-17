@@ -1,11 +1,11 @@
-﻿using Trivial.Domain.Geometry;
-using Trivial.Domain.Models.Base;
+﻿using Trivial.Graph.Domain.Geometry;
+using Trivial.Graph.Domain.Models.Base;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
-using Trivial.Domain.Extensions;
+using Trivial.Graph.Domain.Extensions;
 
-namespace Trivial.Domain.Anchors;
+namespace Trivial.Graph.Domain.Anchors;
 
 public abstract class Anchor
 {

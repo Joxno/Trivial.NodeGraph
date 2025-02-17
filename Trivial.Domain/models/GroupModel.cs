@@ -1,10 +1,10 @@
-﻿using Trivial.Domain.Extensions;
-using Trivial.Domain.Geometry;
+﻿using Trivial.Graph.Domain.Extensions;
+using Trivial.Graph.Domain.Geometry;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 
-namespace Trivial.Domain.Models;
+namespace Trivial.Graph.Domain.Models;
 
 public class GroupModel : NodeModel
 {

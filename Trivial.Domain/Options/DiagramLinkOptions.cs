@@ -1,10 +1,10 @@
 using System;
-using Trivial.Domain.Anchors;
-using Trivial.Domain.Models;
-using Trivial.Domain.PathGenerators;
-using Trivial.Domain.Routers;
+using Trivial.Graph.Domain.Anchors;
+using Trivial.Graph.Domain.Models;
+using Trivial.Graph.Domain.PathGenerators;
+using Trivial.Graph.Domain.Routers;
 
-namespace Trivial.Domain.Options;
+namespace Trivial.Graph.Domain.Options;
 
 public class DiagramLinkOptions
 {

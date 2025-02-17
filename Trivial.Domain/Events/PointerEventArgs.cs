@@ -1,6 +1,6 @@
 using System.Numerics;
 
-namespace Trivial.Domain.Events;
+namespace Trivial.Graph.Domain.Events;
 
 public record PointerEventArgs(float ClientX, float ClientY, long Button, long Buttons, bool CtrlKey, bool ShiftKey,
     bool AltKey, long PointerId, float Width, float Height, float Pressure, float TiltX, float TiltY,

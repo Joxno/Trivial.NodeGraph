@@ -1,8 +1,8 @@
-﻿using Trivial.Domain.Anchors;
-using Trivial.Domain.Models.Base;
+﻿using Trivial.Graph.Domain.Anchors;
+using Trivial.Graph.Domain.Models.Base;
 using System.Linq;
 
-namespace Trivial.Domain.Layers;
+namespace Trivial.Graph.Domain.Layers;
 
 public class LinkLayer : BaseLayer<BaseLinkModel>
 {

@@ -1,8 +1,8 @@
 ﻿using System.Numerics;
-using Trivial.Domain.Geometry;
-using Trivial.Domain.Models.Base;
+using Trivial.Graph.Domain.Geometry;
+using Trivial.Graph.Domain.Models.Base;
 
-namespace Trivial.Domain.Anchors;
+namespace Trivial.Graph.Domain.Anchors;
 
 public sealed class PositionAnchor : Anchor
 {

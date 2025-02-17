@@ -1,9 +1,9 @@
 using System;
 using System.Threading.Tasks;
-using Trivial.Domain.Models;
-using Trivial.Domain.Models.Base;
+using Trivial.Graph.Domain.Models;
+using Trivial.Graph.Domain.Models.Base;
 
-namespace Trivial.Domain.Options;
+namespace Trivial.Graph.Domain.Options;
 
 public class DiagramConstraintsOptions
 {

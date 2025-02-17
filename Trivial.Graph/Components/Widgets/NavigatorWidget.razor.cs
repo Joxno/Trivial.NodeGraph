@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
-using Trivial.Domain.Extensions;
-using Trivial.Domain.Geometry;
-using Trivial.Domain.Models;
-using Trivial.Domain.Models.Base;
+using Trivial.Graph.Domain.Extensions;
+using Trivial.Graph.Domain.Geometry;
+using Trivial.Graph.Domain.Models;
+using Trivial.Graph.Domain.Models.Base;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 

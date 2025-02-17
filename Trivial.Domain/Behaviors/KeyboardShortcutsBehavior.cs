@@ -1,7 +1,7 @@
-﻿using Trivial.Domain.Events;
-using Trivial.Domain.Utils;
+﻿using Trivial.Graph.Domain.Events;
+using Trivial.Graph.Domain.Utils;
 
-namespace Trivial.Domain.Behaviors;
+namespace Trivial.Graph.Domain.Behaviors;
 
 public class KeyboardShortcutsBehavior : BaseBehaviour
 {

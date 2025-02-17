@@ -1,8 +1,8 @@
-﻿using Trivial.Domain.Models;
-using Trivial.Domain.Models.Base;
+﻿using Trivial.Graph.Domain.Models;
+using Trivial.Graph.Domain.Models.Base;
 using System;
 
-namespace Trivial.Domain.Behaviors;
+namespace Trivial.Graph.Domain.Behaviors;
 
 public class DebugEventsBehavior : BaseBehaviour
 {

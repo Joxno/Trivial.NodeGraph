@@ -1,6 +1,6 @@
 using System;
 using System.Text;
-using Trivial.Domain.Extensions;
+using Trivial.Graph.Domain.Extensions;
 using Microsoft.AspNetCore.Components;
 
 namespace Trivial.Graph.Components.Widgets;

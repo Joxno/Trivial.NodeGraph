@@ -1,12 +1,12 @@
-﻿using Trivial.Domain.Anchors;
-using Trivial.Domain.Geometry;
-using Trivial.Domain.Models;
-using Trivial.Domain.Models.Base;
+﻿using Trivial.Graph.Domain.Anchors;
+using Trivial.Graph.Domain.Geometry;
+using Trivial.Graph.Domain.Models;
+using Trivial.Graph.Domain.Models.Base;
 using SvgPathProperties;
 using System;
 using System.Numerics;
 
-namespace Trivial.Domain.PathGenerators;
+namespace Trivial.Graph.Domain.PathGenerators;
 
 public class SmoothPathGenerator : PathGenerator
 {

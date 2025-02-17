@@ -1,7 +1,7 @@
-using Trivial.Domain.Events;
-using Trivial.Domain.Models.Base;
+using Trivial.Graph.Domain.Events;
+using Trivial.Graph.Domain.Models.Base;
 
-namespace Trivial.Domain.Controls;
+namespace Trivial.Graph.Domain.Controls;
 
 public class ControlsBehavior : BaseBehaviour
 {

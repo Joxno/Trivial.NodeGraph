@@ -1,13 +1,13 @@
-﻿using Trivial.Domain.Geometry;
-using Trivial.Domain.Models.Base;
+﻿using Trivial.Graph.Domain.Geometry;
+using Trivial.Graph.Domain.Models.Base;
 using System.Collections.Generic;
 using System;
-using Trivial.Domain.Models;
-using Trivial.Domain.Anchors;
+using Trivial.Graph.Domain.Models;
+using Trivial.Graph.Domain.Anchors;
 using System.Linq;
 using System.Numerics;
 
-namespace Trivial.Domain.Routers;
+namespace Trivial.Graph.Domain.Routers;
 
 public class OrthogonalRouter : Router
 {

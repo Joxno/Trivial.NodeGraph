@@ -1,10 +1,10 @@
 ﻿using System;
-using Trivial.Domain.Events;
-using Trivial.Domain.Models.Base;
+using Trivial.Graph.Domain.Events;
+using Trivial.Graph.Domain.Models.Base;
 using Trivial.Functional;
 using Trivial.Utilities;
 
-namespace Trivial.Domain;
+namespace Trivial.Graph.Domain;
 
 public abstract class BaseBehaviour : IDisposable
 {

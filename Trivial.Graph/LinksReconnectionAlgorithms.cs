@@ -1,9 +1,9 @@
-﻿using Trivial.Domain;
-using Trivial.Domain.Anchors;
+﻿using Trivial.Graph.Domain;
+using Trivial.Graph.Domain.Anchors;
 using System.Collections.Generic;
 using System.Linq;
-using Trivial.Domain.Models.Base;
-using Trivial.Domain.Extensions;
+using Trivial.Graph.Domain.Models.Base;
+using Trivial.Graph.Domain.Extensions;
 
 namespace Trivial.Graph.Algorithms;
 

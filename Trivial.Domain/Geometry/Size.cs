@@ -1,4 +1,4 @@
-﻿namespace Trivial.Domain.Geometry;
+﻿namespace Trivial.Graph.Domain.Geometry;
 
 public record struct Size(float Width, float Height);
 

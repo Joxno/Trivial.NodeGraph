@@ -1,6 +1,6 @@
-using Trivial.Domain.Geometry;
+using Trivial.Graph.Domain.Geometry;
 
-namespace Trivial.Domain.Models.Base;
+namespace Trivial.Graph.Domain.Models.Base;
 
 public interface IHasBounds
 {

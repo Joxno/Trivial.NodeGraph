@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Trivial.Domain.Utils;
+namespace Trivial.Graph.Domain.Utils;
 
 public static class KeysUtils
 {

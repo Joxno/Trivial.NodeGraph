@@ -1,4 +1,4 @@
-﻿namespace Trivial.Domain.Events;
+﻿namespace Trivial.Graph.Domain.Events;
 
 public record WheelEventArgs(
     float ClientX,

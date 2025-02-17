@@ -1,14 +1,14 @@
 ﻿using System.Numerics;
-using Trivial.Domain.Behaviors;
-using Trivial.Domain.Extensions;
-using Trivial.Domain.Geometry;
-using Trivial.Domain.Layers;
-using Trivial.Domain.Models.Base;
-using Trivial.Domain.Events;
-using Trivial.Domain.Options;
-using Trivial.Domain.Controls;
+using Trivial.Graph.Domain.Behaviors;
+using Trivial.Graph.Domain.Extensions;
+using Trivial.Graph.Domain.Geometry;
+using Trivial.Graph.Domain.Layers;
+using Trivial.Graph.Domain.Models.Base;
+using Trivial.Graph.Domain.Events;
+using Trivial.Graph.Domain.Options;
+using Trivial.Graph.Domain.Controls;
 
-namespace Trivial.Domain;
+namespace Trivial.Graph.Domain;
 
 public abstract class Diagram
 {

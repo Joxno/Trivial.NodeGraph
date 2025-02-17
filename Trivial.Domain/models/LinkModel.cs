@@ -1,7 +1,7 @@
-﻿using Trivial.Domain.Anchors;
-using Trivial.Domain.Models.Base;
+﻿using Trivial.Graph.Domain.Anchors;
+using Trivial.Graph.Domain.Models.Base;
 
-namespace Trivial.Domain.Models;
+namespace Trivial.Graph.Domain.Models;
 
 public class LinkModel : BaseLinkModel
 {

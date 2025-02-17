@@ -4,7 +4,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text.Json.Serialization;
 
-namespace Trivial.Domain.Geometry;
+namespace Trivial.Graph.Domain.Geometry;
 
 public class Rectangle : IShape
 {

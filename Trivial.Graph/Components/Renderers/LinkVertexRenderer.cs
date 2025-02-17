@@ -1,10 +1,10 @@
-﻿using Trivial.Domain.Models.Base;
-using Trivial.Domain.Models;
+﻿using Trivial.Graph.Domain.Models.Base;
+using Trivial.Graph.Domain.Models;
 using Microsoft.AspNetCore.Components;
 using System;
 using Microsoft.AspNetCore.Components.Web;
 using Trivial.Graph.Extensions;
-using Trivial.Domain.Extensions;
+using Trivial.Graph.Domain.Extensions;
 using Microsoft.AspNetCore.Components.Rendering;
 
 namespace Trivial.Graph.Components.Renderers;

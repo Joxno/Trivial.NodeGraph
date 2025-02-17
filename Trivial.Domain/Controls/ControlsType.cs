@@ -1,4 +1,4 @@
-namespace Trivial.Domain.Controls;
+namespace Trivial.Graph.Domain.Controls;
 
 public enum ControlsType
 {

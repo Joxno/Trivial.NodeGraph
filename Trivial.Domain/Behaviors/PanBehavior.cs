@@ -1,8 +1,8 @@
 ﻿using System.Numerics;
-using Trivial.Domain.Models.Base;
-using Trivial.Domain.Events;
+using Trivial.Graph.Domain.Models.Base;
+using Trivial.Graph.Domain.Events;
 
-namespace Trivial.Domain.Behaviors;
+namespace Trivial.Graph.Domain.Behaviors;
 
 public class PanBehavior : BaseBehaviour
 {

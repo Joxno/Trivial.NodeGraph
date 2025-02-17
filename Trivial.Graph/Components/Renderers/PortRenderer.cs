@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
-using Trivial.Domain.Geometry;
-using Trivial.Domain.Models;
-using Trivial.Domain.Models.Base;
+using Trivial.Graph.Domain.Geometry;
+using Trivial.Graph.Domain.Models;
+using Trivial.Graph.Domain.Models.Base;
 using Trivial.Graph.Extensions;
 using Trivial.Graph.Models;
 using Microsoft.AspNetCore.Components;

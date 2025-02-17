@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace Trivial.Domain.Geometry;
+namespace Trivial.Graph.Domain.Geometry;
 
 public record struct Line(Vector2 Start, Vector2 End);
 

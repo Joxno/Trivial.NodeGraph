@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
-using Trivial.Domain.Extensions;
+using Trivial.Graph.Domain.Extensions;
 
-namespace Trivial.Domain.Geometry;
+namespace Trivial.Graph.Domain.Geometry;
 
 public class Ellipse : IShape
 {

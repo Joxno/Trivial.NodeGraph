@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Trivial.Domain.Models.Base;
+namespace Trivial.Graph.Domain.Models.Base;
 
 public interface ILinkable
 {

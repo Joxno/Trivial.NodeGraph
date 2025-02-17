@@ -1,8 +1,8 @@
 ﻿using System.Numerics;
-using Trivial.Domain.Geometry;
+using Trivial.Graph.Domain.Geometry;
 using SvgPathProperties;
 
-namespace Trivial.Domain;
+namespace Trivial.Graph.Domain;
 
 public class PathGeneratorResult
 {

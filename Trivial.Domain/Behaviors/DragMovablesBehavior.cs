@@ -1,11 +1,11 @@
-﻿using Trivial.Domain.Models.Base;
-using Trivial.Domain.Events;
+﻿using Trivial.Graph.Domain.Models.Base;
+using Trivial.Graph.Domain.Events;
 using System.Numerics;
-using Trivial.Domain.Models;
+using Trivial.Graph.Domain.Models;
 using Trivial.Functional;
-using Trivial.Domain.Extensions;
+using Trivial.Graph.Domain.Extensions;
 
-namespace Trivial.Domain.Behaviors;
+namespace Trivial.Graph.Domain.Behaviors;
 
 public class DragMovablesBehavior : BaseBehaviour
 {
@@ -17,7 +17,8 @@ public class DragMovablesBehavior : BaseBehaviour
 
     protected override void _OnPointerDown(Maybe<Model> Model, PointerEventArgs E)
     {
-        if (!Model.HasValue && Model.Value is not MovableModel)
+        if (!Model.HasValue) return;
+        if (Model.Value is not MovableModel)
             return;
 
         m_InitialPositions.Clear();

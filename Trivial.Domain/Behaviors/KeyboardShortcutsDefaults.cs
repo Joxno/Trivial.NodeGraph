@@ -1,9 +1,9 @@
-﻿using Trivial.Domain.Models;
-using Trivial.Domain.Models.Base;
+﻿using Trivial.Graph.Domain.Models;
+using Trivial.Graph.Domain.Models.Base;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Trivial.Domain.Behaviors;
+namespace Trivial.Graph.Domain.Behaviors;
 
 public static class KeyboardShortcutsDefaults
 {

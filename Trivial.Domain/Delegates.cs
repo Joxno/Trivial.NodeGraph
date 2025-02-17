@@ -1,8 +1,8 @@
-﻿using Trivial.Domain.Anchors;
-using Trivial.Domain.Models;
-using Trivial.Domain.Models.Base;
+﻿using Trivial.Graph.Domain.Anchors;
+using Trivial.Graph.Domain.Models;
+using Trivial.Graph.Domain.Models.Base;
 
-namespace Trivial.Domain;
+namespace Trivial.Graph.Domain;
 
 public delegate BaseLinkModel? LinkFactory(Diagram Diagram, ILinkable Source, Anchor TargetAnchor);
 

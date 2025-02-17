@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Trivial.Domain.Models;
+using Trivial.Graph.Domain.Models;
 
 namespace Trivial.Graph.Models;
 

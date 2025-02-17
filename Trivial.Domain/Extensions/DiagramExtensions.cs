@@ -1,9 +1,9 @@
-﻿using Trivial.Domain.Geometry;
-using Trivial.Domain.Models;
+﻿using Trivial.Graph.Domain.Geometry;
+using Trivial.Graph.Domain.Models;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Trivial.Domain.Extensions;
+namespace Trivial.Graph.Domain.Extensions;
 
 public static class DiagramExtensions
 {

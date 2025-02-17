@@ -1,8 +1,8 @@
 ﻿using System.Text;
-using Trivial.Domain.Extensions;
-using Trivial.Domain.Geometry;
-using Trivial.Domain.Models;
-using Trivial.Domain.Models.Base;
+using Trivial.Graph.Domain.Extensions;
+using Trivial.Graph.Domain.Geometry;
+using Trivial.Graph.Domain.Models;
+using Trivial.Graph.Domain.Models.Base;
 using Trivial.Graph.Extensions;
 using Trivial.Graph.Models;
 using Microsoft.AspNetCore.Components;

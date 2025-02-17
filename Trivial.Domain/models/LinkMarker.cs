@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Trivial.Domain.Models;
+namespace Trivial.Graph.Domain.Models;
 
 public class LinkMarker
 {

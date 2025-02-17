@@ -1,4 +1,4 @@
-﻿using Trivial.Domain.Events;
+﻿using Trivial.Graph.Domain.Events;
 using MouseEventArgs = Microsoft.AspNetCore.Components.Web.MouseEventArgs;
 
 namespace Trivial.Graph.Extensions;

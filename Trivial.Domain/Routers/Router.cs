@@ -1,9 +1,9 @@
 ﻿using System.Numerics;
-using Trivial.Domain.Geometry;
-using Trivial.Domain.Models;
-using Trivial.Domain.Models.Base;
+using Trivial.Graph.Domain.Geometry;
+using Trivial.Graph.Domain.Models;
+using Trivial.Graph.Domain.Models.Base;
 
-namespace Trivial.Domain.Routers;
+namespace Trivial.Graph.Domain.Routers;
 
 public abstract class Router
 {

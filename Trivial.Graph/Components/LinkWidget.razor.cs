@@ -1,4 +1,4 @@
-﻿using Trivial.Domain.Models;
+﻿using Trivial.Graph.Domain.Models;
 using Trivial.Graph.Extensions;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
