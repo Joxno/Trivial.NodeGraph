@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Numerics;
 using Trivial.Domain.Geometry;
 using Trivial.Domain.Models;
 using Trivial.Domain.Models.Base;
@@ -21,16 +22,16 @@ public sealed class DynamicAnchor : Anchor
     public NodeModel Node { get; }
     public IPositionProvider[] Providers { get; }
 
-    public override Point? GetPosition(BaseLinkModel link, Point[] route)
+    public override Vector2? GetPosition(BaseLinkModel link, Vector2[] route)
     {
         if (Node.Size == null)
             return null;
 
         var isTarget = link.Target == this;
         var pt = route.Length > 0 ? route[isTarget ? ^1 : 0] : GetOtherPosition(link, isTarget);
-        var positions = Providers.Select(e => e.GetPosition(Node));
-        return pt is null ? null : GetClosestPointTo(positions, pt);
+        var positions = Providers.Select(e => e.GetPosition(Node)).Where(P => P.HasValue).Select(P => P.Value);
+        return pt is null ? null : GetClosestPointTo(positions, pt.Value);
     }
 
-    public override Point? GetPlainPosition() => Node.GetBounds()?.Center ?? null;
+    public override Vector2? GetPlainPosition() => Node.GetBounds()?.Center ?? null;
 }

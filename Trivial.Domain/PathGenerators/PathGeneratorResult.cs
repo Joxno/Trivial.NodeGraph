@@ -1,12 +1,13 @@
-﻿using Trivial.Domain.Geometry;
+﻿using System.Numerics;
+using Trivial.Domain.Geometry;
 using SvgPathProperties;
 
 namespace Trivial.Domain;
 
 public class PathGeneratorResult
 {
-    public PathGeneratorResult(SvgPath fullPath, SvgPath[] paths, double? sourceMarkerAngle = null, Point? sourceMarkerPosition = null,
-        double? targetMarkerAngle = null, Point? targetMarkerPosition = null)
+    public PathGeneratorResult(SvgPath fullPath, SvgPath[] paths, float? sourceMarkerAngle = null, Vector2? sourceMarkerPosition = null,
+        float? targetMarkerAngle = null, Vector2? targetMarkerPosition = null)
     {
         FullPath = fullPath;
         Paths = paths;
@@ -18,8 +19,8 @@ public class PathGeneratorResult
 
     public SvgPath FullPath { get; }
     public SvgPath[] Paths { get; }
-    public double? SourceMarkerAngle { get; }
-    public Point? SourceMarkerPosition { get; }
-    public double? TargetMarkerAngle { get; }
-    public Point? TargetMarkerPosition { get; }
+    public float? SourceMarkerAngle { get; }
+    public Vector2? SourceMarkerPosition { get; }
+    public float? TargetMarkerAngle { get; }
+    public Vector2? TargetMarkerPosition { get; }
 }

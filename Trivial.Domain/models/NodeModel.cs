@@ -3,6 +3,7 @@ using Trivial.Domain.Models.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 
 namespace Trivial.Domain.Models;
 
@@ -15,11 +16,11 @@ public class NodeModel : MovableModel, IHasBounds, IHasShape, ILinkable
     public event Action<NodeModel>? SizeChanged;
     public event Action<NodeModel>? Moving;
 
-    public NodeModel(Point? position = null) : base(position)
+    public NodeModel(Vector2? position = null) : base(position)
     {
     }
 
-    public NodeModel(string id, Point? position = null) : base(id, position)
+    public NodeModel(string id, Vector2? position = null) : base(id, position)
     {
     }
 
@@ -91,7 +92,7 @@ public class NodeModel : MovableModel, IHasBounds, IHasShape, ILinkable
 
     #endregion
 
-    public override void SetPosition(double x, double y)
+    public override void SetPosition(float x, float y)
     {
         var deltaX = x - Position.X;
         var deltaY = y - Position.Y;
@@ -103,7 +104,7 @@ public class NodeModel : MovableModel, IHasBounds, IHasShape, ILinkable
         Moving?.Invoke(this);
     }
 
-    public virtual void UpdatePositionSilently(double deltaX, double deltaY)
+    public virtual void UpdatePositionSilently(float deltaX, float deltaY)
     {
         base.SetPosition(Position.X + deltaX, Position.Y + deltaY);
         UpdatePortPositions(deltaX, deltaY);
@@ -125,14 +126,14 @@ public class NodeModel : MovableModel, IHasBounds, IHasShape, ILinkable
         var rightPort = GetPort(PortAlignment.Right);
         var bottomPort = GetPort(PortAlignment.Bottom);
 
-        var left = leftPort == null ? Position.X : Math.Min(Position.X, leftPort.Position.X);
-        var top = topPort == null ? Position.Y : Math.Min(Position.Y, topPort.Position.Y);
+        var left = leftPort == null ? Position.X : MathF.Min(Position.X, leftPort.Position.X);
+        var top = topPort == null ? Position.Y : MathF.Min(Position.Y, topPort.Position.Y);
         var right = rightPort == null
             ? Position.X + Size!.Width
-            : Math.Max(rightPort.Position.X + rightPort.Size.Width, Position.X + Size!.Width);
+            : MathF.Max(rightPort.Position.X + rightPort.Size.Width, Position.X + Size!.Width);
         var bottom = bottomPort == null
             ? Position.Y + Size!.Height
-            : Math.Max(bottomPort.Position.Y + bottomPort.Size.Height, Position.Y + Size!.Height);
+            : MathF.Max(bottomPort.Position.Y + bottomPort.Size.Height, Position.Y + Size!.Height);
 
         return new Rectangle(left, top, right, bottom);
     }
@@ -141,12 +142,12 @@ public class NodeModel : MovableModel, IHasBounds, IHasShape, ILinkable
 
     public virtual bool CanAttachTo(ILinkable other) => other is not PortModel && other is not BaseLinkModel;
 
-    private void UpdatePortPositions(double deltaX, double deltaY)
+    private void UpdatePortPositions(float deltaX, float deltaY)
     {
         // Save some JS calls and update ports directly here
         foreach (var port in _ports)
         {
-            port.Position = new Point(port.Position.X + deltaX, port.Position.Y + deltaY);
+            port.Position = new Vector2(port.Position.X + deltaX, port.Position.Y + deltaY);
             port.RefreshLinks();
         }
     }

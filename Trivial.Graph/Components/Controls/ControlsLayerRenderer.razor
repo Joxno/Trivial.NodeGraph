@@ -13,7 +13,7 @@
                 if (position == null)
                     continue;
 
-                @RenderControl(model, control, position, true)
+                @RenderControl(model, control, position.Value, true)
             }
         </g>
     }
@@ -26,7 +26,7 @@
                 if (position == null)
                     continue;
 
-                @RenderControl(model, control, position, false)
+                @RenderControl(model, control, position.Value, false)
             }
         </div>
     }

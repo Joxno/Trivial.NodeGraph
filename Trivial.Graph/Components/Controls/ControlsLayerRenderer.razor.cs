@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 using System.Threading.Tasks;
 using Trivial.Domain.Controls;
 using Trivial.Domain.Extensions;
@@ -46,7 +47,7 @@ public partial class ControlsLayerRenderer : IDisposable
         InvokeAsync(StateHasChanged);
     }
 
-    private RenderFragment RenderControl(Model model, Control control, Point position, bool svg)
+    private RenderFragment RenderControl(Model model, Control control, Vector2 position, bool svg)
     {
         var componentType = BlazorDiagram.GetComponent(control.GetType());
         if (componentType == null)

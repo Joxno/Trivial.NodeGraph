@@ -3,6 +3,7 @@ using Trivial.Domain.Anchors;
 using System.Collections.Generic;
 using System.Linq;
 using Trivial.Domain.Models.Base;
+using Trivial.Domain.Extensions;
 
 namespace Trivial.Graph.Algorithms;
 
@@ -22,7 +23,7 @@ public static class LinksReconnectionAlgorithms
             var targetPorts = spa2.Port.Parent.Ports;
 
             // Find the ports with minimal distance
-            var minDistance = double.MaxValue;
+            var minDistance = float.MaxValue;
             var minSourcePort = spa1.Port;
             var minTargetPort = spa2.Port;
             foreach (var sourcePort in sourcePorts)

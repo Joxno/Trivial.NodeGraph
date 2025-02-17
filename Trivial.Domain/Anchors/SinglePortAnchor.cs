@@ -1,4 +1,5 @@
-﻿using Trivial.Domain.Geometry;
+﻿using System.Numerics;
+using Trivial.Domain.Geometry;
 using Trivial.Domain.Models;
 using Trivial.Domain.Models.Base;
 
@@ -15,7 +16,7 @@ public sealed class SinglePortAnchor : Anchor
     public bool MiddleIfNoMarker { get; set; } = false;
     public bool UseShapeAndAlignment { get; set; } = true;
 
-    public override Point? GetPosition(BaseLinkModel link, Point[] route)
+    public override Vector2? GetPosition(BaseLinkModel link, Vector2[] route)
     {
         if (!Port.Initialized)
             return null;
@@ -42,16 +43,16 @@ public sealed class SinglePortAnchor : Anchor
 
         return Port.Alignment switch
         {
-            PortAlignment.Top => new Point(pt.X + Port.Size.Width / 2, pt.Y),
-            PortAlignment.TopRight => new Point(pt.X + Port.Size.Width, pt.Y),
-            PortAlignment.Right => new Point(pt.X + Port.Size.Width, pt.Y + Port.Size.Height / 2),
-            PortAlignment.BottomRight => new Point(pt.X + Port.Size.Width, pt.Y + Port.Size.Height),
-            PortAlignment.Bottom => new Point(pt.X + Port.Size.Width / 2, pt.Y + Port.Size.Height),
-            PortAlignment.BottomLeft => new Point(pt.X, pt.Y + Port.Size.Height),
-            PortAlignment.Left => new Point(pt.X, pt.Y + Port.Size.Height / 2),
+            PortAlignment.Top => new Vector2(pt.X + Port.Size.Width / 2, pt.Y),
+            PortAlignment.TopRight => new Vector2(pt.X + Port.Size.Width, pt.Y),
+            PortAlignment.Right => new Vector2(pt.X + Port.Size.Width, pt.Y + Port.Size.Height / 2),
+            PortAlignment.BottomRight => new Vector2(pt.X + Port.Size.Width, pt.Y + Port.Size.Height),
+            PortAlignment.Bottom => new Vector2(pt.X + Port.Size.Width / 2, pt.Y + Port.Size.Height),
+            PortAlignment.BottomLeft => new Vector2(pt.X, pt.Y + Port.Size.Height),
+            PortAlignment.Left => new Vector2(pt.X, pt.Y + Port.Size.Height / 2),
             _ => pt,
         };
     }
 
-    public override Point? GetPlainPosition() => Port.MiddlePosition;
+    public override Vector2? GetPlainPosition() => Port.MiddlePosition;
 }

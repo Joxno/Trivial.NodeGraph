@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using Trivial.Domain.Geometry;
 
 namespace Trivial.Domain.Models.Base;
@@ -9,19 +10,19 @@ public abstract class MovableModel : SelectableModel
 {
     public event Action<MovableModel>? Moved;
     
-    public MovableModel(Point? position = null)
+    public MovableModel(Vector2? position = null)
     {
-        Position = position ?? Point.Zero;
+        Position = position ?? Vector2.Zero;
     }
 
-    public MovableModel(string id, Point? position = null) : base(id)
+    public MovableModel(string id, Vector2? position = null) : base(id)
     {
-        Position = position ?? Point.Zero;
+        Position = position ?? Vector2.Zero;
     }
 
-    public Point Position { get; set; }
+    public Vector2 Position { get; set; }
 
-    public virtual void SetPosition(double x, double y) => Position = new Point(x, y);
+    public virtual void SetPosition(float x, float y) => Position = new Vector2(x, y);
 
     /// <summary>
     /// Only use this if you know what you're doing

@@ -37,7 +37,7 @@ public partial class LinkWidget
         if (!Link.Segmentable)
             return;
 
-        var vertex = CreateVertex(e.ClientX, e.ClientY, index);
+        var vertex = CreateVertex((float)e.ClientX, (float)e.ClientY, index);
         BlazorDiagram.TriggerPointerDown(vertex, e.ToCore());
     }
 
@@ -51,7 +51,7 @@ public partial class LinkWidget
         _hovered = false;
     }
 
-    private LinkVertexModel CreateVertex(double clientX, double clientY, int index)
+    private LinkVertexModel CreateVertex(float clientX, float clientY, int index)
     {
         var rPt = BlazorDiagram.GetRelativeMousePoint(clientX, clientY);
         var vertex = new LinkVertexModel(Link, rPt);

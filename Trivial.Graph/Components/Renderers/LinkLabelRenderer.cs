@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using Trivial.Domain.Extensions;
 using Trivial.Domain.Geometry;
 using Trivial.Domain.Models;
@@ -40,8 +41,8 @@ public class LinkLabelRenderer : ComponentBase, IDisposable
 
         builder.OpenElement(0, "foreignObject");
         builder.AddAttribute(1, "class", "diagram-link-label");
-        builder.AddAttribute(2, "x", (position.X + (Label.Offset?.X ?? 0)).ToInvariantString());
-        builder.AddAttribute(3, "y", (position.Y + (Label.Offset?.Y ?? 0)).ToInvariantString());
+        builder.AddAttribute(2, "x", (position.Value.X + (Label.Offset?.X ?? 0)).ToInvariantString());
+        builder.AddAttribute(3, "y", (position.Value.Y + (Label.Offset?.Y ?? 0)).ToInvariantString());
         
         builder.OpenComponent(4, componentType);
         builder.AddAttribute(5, "Label", Label);
@@ -55,7 +56,7 @@ public class LinkLabelRenderer : ComponentBase, IDisposable
         InvokeAsync(StateHasChanged);
     }
 
-    private Point? FindPosition()
+    private Vector2? FindPosition()
     {
         var totalLength = Path.Length;
         var length = Label.Distance switch
@@ -67,6 +68,6 @@ public class LinkLabelRenderer : ComponentBase, IDisposable
         };
 
         var pt = Path.GetPointAtLength(length);
-        return new Point(pt.X, pt.Y);
+        return new Vector2((float)pt.X, (float)pt.Y);
     }
 }

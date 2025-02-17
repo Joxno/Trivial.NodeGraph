@@ -2,6 +2,7 @@
 using Trivial.Domain.Geometry;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 
 namespace Trivial.Domain.Models;
 
@@ -52,7 +53,7 @@ public class GroupModel : NodeModel
         }
     }
 
-    public override void SetPosition(double x, double y)
+    public override void SetPosition(float x, float y)
     {
         var deltaX = x - Position.X;
         var deltaY = y - Position.Y;
@@ -68,7 +69,7 @@ public class GroupModel : NodeModel
         RefreshLinks();
     }
 
-    public override void UpdatePositionSilently(double deltaX, double deltaY)
+    public override void UpdatePositionSilently(float deltaX, float deltaY)
     {
         base.UpdatePositionSilently(deltaX, deltaY);
 
@@ -121,7 +122,7 @@ public class GroupModel : NodeModel
 
         var bounds = Children.GetBounds();
 
-        var newPosition = new Point(bounds.Left - Padding, bounds.Top - Padding);
+        var newPosition = new Vector2(bounds.Left - Padding, bounds.Top - Padding);
         if (!Position.Equals(newPosition))
         {
             Position = newPosition;

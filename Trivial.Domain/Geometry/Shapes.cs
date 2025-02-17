@@ -1,4 +1,5 @@
-﻿using Trivial.Domain.Models;
+﻿using System.Numerics;
+using Trivial.Domain.Models;
 
 namespace Trivial.Domain.Geometry;
 
@@ -16,9 +17,9 @@ public static class Shapes
 
     public static IShape Ellipse(PortModel port) => Ellipse(port.Position, port.Size!);
     
-    private static IShape Rectangle(Point position, Size size) => new Rectangle(position, size);
+    private static IShape Rectangle(Vector2 position, Size size) => new Rectangle(position, size);
 
-    private static IShape Circle(Point position, Size size)
+    private static IShape Circle(Vector2 position, Size size)
     {
         var halfWidth = size.Width / 2;
         var centerX = position.X + halfWidth;
@@ -26,7 +27,7 @@ public static class Shapes
         return new Ellipse(centerX, centerY, halfWidth, halfWidth);
     }
 
-    private static IShape Ellipse(Point position, Size size)
+    private static IShape Ellipse(Vector2 position, Size size)
     {
         var halfWidth = size.Width / 2;
         var halfHeight = size.Height / 2;

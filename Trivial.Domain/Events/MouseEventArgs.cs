@@ -1,3 +1,3 @@
 ﻿namespace Trivial.Domain.Events;
 
-public record MouseEventArgs(double ClientX, double ClientY, long Button, long Buttons, bool CtrlKey, bool ShiftKey, bool AltKey);
+public record MouseEventArgs(float ClientX, float ClientY, long Button, long Buttons, bool CtrlKey, bool ShiftKey, bool AltKey);

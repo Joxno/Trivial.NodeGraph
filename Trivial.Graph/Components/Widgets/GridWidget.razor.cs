@@ -8,13 +8,13 @@ namespace Trivial.Graph.Components.Widgets;
 public partial class GridWidget : IDisposable
 {
     private bool _visible;
-    private double _scaledSize;
-    private double _posX;
-    private double _posY;
+    private float _scaledSize;
+    private float _posX;
+    private float _posY;
     
     [CascadingParameter] public BlazorDiagram BlazorDiagram { get; set; } = null!;
-    [Parameter] public double Size { get; set; } = 20;
-    [Parameter] public double ZoomThreshold { get; set; } = 0;
+    [Parameter] public float Size { get; set; } = 20;
+    [Parameter] public float ZoomThreshold { get; set; } = 0;
     [Parameter] public GridMode Mode { get; set; } = GridMode.Line;
     [Parameter] public string BackgroundColor { get; set; } = "rgb(241 241 241)";
 

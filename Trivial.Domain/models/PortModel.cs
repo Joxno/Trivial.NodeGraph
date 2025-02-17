@@ -1,6 +1,7 @@
 ﻿using Trivial.Domain.Geometry;
 using Trivial.Domain.Models.Base;
 using System.Collections.Generic;
+using System.Numerics;
 
 namespace Trivial.Domain.Models;
 
@@ -8,28 +9,28 @@ public class PortModel : Model, IHasBounds, IHasShape, ILinkable
 {
     private readonly List<BaseLinkModel> _links = new(4);
 
-    public PortModel(NodeModel parent, PortAlignment alignment = PortAlignment.Bottom, Point? position = null,
+    public PortModel(NodeModel parent, PortAlignment alignment = PortAlignment.Bottom, Vector2? position = null,
         Size? size = null)
     {
         Parent = parent;
         Alignment = alignment;
-        Position = position ?? Point.Zero;
+        Position = position ?? Vector2.Zero;
         Size = size ?? Size.Zero;
     }
 
     public PortModel(string id, NodeModel parent, PortAlignment alignment = PortAlignment.Bottom,
-        Point? position = null, Size? size = null) : base(id)
+        Vector2? position = null, Size? size = null) : base(id)
     {
         Parent = parent;
         Alignment = alignment;
-        Position = position ?? Point.Zero;
+        Position = position ?? Vector2.Zero;
         Size = size ?? Size.Zero;
     }
 
     public NodeModel Parent { get; }
     public PortAlignment Alignment { get; }
-    public Point Position { get; set; }
-    public Point MiddlePosition => new(Position.X + (Size.Width / 2), Position.Y + (Size.Height / 2));
+    public Vector2 Position { get; set; }
+    public Vector2 MiddlePosition => new(Position.X + (Size.Width / 2), Position.Y + (Size.Height / 2));
     public Size Size { get; set; }
     public IReadOnlyList<BaseLinkModel> Links => _links;
     /// <summary>

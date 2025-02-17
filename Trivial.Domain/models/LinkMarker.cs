@@ -8,23 +8,23 @@ public class LinkMarker
     public static LinkMarker Circle { get; } = new LinkMarker("M 0, 0 a 5,5 0 1,0 10,0 a 5,5 0 1,0 -10,0", 10);
     public static LinkMarker Square { get; } = new LinkMarker("M 0 -5 10 -5 10 5 0 5 z", 10);
 
-    public LinkMarker(string path, double width)
+    public LinkMarker(string path, float width)
     {
         Path = path;
         Width = width;
     }
 
     public string Path { get; }
-    public double Width { get; }
+    public float Width { get; }
 
-    public static LinkMarker NewArrow(double width, double height)
+    public static LinkMarker NewArrow(float width, float height)
         => new LinkMarker(FormattableString.Invariant($"M 0 -{height / 2} {width} 0 0 {height / 2}"), width);
 
-    public static LinkMarker NewCircle(double r)
+    public static LinkMarker NewCircle(float r)
         => new LinkMarker(FormattableString.Invariant($"M 0, 0 a {r},{r} 0 1,0 {r * 2},0 a {r},{r} 0 1,0 -{r * 2},0"), r * 2);
 
-    public static LinkMarker NewRectangle(double width, double height)
+    public static LinkMarker NewRectangle(float width, float height)
         => new LinkMarker(FormattableString.Invariant($"M 0 -{height / 2} {width} -{height / 2} {width} {height / 2} 0 {height / 2} z"), width);
 
-    public static LinkMarker NewSquare(double size) => NewRectangle(size, size);
+    public static LinkMarker NewSquare(float size) => NewRectangle(size, size);
 }

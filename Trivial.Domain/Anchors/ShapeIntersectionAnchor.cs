@@ -1,4 +1,5 @@
-﻿using Trivial.Domain.Geometry;
+﻿using System.Numerics;
+using Trivial.Domain.Geometry;
 using Trivial.Domain.Models;
 using Trivial.Domain.Models.Base;
 
@@ -13,14 +14,14 @@ public sealed class ShapeIntersectionAnchor : Anchor
 
     public NodeModel Node { get; }
 
-    public override Point? GetPosition(BaseLinkModel link, Point[] route)
+    public override Vector2? GetPosition(BaseLinkModel link, Vector2[] route)
     {
         if (Node.Size == null)
             return null;
 
         var isTarget = link.Target == this;
         var nodeCenter = Node.GetBounds()!.Center;
-        Point? pt;
+        Vector2? pt;
         if (route.Length > 0)
         {
             pt = route[isTarget ? ^1 : 0];
@@ -32,10 +33,10 @@ public sealed class ShapeIntersectionAnchor : Anchor
 
         if (pt is null) return null;
 
-        var line = new Line(pt, nodeCenter);
+        var line = new Line(pt.Value, nodeCenter);
         var intersections = Node.GetShape().GetIntersectionsWithLine(line);
-        return GetClosestPointTo(intersections, pt);
+        return GetClosestPointTo(intersections, pt.Value);
     }
 
-    public override Point? GetPlainPosition() => Node.GetBounds()?.Center ?? null;
+    public override Vector2? GetPlainPosition() => Node.GetBounds()?.Center ?? null;
 }

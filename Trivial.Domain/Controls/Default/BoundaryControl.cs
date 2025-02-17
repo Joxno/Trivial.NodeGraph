@@ -1,3 +1,4 @@
+using System.Numerics;
 using Trivial.Domain.Geometry;
 using Trivial.Domain.Models.Base;
 
@@ -7,7 +8,7 @@ public class BoundaryControl : Control
 {
     public Rectangle Bounds { get; private set; } = Rectangle.Zero;
     
-    public override Point? GetPosition(Model model)
+    public override Vector2? GetPosition(Model model)
     {
         if (model is not IHasBounds hb)
             return null;

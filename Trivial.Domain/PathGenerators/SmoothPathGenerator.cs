@@ -4,19 +4,20 @@ using Trivial.Domain.Models;
 using Trivial.Domain.Models.Base;
 using SvgPathProperties;
 using System;
+using System.Numerics;
 
 namespace Trivial.Domain.PathGenerators;
 
 public class SmoothPathGenerator : PathGenerator
 {
-    private readonly double _margin;
+    private readonly float _margin;
 
-    public SmoothPathGenerator(double margin = 125)
+    public SmoothPathGenerator(float margin = 125)
     {
         _margin = margin;
     }
 
-    public override PathGeneratorResult GetResult(Diagram diagram, BaseLinkModel link, Point[] route, Point source, Point target)
+    public override PathGeneratorResult GetResult(Diagram diagram, BaseLinkModel link, Vector2[] route, Vector2 source, Vector2 target)
     {
         route = ConcatRouteAndSourceAndTarget(route, source, target);
 
@@ -24,8 +25,8 @@ public class SmoothPathGenerator : PathGenerator
             return CurveThroughPoints(route, link);
 
         route = GetRouteWithCurvePoints(link, route);
-        double? sourceAngle = null;
-        double? targetAngle = null;
+        float? sourceAngle = null;
+        float? targetAngle = null;
 
         if (link.SourceMarker != null)
         {
@@ -44,10 +45,10 @@ public class SmoothPathGenerator : PathGenerator
         return new PathGeneratorResult(path, Array.Empty<SvgPath>(), sourceAngle, route[0], targetAngle, route[^1]);
     }
 
-    private PathGeneratorResult CurveThroughPoints(Point[] route, BaseLinkModel link)
+    private PathGeneratorResult CurveThroughPoints(Vector2[] route, BaseLinkModel link)
     {
-        double? sourceAngle = null;
-        double? targetAngle = null;
+        float? sourceAngle = null;
+        float? targetAngle = null;
 
         if (link.SourceMarker != null)
         {
@@ -75,7 +76,7 @@ public class SmoothPathGenerator : PathGenerator
         return new PathGeneratorResult(fullPath, paths, sourceAngle, route[0], targetAngle, route[^1]);
     }
 
-    private Point[] GetRouteWithCurvePoints(BaseLinkModel link, Point[] route)
+    private Vector2[] GetRouteWithCurvePoints(BaseLinkModel link, Vector2[] route)
     {
         var cX = (route[0].X + route[1].X) / 2;
         var cY = (route[0].Y + route[1].Y) / 2;
@@ -84,10 +85,10 @@ public class SmoothPathGenerator : PathGenerator
         return new[] { route[0], curvePointA, curvePointB, route[1] };
     }
 
-    private Point GetCurvePoint(Point[] route, Anchor anchor, double pX, double pY, double cX, double cY, bool first)
+    private Vector2 GetCurvePoint(Vector2[] route, Anchor anchor, float pX, float pY, float cX, float cY, bool first)
     {
         if (anchor is PositionAnchor)
-            return new Point(cX, cY);
+            return new Vector2(cX, cY);
 
         if (anchor is SinglePortAnchor spa)
         {
@@ -95,13 +96,13 @@ public class SmoothPathGenerator : PathGenerator
         }
         else if (anchor is ShapeIntersectionAnchor or DynamicAnchor or LinkAnchor)
         {
-            if (Math.Abs(route[0].X - route[1].X) >= Math.Abs(route[0].Y - route[1].Y))
+            if (MathF.Abs(route[0].X - route[1].X) >= MathF.Abs(route[0].Y - route[1].Y))
             {
-                return first ? new Point(cX, route[0].Y) : new Point(cX, route[1].Y);
+                return first ? new Vector2(cX, route[0].Y) : new Vector2(cX, route[1].Y);
             }
             else
             {
-                return first ? new Point(route[0].X, cY) : new Point(route[1].X, cY);
+                return first ? new Vector2(route[0].X, cY) : new Vector2(route[1].X, cY);
             }
         }
         else
@@ -110,20 +111,20 @@ public class SmoothPathGenerator : PathGenerator
         }
     }
 
-    private Point GetCurvePoint(double pX, double pY, double cX, double cY, PortAlignment? alignment)
+    private Vector2 GetCurvePoint(float pX, float pY, float cX, float cY, PortAlignment? alignment)
     {
-        var margin = Math.Min(_margin, Math.Pow(Math.Pow(pX - cX, 2) + Math.Pow(pY - cY, 2), .5));
+        var margin = MathF.Min(_margin, MathF.Pow(MathF.Pow(pX - cX, 2) + MathF.Pow(pY - cY, 2), .5f));
         return alignment switch
         {
-            PortAlignment.Top => new Point(pX, Math.Min(pY - margin, cY)),
-            PortAlignment.Bottom => new Point(pX, Math.Max(pY + margin, cY)),
-            PortAlignment.TopRight => new Point(Math.Max(pX + margin, cX), Math.Min(pY - margin, cY)),
-            PortAlignment.BottomRight => new Point(Math.Max(pX + margin, cX), Math.Max(pY + margin, cY)),
-            PortAlignment.Right => new Point(Math.Max(pX + margin, cX), pY),
-            PortAlignment.Left => new Point(Math.Min(pX - margin, cX), pY),
-            PortAlignment.BottomLeft => new Point(Math.Min(pX - margin, cX), Math.Max(pY + margin, cY)),
-            PortAlignment.TopLeft => new Point(Math.Min(pX - margin, cX), Math.Min(pY - margin, cY)),
-            _ => new Point(cX, cY),
+            PortAlignment.Top => new Vector2(pX, MathF.Min(pY - margin, cY)),
+            PortAlignment.Bottom => new Vector2(pX, MathF.Max(pY + margin, cY)),
+            PortAlignment.TopRight => new Vector2(MathF.Max(pX + margin, cX), MathF.Min(pY - margin, cY)),
+            PortAlignment.BottomRight => new Vector2(MathF.Max(pX + margin, cX), MathF.Max(pY + margin, cY)),
+            PortAlignment.Right => new Vector2(MathF.Max(pX + margin, cX), pY),
+            PortAlignment.Left => new Vector2(MathF.Min(pX - margin, cX), pY),
+            PortAlignment.BottomLeft => new Vector2(MathF.Min(pX - margin, cX), MathF.Max(pY + margin, cY)),
+            PortAlignment.TopLeft => new Vector2(MathF.Min(pX - margin, cX), MathF.Min(pY - margin, cY)),
+            _ => new Vector2(cX, cY),
         };
     }
 }

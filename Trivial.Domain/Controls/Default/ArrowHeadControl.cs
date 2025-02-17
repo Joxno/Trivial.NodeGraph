@@ -5,6 +5,7 @@ using Trivial.Domain.Models;
 using Trivial.Domain.Models.Base;
 using Trivial.Domain.Positions;
 using System;
+using System.Numerics;
 using System.Threading.Tasks;
 
 namespace Trivial.Domain.Controls.Default;
@@ -19,9 +20,9 @@ public class ArrowHeadControl : ExecutableControl
 
     public bool Source { get; }
     public LinkMarker Marker { get; }
-    public double Angle { get; private set; }
+    public float Angle { get; private set; }
 
-    public override Point? GetPosition(Model model)
+    public override Vector2? GetPosition(Model model)
     {
         if (model is not BaseLinkModel link)
             throw new DiagramsException("ArrowHeadControl only works for models of type BaseLinkModel");
@@ -34,7 +35,7 @@ public class ArrowHeadControl : ExecutableControl
             var p2 = Source ? link.Source.GetPosition(link) : link.Target.GetPosition(link);
             if (p2 is not null)
             {
-                Angle = Math.Atan2(p2.Y - p1.Y, p2.X - p1.X) * 180 / Math.PI;
+                Angle = MathF.Atan2(p2.Value.Y - p1.Value.Y, p2.Value.X - p1.Value.X) * 180 / MathF.PI;
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using Trivial.Domain.Behaviors;
+﻿using System.Numerics;
+using Trivial.Domain.Behaviors;
 using Trivial.Domain.Extensions;
 using Trivial.Domain.Geometry;
 using Trivial.Domain.Layers;
@@ -27,7 +28,7 @@ public abstract class Diagram
     public event Action<KeyboardEventArgs>? KeyDown;
     public event Action<WheelEventArgs>? Wheel;
     public event Action<Model?, PointerEventArgs>? PointerClick;
-    public event Action<Model?, PointerEventArgs>? PointerDoubleClick;
+    public event Action<Model?, PointerEventArgs>? PointerfloatClick;
 
     public event Action<SelectableModel>? SelectionChanged;
     public event Action? PanChanged;
@@ -73,8 +74,8 @@ public abstract class Diagram
     public GroupLayer Groups { get; }
     public ControlsLayer Controls { get; }
     public Rectangle? Container { get; private set; }
-    public Point Pan { get; private set; } = Point.Zero;
-    public double Zoom { get; private set; } = 1;
+    public Vector2 Pan { get; private set; } = Vector2.Zero;
+    public float Zoom { get; private set; } = 1;
     public bool SuspendRefresh { get; set; }
     public bool SuspendSorting { get; set; }
     public IReadOnlyList<SelectableModel> OrderedSelectables => _orderedSelectables;
@@ -197,7 +198,7 @@ public abstract class Diagram
 
     #endregion
 
-    public void ZoomToFit(double margin = 10)
+    public void ZoomToFit(float margin = 10)
     {
         if (Container == null || Nodes.Count == 0)
             return;
@@ -214,7 +215,7 @@ public abstract class Diagram
 
         var xf = Container.Width / width;
         var yf = Container.Height / height;
-        SetZoom(Math.Min(xf, yf));
+        SetZoom(MathF.Min(xf, yf));
 
         var nx = Container.Left + Pan.X + minX * Zoom;
         var ny = Container.Top + Pan.Y + minY * Zoom;
@@ -224,21 +225,21 @@ public abstract class Diagram
         Refresh();
     }
 
-    public void SetPan(double x, double y)
+    public void SetPan(float x, float y)
     {
-        Pan = new Point(x, y);
+        Pan = new Vector2(x, y);
         PanChanged?.Invoke();
         Refresh();
     }
 
-    public void UpdatePan(double deltaX, double deltaY)
+    public void UpdatePan(float deltaX, float deltaY)
     {
-        Pan = Pan.Add(deltaX, deltaY);
+        Pan += new Vector2(deltaX, deltaY);
         PanChanged?.Invoke();
         Refresh();
     }
 
-    public void SetZoom(double newZoom)
+    public void SetZoom(float newZoom)
     {
         if (newZoom <= 0)
             throw new ArgumentException($"{nameof(newZoom)} cannot be equal or lower than 0");
@@ -261,31 +262,31 @@ public abstract class Diagram
         Refresh();
     }
 
-    public Point GetRelativeMousePoint(double clientX, double clientY)
+    public Vector2 GetRelativeMousePoint(float clientX, float clientY)
     {
         if (Container == null)
             throw new Exception(
                 "Container not available. Make sure you're not using this method before the diagram is fully loaded");
 
-        return new Point((clientX - Container.Left - Pan.X) / Zoom, (clientY - Container.Top - Pan.Y) / Zoom);
+        return new Vector2((clientX - Container.Left - Pan.X) / Zoom, (clientY - Container.Top - Pan.Y) / Zoom);
     }
 
-    public Point GetRelativePoint(double clientX, double clientY)
+    public Vector2 GetRelativePoint(float clientX, float clientY)
     {
         if (Container == null)
             throw new Exception(
                 "Container not available. Make sure you're not using this method before the diagram is fully loaded");
 
-        return new Point(clientX - Container.Left, clientY - Container.Top);
+        return new Vector2(clientX - Container.Left, clientY - Container.Top);
     }
 
-    public Point GetScreenPoint(double clientX, double clientY)
+    public Vector2 GetScreenPoint(float clientX, float clientY)
     {
         if (Container == null)
             throw new Exception(
                 "Container not available. Make sure you're not using this method before the diagram is fully loaded");
 
-        return new Point(Zoom * clientX + Container.Left + Pan.X, Zoom * clientY + Container.Top + Pan.Y);
+        return new Vector2(Zoom * clientX + Container.Left + Pan.X, Zoom * clientY + Container.Top + Pan.Y);
     }
 
     #region Ordering
@@ -400,7 +401,7 @@ public abstract class Diagram
 
     public void TriggerPointerClick(Model? model, PointerEventArgs e) => PointerClick?.Invoke(model, e);
 
-    public void TriggerPointerDoubleClick(Model? model, PointerEventArgs e) => PointerDoubleClick?.Invoke(model, e);
+    public void TriggerPointerfloatClick(Model? model, PointerEventArgs e) => PointerfloatClick?.Invoke(model, e);
 
     #endregion
 }

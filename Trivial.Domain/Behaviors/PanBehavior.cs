@@ -1,4 +1,5 @@
-﻿using Trivial.Domain.Geometry;
+﻿using System.Numerics;
+using Trivial.Domain.Geometry;
 using Trivial.Domain.Models.Base;
 using Trivial.Domain.Events;
 
@@ -6,9 +7,9 @@ namespace Trivial.Domain.Behaviors;
 
 public class PanBehavior : Behavior
 {
-    private Point? _initialPan;
-    private double _lastClientX;
-    private double _lastClientY;
+    private Vector2? _initialPan;
+    private float _lastClientX;
+    private float _lastClientY;
 
     public PanBehavior(Diagram diagram) : base(diagram)
     {
@@ -29,7 +30,7 @@ public class PanBehavior : Behavior
 
     private void OnPointerUp(Model? model, PointerEventArgs e) => End();
 
-    private void Start(Model? model, double clientX, double clientY, bool shiftKey)
+    private void Start(Model? model, float clientX, float clientY, bool shiftKey)
     {
         if (!Diagram.Options.AllowPanning || model != null || shiftKey)
             return;
@@ -39,13 +40,13 @@ public class PanBehavior : Behavior
         _lastClientY = clientY;
     }
 
-    private void Move(double clientX, double clientY)
+    private void Move(float clientX, float clientY)
     {
         if (!Diagram.Options.AllowPanning || _initialPan == null)
             return;
 
-        var deltaX = clientX - _lastClientX - (Diagram.Pan.X - _initialPan.X);
-        var deltaY = clientY - _lastClientY - (Diagram.Pan.Y - _initialPan.Y);
+        var deltaX = clientX - _lastClientX - (Diagram.Pan.X - _initialPan.Value.X);
+        var deltaY = clientY - _lastClientY - (Diagram.Pan.Y - _initialPan.Value.Y);
         Diagram.UpdatePan(deltaX, deltaY);
     }
 

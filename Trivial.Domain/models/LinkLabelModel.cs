@@ -1,11 +1,12 @@
-﻿using Trivial.Domain.Geometry;
+﻿using System.Numerics;
+using Trivial.Domain.Geometry;
 using Trivial.Domain.Models.Base;
 
 namespace Trivial.Domain.Models;
 
 public class LinkLabelModel : Model
 {
-    public LinkLabelModel(BaseLinkModel parent, string id, string content, double? distance = null, Point? offset = null) : base(id)
+    public LinkLabelModel(BaseLinkModel parent, string id, string content, float? distance = null, Vector2? offset = null) : base(id)
     {
         Parent = parent;
         Content = content;
@@ -13,7 +14,7 @@ public class LinkLabelModel : Model
         Offset = offset;
     }
 
-    public LinkLabelModel(BaseLinkModel parent, string content, double? distance = null, Point? offset = null)
+    public LinkLabelModel(BaseLinkModel parent, string content, float? distance = null, Vector2? offset = null)
     {
         Parent = parent;
         Content = content;
@@ -29,6 +30,6 @@ public class LinkLabelModel : Model
     /// <para>- A positive number, greater than 1: Position away from the start</para>
     /// <para>- A negative number, less than 0: Position away from the end</para>
     /// </summary>
-    public double? Distance { get; set; }
-    public Point? Offset { get; set; }
+    public float? Distance { get; set; }
+    public Vector2? Offset { get; set; }
 }

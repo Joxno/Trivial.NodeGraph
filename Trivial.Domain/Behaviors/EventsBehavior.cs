@@ -25,7 +25,7 @@ public class EventsBehavior : Behavior
     {
         if (_mouseClickSw.IsRunning && _mouseClickSw.ElapsedMilliseconds <= 500)
         {
-            Diagram.TriggerPointerDoubleClick(model, e);
+            Diagram.TriggerPointerfloatClick(model, e);
         }
 
         _mouseClickSw.Restart();

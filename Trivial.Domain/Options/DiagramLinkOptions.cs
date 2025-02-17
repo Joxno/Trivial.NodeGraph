@@ -8,14 +8,14 @@ namespace Trivial.Domain.Options;
 
 public class DiagramLinkOptions
 {
-    private double _snappingRadius = 50;
+    private float _snappingRadius = 50;
 
     public Router DefaultRouter { get; set; } = new NormalRouter();
     public PathGenerator DefaultPathGenerator { get; set; } = new SmoothPathGenerator();
     public bool EnableSnapping { get; set; } = false;
     public bool RequireTarget { get; set; } = true;
 
-    public double SnappingRadius
+    public float SnappingRadius
     {
         get => _snappingRadius;
         set

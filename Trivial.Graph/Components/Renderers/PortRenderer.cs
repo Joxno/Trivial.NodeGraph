@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Numerics;
 using System.Threading.Tasks;
 using Trivial.Domain.Geometry;
 using Trivial.Domain.Models;
@@ -93,11 +94,11 @@ public class PortRenderer : ComponentBase, IDisposable
 
     private void OnPointerUp(PointerEventArgs e)
     {
-        var model = e.PointerType == "mouse" ? Port : FindPortOn(e.ClientX, e.ClientY);
+        var model = e.PointerType == "mouse" ? Port : FindPortOn((float)e.ClientX, (float)e.ClientY);
         BlazorDiagram.TriggerPointerUp(model, e.ToCore());
     }
 
-    private PortModel? FindPortOn(double clientX, double clientY)
+    private PortModel? FindPortOn(float clientX, float clientY)
     {
         var allPorts = BlazorDiagram.Nodes.SelectMany(n => n.Ports)
             .Union(BlazorDiagram.Groups.SelectMany(g => g.Ports));
@@ -126,7 +127,7 @@ public class PortRenderer : ComponentBase, IDisposable
         var rect = await JSRuntime.GetBoundingClientRect(_element);
 
         Port.Size = new Size(rect.Width / zoom, rect.Height / zoom);
-        Port.Position = new Point((rect.Left - BlazorDiagram.Container.Left - pan.X) / zoom,
+        Port.Position = new Vector2((rect.Left - BlazorDiagram.Container.Left - pan.X) / zoom,
             (rect.Top - BlazorDiagram.Container.Top - pan.Y) / zoom);
 
         Port.Initialized = true;

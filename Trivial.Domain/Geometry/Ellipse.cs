@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Numerics;
+using Trivial.Domain.Extensions;
 
 namespace Trivial.Domain.Geometry;
 
 public class Ellipse : IShape
 {
-    public Ellipse(double cx, double cy, double rx, double ry)
+    public Ellipse(float cx, float cy, float rx, float ry)
     {
         Cx = cx;
         Cy = cy;
@@ -13,28 +15,28 @@ public class Ellipse : IShape
         Ry = ry;
     }
 
-    public double Cx { get; }
-    public double Cy { get; }
-    public double Rx { get; }
-    public double Ry { get; }
+    public float Cx { get; }
+    public float Cy { get; }
+    public float Rx { get; }
+    public float Ry { get; }
 
-    public IEnumerable<Point> GetIntersectionsWithLine(Line line)
+    public IEnumerable<Vector2> GetIntersectionsWithLine(Line line)
     {
         var a1 = line.Start;
         var a2 = line.End;
-        var dir = new Point(line.End.X - line.Start.X, line.End.Y - line.Start.Y);
-        var diff = a1.Subtract(Cx, Cy);
-        var mDir = new Point(dir.X / (Rx * Rx), dir.Y / (Ry * Ry));
-        var mDiff = new Point(diff.X / (Rx * Rx), diff.Y / (Ry * Ry));
+        var dir = new Vector2(line.End.X - line.Start.X, line.End.Y - line.Start.Y);
+        var diff = a1 - new Vector2(Cx, Cy);
+        var mDir = new Vector2(dir.X / (Rx * Rx), dir.Y / (Ry * Ry));
+        var mDiff = new Vector2(diff.X / (Rx * Rx), diff.Y / (Ry * Ry));
 
         var a = dir.Dot(mDir);
         var b = dir.Dot(mDiff);
-        var c = diff.Dot(mDiff) - 1.0;
+        var c = diff.Dot(mDiff) - 1.0f;
         var d = b * b - a * c;
 
         if (d > 0)
         {
-            var root = Math.Sqrt(d);
+            var root = MathF.Sqrt(d);
             var ta = (-b - root) / a;
             var tb = (-b + root) / a;
 
@@ -57,11 +59,11 @@ public class Ellipse : IShape
         }
     }
 
-    public Point? GetPointAtAngle(double a)
+    public Vector2? GetPointAtAngle(float a)
     {
-        var t = Math.Tan(a / 360 * Math.PI);
-        var px = Rx * (1 - Math.Pow(t, 2)) / (1 + Math.Pow(t, 2));
-        var py = Ry * 2 * t / (1 + Math.Pow(t, 2));
-        return new Point(Cx + px, Cy + py);
+        var t = MathF.Tan(a / 360 * MathF.PI);
+        var px = Rx * (1 - MathF.Pow(t, 2)) / (1 + MathF.Pow(t, 2));
+        var py = Ry * 2 * t / (1 + MathF.Pow(t, 2));
+        return new Vector2(Cx + px, Cy + py);
     }
 }

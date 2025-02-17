@@ -2,6 +2,8 @@
 using Trivial.Domain.Models.Base;
 using System;
 using System.Collections.Generic;
+using System.Numerics;
+using Trivial.Domain.Extensions;
 
 namespace Trivial.Domain.Anchors;
 
@@ -14,22 +16,22 @@ public abstract class Anchor
 
     public ILinkable? Model { get; }
 
-    public abstract Point? GetPosition(BaseLinkModel link, Point[] route);
+    public abstract Vector2? GetPosition(BaseLinkModel link, Vector2[] route);
 
-    public abstract Point? GetPlainPosition();
+    public abstract Vector2? GetPlainPosition();
 
-    public Point? GetPosition(BaseLinkModel link) => GetPosition(link, Array.Empty<Point>());
+    public Vector2? GetPosition(BaseLinkModel link) => GetPosition(link, Array.Empty<Vector2>());
 
-    protected static Point? GetOtherPosition(BaseLinkModel link, bool isTarget)
+    protected static Vector2? GetOtherPosition(BaseLinkModel link, bool isTarget)
     {
         var anchor = isTarget ? link.Source : link.Target!;
         return anchor.GetPlainPosition();
     }
 
-    protected static Point? GetClosestPointTo(IEnumerable<Point?> points, Point point)
+    protected static Vector2? GetClosestPointTo(IEnumerable<Vector2> points, Vector2 point)
     {
-        var minDist = double.MaxValue;
-        Point? minPoint = null;
+        var minDist = float.MaxValue;
+        Vector2? minPoint = null;
 
         foreach (var pt in points)
         {

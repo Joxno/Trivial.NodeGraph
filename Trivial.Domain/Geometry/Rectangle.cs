@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text.Json.Serialization;
 
 namespace Trivial.Domain.Geometry;
@@ -9,25 +10,25 @@ public class Rectangle : IShape
 {
     public static Rectangle Zero { get; } = new(0, 0, 0, 0);
 
-    public double Width { get; }
-    public double Height { get; }
-    public double Top { get; }
-    public double Right { get; }
-    public double Bottom { get; }
-    public double Left { get; }
+    public float Width { get; }
+    public float Height { get; }
+    public float Top { get; }
+    public float Right { get; }
+    public float Bottom { get; }
+    public float Left { get; }
 
     [JsonConstructor]
-    public Rectangle(double left, double top, double right, double bottom)
+    public Rectangle(float left, float top, float right, float bottom)
     {
         Left = left;
         Top = top;
         Right = right;
         Bottom = bottom;
-        Width = Math.Abs(Left - Right);
-        Height = Math.Abs(Top - Bottom);
+        Width = MathF.Abs(Left - Right);
+        Height = MathF.Abs(Top - Bottom);
     }
 
-    public Rectangle(Point position, Size size)
+    public Rectangle(Vector2 position, Size size)
     {
         ArgumentNullException.ThrowIfNull(position, nameof(position));
         ArgumentNullException.ThrowIfNull(size, nameof(size));
@@ -56,24 +57,24 @@ public class Rectangle : IShape
         return rectX < thisX + thisW && thisX < rectX + rectW && rectY < thisY + thisH && thisY < rectY + rectH;
     }
 
-    public Rectangle Inflate(double horizontal, double vertical)
+    public Rectangle Inflate(float horizontal, float vertical)
         => new(Left - horizontal, Top - vertical, Right + horizontal, Bottom + vertical);
 
     public Rectangle Union(Rectangle r)
     {
-        var x1 = Math.Min(Left, r.Left);
-        var x2 = Math.Max(Left + Width, r.Left + r.Width);
-        var y1 = Math.Min(Top, r.Top);
-        var y2 = Math.Max(Top + Height, r.Top + r.Height);
+        var x1 = MathF.Min(Left, r.Left);
+        var x2 = MathF.Max(Left + Width, r.Left + r.Width);
+        var y1 = MathF.Min(Top, r.Top);
+        var y2 = MathF.Max(Top + Height, r.Top + r.Height);
         return new(x1, y1, x2, y2);
     }
 
-    public bool ContainsPoint(Point point) => ContainsPoint(point.X, point.Y);
+    public bool ContainsPoint(Vector2 point) => ContainsPoint(point.X, point.Y);
 
-    public bool ContainsPoint(double x, double y)
+    public bool ContainsPoint(float x, float y)
         => x >= Left && x <= Right && y >= Top && y <= Bottom;
 
-    public IEnumerable<Point> GetIntersectionsWithLine(Line line)
+    public IEnumerable<Vector2> GetIntersectionsWithLine(Line line)
     {
         var borders = new[] {
             new Line(NorthWest, NorthEast),
@@ -86,37 +87,37 @@ public class Rectangle : IShape
         {
             var intersectionPt = borders[i].GetIntersection(line);
             if (intersectionPt != null)
-                yield return intersectionPt;
+                yield return intersectionPt.Value;
         }
     }
 
-    public Point? GetPointAtAngle(double a)
+    public Vector2? GetPointAtAngle(float a)
     {
-        var vx = Math.Cos(a * Math.PI / 180);
-        var vy = Math.Sin(a * Math.PI / 180);
+        var vx = MathF.Cos(a * MathF.PI / 180);
+        var vy = MathF.Sin(a * MathF.PI / 180);
         var px = Left + Width / 2;
         var py = Top + Height / 2;
-        double? t1 = (Left - px) / vx; // left
-        double? t2 = (Right - px) / vx; // right
-        double? t3 = (Top - py) / vy; // top
-        double? t4 = (Bottom - py) / vy; // bottom
-        var t = (new[] { t1, t2, t3, t4 }).Where(n => n.HasValue && double.IsFinite(n.Value) && n.Value > 0).DefaultIfEmpty(null).Min();
+        float? t1 = (Left - px) / vx; // left
+        float? t2 = (Right - px) / vx; // right
+        float? t3 = (Top - py) / vy; // top
+        float? t4 = (Bottom - py) / vy; // bottom
+        var t = (new[] { t1, t2, t3, t4 }).Where(n => n.HasValue && float.IsFinite(n.Value) && n.Value > 0).DefaultIfEmpty(null).Min();
         if (t == null) return null;
 
         var x = px + t.Value * vx;
         var y = py + t.Value * vy;
-        return new Point(x, y);
+        return new Vector2(x, y);
     }
 
-    public Point Center => new(Left + Width / 2, Top + Height / 2);
-    public Point NorthEast => new(Right, Top);
-    public Point SouthEast => new(Right, Bottom);
-    public Point SouthWest => new(Left, Bottom);
-    public Point NorthWest => new(Left, Top);
-    public Point East => new(Right, Top + Height / 2);
-    public Point North => new(Left + Width / 2, Top);
-    public Point South => new(Left + Width / 2, Bottom);
-    public Point West => new(Left, Top + Height / 2);
+    public Vector2 Center => new(Left + Width / 2, Top + Height / 2);
+    public Vector2 NorthEast => new(Right, Top);
+    public Vector2 SouthEast => new(Right, Bottom);
+    public Vector2 SouthWest => new(Left, Bottom);
+    public Vector2 NorthWest => new(Left, Top);
+    public Vector2 East => new(Right, Top + Height / 2);
+    public Vector2 North => new(Left + Width / 2, Top);
+    public Vector2 South => new(Left + Width / 2, Bottom);
+    public Vector2 West => new(Left, Top + Height / 2);
 
     public bool Equals(Rectangle? other)
     {

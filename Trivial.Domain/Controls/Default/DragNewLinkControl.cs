@@ -1,3 +1,4 @@
+using System.Numerics;
 using System.Threading.Tasks;
 using Trivial.Domain.Behaviors;
 using Trivial.Domain.Events;
@@ -12,7 +13,7 @@ public class DragNewLinkControl : ExecutableControl
 {
     private readonly IPositionProvider _positionProvider;
 
-    public DragNewLinkControl(double x, double y, double offsetX = 0, double offsetY = 0)
+    public DragNewLinkControl(float x, float y, float offsetX = 0, float offsetY = 0)
         : this(new BoundsBasedPositionProvider(x, y, offsetX, offsetY))
     {
     }
@@ -22,7 +23,7 @@ public class DragNewLinkControl : ExecutableControl
         _positionProvider = positionProvider;
     }
 
-    public override Point? GetPosition(Model model) => _positionProvider.GetPosition(model);
+    public override Vector2? GetPosition(Model model) => _positionProvider.GetPosition(model);
 
     public override ValueTask OnPointerDown(Diagram diagram, Model model, PointerEventArgs e)
     {

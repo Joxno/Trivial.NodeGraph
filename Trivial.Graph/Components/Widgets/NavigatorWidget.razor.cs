@@ -11,21 +11,21 @@ namespace Trivial.Graph.Components.Widgets;
 
 public partial class NavigatorWidget : IDisposable
 {
-    private double _x;
-    private double _y;
-    private double _width;
-    private double _height;
-    private double _scaledMargin;
-    private double _vX;
-    private double _vY;
-    private double _vWidth;
-    private double _vHeight;
+    private float _x;
+    private float _y;
+    private float _width;
+    private float _height;
+    private float _scaledMargin;
+    private float _vX;
+    private float _vY;
+    private float _vWidth;
+    private float _vHeight;
 
     [CascadingParameter] public BlazorDiagram BlazorDiagram { get; set; } = null!;
     [Parameter] public bool UseNodeShape { get; set; } = true;
-    [Parameter] public double Width { get; set; }
-    [Parameter] public double Height { get; set; }
-    [Parameter] public double Margin { get; set; } = 5;
+    [Parameter] public float Width { get; set; }
+    [Parameter] public float Height { get; set; }
+    [Parameter] public float Margin { get; set; } = 5;
     [Parameter] public string NodeColor { get; set; } = "#40babd";
     [Parameter] public string GroupColor { get; set; } = "#9fd0d1";
     [Parameter] public string ViewStrokeColor { get; set; } = "#40babd";
@@ -89,17 +89,17 @@ public partial class NavigatorWidget : IDisposable
             if (node.Size == null)
                 continue;
 
-            minX = Math.Min(minX, node.Position.X);
-            minY = Math.Min(minY, node.Position.Y);
-            maxX = Math.Max(maxX, node.Position.X + node.Size.Width);
-            maxY = Math.Max(maxY, node.Position.Y + node.Size.Height);
+            minX = MathF.Min(minX, node.Position.X);
+            minY = MathF.Min(minY, node.Position.Y);
+            maxX = MathF.Max(maxX, node.Position.X + node.Size.Width);
+            maxY = MathF.Max(maxY, node.Position.Y + node.Size.Height);
         }
 
         var width = maxX - minX;
         var height = maxY - minY;
         var scaledWidth = width / Width;
         var scaledHeight = height / Height;
-        var scale = Math.Max(scaledWidth, scaledHeight);
+        var scale = MathF.Max(scaledWidth, scaledHeight);
         var viewWidth = scale * Width;
         var viewHeight = scale * Height;
 

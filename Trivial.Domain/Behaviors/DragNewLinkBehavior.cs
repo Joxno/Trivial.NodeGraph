@@ -2,8 +2,10 @@
 using Trivial.Domain.Models.Base;
 using Trivial.Domain.Events;
 using System.Linq;
+using System.Numerics;
 using Trivial.Domain.Anchors;
 using Trivial.Domain.Geometry;
+using Trivial.Domain.Extensions;
 
 namespace Trivial.Domain.Behaviors;
 
@@ -20,7 +22,7 @@ public class DragNewLinkBehavior : Behavior
         Diagram.PointerUp += OnPointerUp;
     }
 
-    public void StartFrom(ILinkable source, double clientX, double clientY)
+    public void StartFrom(ILinkable source, float clientX, float clientY)
     {
         if (OngoingLink != null)
             return;
@@ -33,7 +35,7 @@ public class DragNewLinkBehavior : Behavior
         Diagram.Links.Add(OngoingLink);
     }
 
-    public void StartFrom(BaseLinkModel link, double clientX, double clientY)
+    public void StartFrom(BaseLinkModel link, float clientX, float clientY)
     {
         if (OngoingLink != null)
             return;
@@ -120,7 +122,7 @@ public class DragNewLinkBehavior : Behavior
         OngoingLink = null;
     }
 
-    private Point CalculateTargetPosition(double clientX, double clientY)
+    private Vector2 CalculateTargetPosition(float clientX, float clientY)
     {
         var target = Diagram.GetRelativeMousePoint(clientX, clientY);
 
@@ -130,9 +132,9 @@ public class DragNewLinkBehavior : Behavior
         }
 
         var source = OngoingLink.Source.GetPlainPosition()!;
-        var dirVector = target.Subtract(source).Normalize();
-        var change = dirVector.Multiply(5);
-        return target.Subtract(change);
+        var dirVector = (target - source.Value).Normalized();
+        var change = dirVector * 5;
+        return target - change;
     }
 
     private PortModel? FindNearPortToAttachTo()
@@ -141,13 +143,13 @@ public class DragNewLinkBehavior : Behavior
             return null;
 
         PortModel? nearestSnapPort = null;
-        var nearestSnapPortDistance = double.PositiveInfinity;
+        var nearestSnapPortDistance = float.PositiveInfinity;
 
         var position = _targetPositionAnchor!.GetPosition(OngoingLink)!;
 
         foreach (var port in Diagram.Nodes.SelectMany((NodeModel n) => n.Ports))
         {
-            var distance = position.DistanceTo(port.Position);
+            var distance = position.Value.DistanceTo(port.Position);
 
             if (distance <= Diagram.Options.Links.SnappingRadius && (OngoingLink.Source.Model?.CanAttachTo(port) != false))
             {

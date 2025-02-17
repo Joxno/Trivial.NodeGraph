@@ -1,3 +1,4 @@
+using System.Numerics;
 using System.Threading.Tasks;
 using Trivial.Domain.Events;
 using Trivial.Domain.Geometry;
@@ -11,7 +12,7 @@ public class RemoveControl : ExecutableControl
 {
     private readonly IPositionProvider _positionProvider;
 
-    public RemoveControl(double x, double y, double offsetX = 0, double offsetY = 0)
+    public RemoveControl(float x, float y, float offsetX = 0, float offsetY = 0)
         : this(new BoundsBasedPositionProvider(x, y, offsetX, offsetY))
     {
     }
@@ -21,7 +22,7 @@ public class RemoveControl : ExecutableControl
         _positionProvider = positionProvider;
     }
 
-    public override Point? GetPosition(Model model) => _positionProvider.GetPosition(model);
+    public override Vector2? GetPosition(Model model) => _positionProvider.GetPosition(model);
 
     public override async ValueTask OnPointerDown(Diagram diagram, Model model, PointerEventArgs _)
     {

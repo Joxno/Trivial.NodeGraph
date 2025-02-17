@@ -2,6 +2,7 @@
 using Trivial.Domain.Geometry;
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using Trivial.Domain.PathGenerators;
 using Trivial.Domain.Routers;
 
@@ -30,7 +31,7 @@ public abstract class BaseLinkModel : SelectableModel, IHasBounds, ILinkable
     public Anchor Source { get; private set; }
     public Anchor Target { get; private set; }
     public Diagram? Diagram { get; internal set; }
-    public Point[]? Route { get; private set; }
+    public Vector2[]? Route { get; private set; }
     public PathGeneratorResult? PathGeneratorResult { get; private set; }
     public bool IsAttached => Source is not PositionAnchor && Target is not PositionAnchor;
     public Router? Router { get; set; }
@@ -56,14 +57,14 @@ public abstract class BaseLinkModel : SelectableModel, IHasBounds, ILinkable
         }
     }
 
-    public LinkLabelModel AddLabel(string content, double? distance = null, Point? offset = null)
+    public LinkLabelModel AddLabel(string content, float? distance = null, Vector2? offset = null)
     {
         var label = new LinkLabelModel(this, content, distance, offset);
         Labels.Add(label);
         return label;
     }
 
-    public LinkVertexModel AddVertex(Point? position = null)
+    public LinkVertexModel AddVertex(Vector2? position = null)
     {
         var vertex = new LinkVertexModel(this, position);
         Vertices.Add(vertex);
@@ -97,17 +98,17 @@ public abstract class BaseLinkModel : SelectableModel, IHasBounds, ILinkable
         if (PathGeneratorResult == null)
             return null;
 
-        var minX = double.PositiveInfinity;
-        var minY = double.PositiveInfinity;
-        var maxX = double.NegativeInfinity;
-        var maxY = double.NegativeInfinity;
+        var minX = float.PositiveInfinity;
+        var minY = float.PositiveInfinity;
+        var maxX = float.NegativeInfinity;
+        var maxY = float.NegativeInfinity;
 
         var path = PathGeneratorResult.FullPath;
         var bbox = path.GetBBox();
-        minX = Math.Min(minX, bbox.Left);
-        minY = Math.Min(minY, bbox.Top);
-        maxX = Math.Max(maxX, bbox.Right);
-        maxY = Math.Max(maxY, bbox.Bottom);
+        minX = MathF.Min(minX, (float)bbox.Left);
+        minY = MathF.Min(minY, (float)bbox.Top);
+        maxX = MathF.Max(maxX, (float)bbox.Right);
+        maxY = MathF.Max(maxY, (float)bbox.Bottom);
 
         return new Rectangle(minX, minY, maxX, maxY);
     }
@@ -131,7 +132,7 @@ public abstract class BaseLinkModel : SelectableModel, IHasBounds, ILinkable
             if (source != null && target != null)
             {
                 Route = route;
-                PathGeneratorResult = pathGenerator.GetResult(Diagram, this, route, source, target);
+                PathGeneratorResult = pathGenerator.GetResult(Diagram, this, route, source.Value, target.Value);
                 return;
             }
         }

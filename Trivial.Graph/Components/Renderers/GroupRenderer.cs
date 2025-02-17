@@ -73,7 +73,7 @@ public class GroupRenderer : ComponentBase, IDisposable
         InvokeAsync(StateHasChanged);
     }
 
-    private static string GenerateStyle(double top, double left, double width, double height)
+    private static string GenerateStyle(float top, float left, float width, float height)
     {
         return FormattableString.Invariant($"top: {top}px; left: {left}px; width: {width}px; height: {height}px");
     }

@@ -5,23 +5,24 @@ using System;
 using Trivial.Domain.Models;
 using Trivial.Domain.Anchors;
 using System.Linq;
+using System.Numerics;
 
 namespace Trivial.Domain.Routers;
 
 public class OrthogonalRouter : Router
 {
     private readonly Router _fallbackRouter;
-    private double _shapeMargin;
-    private double _globalMargin;
+    private float _shapeMargin;
+    private float _globalMargin;
 
-    public OrthogonalRouter(double shapeMargin = 10d, double globalMargin = 50d, Router? fallbackRouter = null)
+    public OrthogonalRouter(float shapeMargin = 10, float globalMargin = 50, Router? fallbackRouter = null)
     {
         _shapeMargin = shapeMargin;
         _globalMargin = globalMargin;
         _fallbackRouter = fallbackRouter ?? new NormalRouter();
     }
 
-    public override Point[] GetRoute(Diagram diagram, BaseLinkModel link)
+    public override Vector2[] GetRoute(Diagram diagram, BaseLinkModel link)
     {
         if (!link.IsAttached)
             return _fallbackRouter.GetRoute(diagram, link);
@@ -40,9 +41,9 @@ public class OrthogonalRouter : Router
 
         var shapeMargin = _shapeMargin;
         var globalBoundsMargin = _globalMargin;
-        var spots = new HashSet<Point>();
-        var verticals = new List<double>();
-        var horizontals = new List<double>();
+        var spots = new HashSet<Vector2>();
+        var verticals = new List<float>();
+        var horizontals = new List<float>();
         var sideA = sourcePort.Alignment;
         var sideAVertical = IsVerticalSide(sideA);
         var sideB = targetPort.Alignment;
@@ -104,13 +105,13 @@ public class OrthogonalRouter : Router
         {
             for (var j = 0; j < xs.Count; j++)
             {
-                var b = new Point(xs[j], ys[i]);
+                var b = new Vector2(xs[j], ys[i]);
                 if (!nodes.ContainsKey(b))
                     continue;
 
                 if (j > 0)
                 {
-                    var a = new Point(xs[j - 1], ys[i]);
+                    var a = new Vector2(xs[j - 1], ys[i]);
 
                     if (nodes.ContainsKey(a))
                     {
@@ -121,7 +122,7 @@ public class OrthogonalRouter : Router
 
                 if (i > 0)
                 {
-                    var a = new Point(xs[j], ys[i - 1]);
+                    var a = new Vector2(xs[j], ys[i - 1]);
 
                     if (nodes.ContainsKey(a))
                     {
@@ -146,7 +147,7 @@ public class OrthogonalRouter : Router
         }
     }
 
-    private static Grid RulersToGrid(List<double> verticals, List<double> horizontals, Rectangle bounds)
+    private static Grid RulersToGrid(List<float> verticals, List<float> horizontals, Rectangle bounds)
     {
         var result = new Grid();
         verticals.Sort();
@@ -187,9 +188,9 @@ public class OrthogonalRouter : Router
         return result;
     }
 
-    private static HashSet<Point> GridToSpots(Grid grid, Rectangle[] obstacles)
+    private static HashSet<Vector2> GridToSpots(Grid grid, Rectangle[] obstacles)
     {
-        bool IsInsideObstacles(Point p)
+        bool IsInsideObstacles(Vector2 p)
         {
             foreach (var obstacle in obstacles)
             {
@@ -200,7 +201,7 @@ public class OrthogonalRouter : Router
             return false;
         }
 
-        void AddIfNotInsideObstacles(HashSet<Point> list, Point p)
+        void AddIfNotInsideObstacles(HashSet<Vector2> list, Vector2 p)
         {
             if (!IsInsideObstacles(p))
             {
@@ -208,7 +209,7 @@ public class OrthogonalRouter : Router
             }
         }
 
-        var gridPoints = new HashSet<Point>();
+        var gridPoints = new HashSet<Vector2>();
         foreach (var (row, data) in grid.Data)
         {
             var firstRow = row == 0;
@@ -276,14 +277,14 @@ public class OrthogonalRouter : Router
     private static bool IsVerticalSide(PortAlignment alignment)
         => alignment == PortAlignment.Top || alignment == PortAlignment.Bottom;
 
-    private static Point GetOriginSpot(Point p, PortAlignment alignment, double shapeMargin)
+    private static Vector2 GetOriginSpot(Vector2 p, PortAlignment alignment, float shapeMargin)
     {
         return alignment switch
         {
-            PortAlignment.Top => p.Add(0, -shapeMargin),
-            PortAlignment.Right => p.Add(shapeMargin, 0),
-            PortAlignment.Bottom => p.Add(0, shapeMargin),
-            PortAlignment.Left => p.Add(-shapeMargin, 0),
+            PortAlignment.Top => p + new Vector2(0, -shapeMargin),
+            PortAlignment.Right => p + new Vector2(shapeMargin, 0),
+            PortAlignment.Bottom => p + new Vector2(0, shapeMargin),
+            PortAlignment.Left => p + new Vector2(-shapeMargin, 0),
             _ => throw new NotImplementedException()
         };
     }
@@ -293,21 +294,21 @@ class Grid
 {
     public Grid()
     {
-        Data = new Dictionary<double, Dictionary<double, Rectangle>>();
+        Data = new Dictionary<float, Dictionary<float, Rectangle>>();
     }
 
-    public Dictionary<double, Dictionary<double, Rectangle>> Data { get; }
-    public double Rows { get; private set; }
-    public double Columns { get; private set; }
+    public Dictionary<float, Dictionary<float, Rectangle>> Data { get; }
+    public float Rows { get; private set; }
+    public float Columns { get; private set; }
 
-    public void Set(double row, double column, Rectangle rectangle)
+    public void Set(float row, float column, Rectangle rectangle)
     {
-        Rows = Math.Max(Rows, row + 1);
-        Columns = Math.Max(Columns, column + 1);
+        Rows = MathF.Max(Rows, row + 1);
+        Columns = MathF.Max(Columns, column + 1);
 
         if (!Data.ContainsKey(row))
         {
-            Data.Add(row, new Dictionary<double, Rectangle>());
+            Data.Add(row, new Dictionary<float, Rectangle>());
         }
 
         Data[row].Add(column, rectangle);
@@ -316,9 +317,9 @@ class Grid
 
 static class AStarPathfinder
 {
-    public static IReadOnlyList<Point> GetPath(Node start, Node goal)
+    public static IReadOnlyList<Vector2> GetPath(Node start, Node goal)
     {
-        var frontier = new PriorityQueue<Node, double>();
+        var frontier = new PriorityQueue<Node, float>();
         frontier.Enqueue(start, 0);
 
         while (frontier.Count > 0)
@@ -330,7 +331,7 @@ static class AStarPathfinder
 
             foreach (var next in current.ConnectedTo)
             {
-                var newCost = current.Cost + 1.0;
+                var newCost = current.Cost + 1.0f;
                 if (current.Parent != null && IsChangeOfDirection(current.Parent.Position, current.Position, next.Position))
                 {
                     newCost *= newCost;
@@ -347,7 +348,7 @@ static class AStarPathfinder
             }
         }
 
-        var result = new List<Point>();
+        var result = new List<Vector2>();
         var c = goal.Parent;
 
         while (c != null && c != start)
@@ -378,16 +379,16 @@ static class AStarPathfinder
         }
         else
         {
-            return Array.Empty<Point>();
+            return Array.Empty<Vector2>();
         }
     }
 
-    private static bool AreOnSameLine(Point prev, Point curr, Point next)
+    private static bool AreOnSameLine(Vector2 prev, Vector2 curr, Vector2 next)
     {
         return (prev.X == curr.X && curr.X == next.X) || (prev.Y == curr.Y && curr.Y == next.Y);
     }
 
-    private static List<Point> SimplifyPath(List<Point> path)
+    private static List<Vector2> SimplifyPath(List<Vector2> path)
     {
         for (var i = path.Count - 2; i > 0; i--)
         {
@@ -404,7 +405,7 @@ static class AStarPathfinder
         return path;
     }
 
-    private static bool IsChangeOfDirection(Point a, Point b, Point c)
+    private static bool IsChangeOfDirection(Vector2 a, Vector2 b, Vector2 c)
     {
         if (a.X == b.X && b.X != c.X)
             return true;
@@ -415,24 +416,24 @@ static class AStarPathfinder
         return false;
     }
 
-    private static double Heuristic(Point a, Point b)
+    private static float Heuristic(Vector2 a, Vector2 b)
     {
-        return Math.Abs(a.X - b.X) + Math.Abs(a.Y - b.Y);
+        return MathF.Abs(a.X - b.X) + MathF.Abs(a.Y - b.Y);
     }
 }
 
 class Node
 {
-    public Node(Point position)
+    public Node(Vector2 position)
     {
         Position = position;
         ConnectedTo = new List<Node>();
     }
 
-    public Point Position { get; }
+    public Vector2 Position { get; }
     public List<Node> ConnectedTo { get; }
 
-    public double Cost { get; internal set; }
+    public float Cost { get; internal set; }
     public Node? Parent { get; internal set; }
 
     public override bool Equals(object? obj)

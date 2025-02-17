@@ -12,10 +12,10 @@ public static class DiagramExtensions
         if (!nodes.Any())
             return Rectangle.Zero;
 
-        var minX = double.MaxValue;
-        var maxX = double.MinValue;
-        var minY = double.MaxValue;
-        var maxY = double.MinValue;
+        var minX = float.MaxValue;
+        var maxX = float.MinValue;
+        var minY = float.MaxValue;
+        var maxY = float.MinValue;
 
         foreach (var node in nodes)
         {

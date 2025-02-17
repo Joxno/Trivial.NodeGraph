@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using Trivial.Domain.Events;
 using Trivial.Domain.Geometry;
 using Trivial.Domain.Models.Base;
@@ -8,9 +9,9 @@ namespace Trivial.Graph.Components.Widgets;
 
 public partial class SelectionBoxWidget : IDisposable
 {
-    private Point? _initialClientPoint;
+    private Vector2? _initialClientPoint;
     private Size? _selectionBoxSize; // Todo: remove unneeded instantiations
-    private Point? _selectionBoxTopLeft; // Todo: remove unneeded instantiations
+    private Vector2? _selectionBoxTopLeft; // Todo: remove unneeded instantiations
 
     [CascadingParameter] public BlazorDiagram BlazorDiagram { get; set; } = null!;
 
@@ -33,7 +34,7 @@ public partial class SelectionBoxWidget : IDisposable
     private string GenerateStyle()
     {
         return FormattableString.Invariant(
-            $"position: absolute; background: {Background}; top: {_selectionBoxTopLeft!.Y}px; left: {_selectionBoxTopLeft.X}px; width: {_selectionBoxSize!.Width}px; height: {_selectionBoxSize.Height}px;");
+            $"position: absolute; background: {Background}; top: {_selectionBoxTopLeft!.Value.Y}px; left: {_selectionBoxTopLeft.Value.X}px; width: {_selectionBoxSize!.Width}px; height: {_selectionBoxSize.Height}px;");
     }
 
     private void OnPointerDown(Model? model, MouseEventArgs e)
@@ -41,7 +42,7 @@ public partial class SelectionBoxWidget : IDisposable
         if (model != null || !e.ShiftKey)
             return;
 
-        _initialClientPoint = new Point(e.ClientX, e.ClientY);
+        _initialClientPoint = new Vector2(e.ClientX, e.ClientY);
     }
 
     private void OnPointerMove(Model? model, MouseEventArgs e)
@@ -51,10 +52,10 @@ public partial class SelectionBoxWidget : IDisposable
 
         SetSelectionBoxInformation(e);
 
-        var start = BlazorDiagram.GetRelativeMousePoint(_initialClientPoint.X, _initialClientPoint.Y);
+        var start = BlazorDiagram.GetRelativeMousePoint(_initialClientPoint.Value.X, _initialClientPoint.Value.Y);
         var end = BlazorDiagram.GetRelativeMousePoint(e.ClientX, e.ClientY);
-        var (sX, sY) = (Math.Min(start.X, end.X), Math.Min(start.Y, end.Y));
-        var (eX, eY) = (Math.Max(start.X, end.X), Math.Max(start.Y, end.Y));
+        var (sX, sY) = (MathF.Min(start.X, end.X), MathF.Min(start.Y, end.Y));
+        var (eX, eY) = (MathF.Max(start.X, end.X), MathF.Max(start.Y, end.Y));
         var bounds = new Rectangle(sX, sY, eX, eY);
 
         foreach (var node in BlazorDiagram.Nodes)
@@ -73,11 +74,11 @@ public partial class SelectionBoxWidget : IDisposable
 
     private void SetSelectionBoxInformation(MouseEventArgs e)
     {
-        var start = BlazorDiagram.GetRelativePoint(_initialClientPoint!.X, _initialClientPoint.Y);
+        var start = BlazorDiagram.GetRelativePoint(_initialClientPoint!.Value.X, _initialClientPoint.Value.Y);
         var end = BlazorDiagram.GetRelativePoint(e.ClientX, e.ClientY);
-        var (sX, sY) = (Math.Min(start.X, end.X), Math.Min(start.Y, end.Y));
-        var (eX, eY) = (Math.Max(start.X, end.X), Math.Max(start.Y, end.Y));
-        _selectionBoxTopLeft = new Point(sX, sY);
+        var (sX, sY) = (MathF.Min(start.X, end.X), MathF.Min(start.Y, end.Y));
+        var (eX, eY) = (MathF.Max(start.X, end.X), MathF.Max(start.Y, end.Y));
+        _selectionBoxTopLeft = new Vector2(sX, sY);
         _selectionBoxSize = new Size(eX - sX, eY - sY);
     }
 

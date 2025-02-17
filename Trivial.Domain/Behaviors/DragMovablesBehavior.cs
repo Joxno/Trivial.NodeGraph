@@ -3,20 +3,21 @@ using Trivial.Domain.Models.Base;
 using Trivial.Domain.Events;
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using Trivial.Domain.Models;
 
 namespace Trivial.Domain.Behaviors;
 
 public class DragMovablesBehavior : Behavior
 {
-    private readonly Dictionary<MovableModel, Point> _initialPositions;
-    private double? _lastClientX;
-    private double? _lastClientY;
+    private readonly Dictionary<MovableModel, Vector2> _initialPositions;
+    private float? _lastClientX;
+    private float? _lastClientY;
     private bool _moved;
 
     public DragMovablesBehavior(Diagram diagram) : base(diagram)
     {
-        _initialPositions = new Dictionary<MovableModel, Point>();
+        _initialPositions = new Dictionary<MovableModel, Vector2>();
         Diagram.PointerDown += OnPointerDown;
         Diagram.PointerMove += OnPointerMove;
         Diagram.PointerUp += OnPointerUp;
@@ -40,7 +41,7 @@ public class DragMovablesBehavior : Behavior
             var position = movable.Position;
             if (Diagram.Options.GridSnapToCenter && movable is NodeModel n)
             {
-                position = new Point(movable.Position.X + (n.Size?.Width ?? 0) / 2,
+                position = new Vector2(movable.Position.X + (n.Size?.Width ?? 0) / 2,
                     movable.Position.Y + (n.Size?.Height ?? 0) / 2);
             }
 
@@ -94,13 +95,13 @@ public class DragMovablesBehavior : Behavior
         _lastClientY = null;
     }
 
-    private double ApplyGridSize(double n)
+    private float ApplyGridSize(float n)
     {
         if (Diagram.Options.GridSize == null)
             return n;
 
         var gridSize = Diagram.Options.GridSize.Value;
-        return gridSize * Math.Floor((n + gridSize / 2.0) / gridSize);
+        return gridSize * MathF.Floor((n + gridSize / 2.0f) / gridSize);
     }
 
     public override void Dispose()

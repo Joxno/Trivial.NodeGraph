@@ -45,7 +45,7 @@ public class LinkVertexRenderer : ComponentBase, IDisposable
         builder.OpenElement(0, "g");
         builder.AddAttribute(1, "class", "diagram-link-vertex");
         builder.AddAttribute(4, "cursor", "move");
-        builder.AddAttribute(5, "ondblclick", value: EventCallback.Factory.Create<MouseEventArgs>(this, OnDoubleClick));
+        builder.AddAttribute(5, "ondblclick", value: EventCallback.Factory.Create<MouseEventArgs>(this, OnfloatClick));
         builder.AddAttribute(6, "onpointerdown", EventCallback.Factory.Create<PointerEventArgs>(this, OnPointerDown));
         builder.AddAttribute(7, "onpointerup", EventCallback.Factory.Create<PointerEventArgs>(this, OnPointerUp));
         builder.AddEventStopPropagationAttribute(8, "onpointerdown", true);
@@ -87,7 +87,7 @@ public class LinkVertexRenderer : ComponentBase, IDisposable
         BlazorDiagram.TriggerPointerUp(Vertex, e.ToCore());
     }
 
-    private void OnDoubleClick(MouseEventArgs e)
+    private void OnfloatClick(MouseEventArgs e)
     {
         Vertex.Parent.Vertices.Remove(Vertex);
         Vertex.Parent.Refresh();

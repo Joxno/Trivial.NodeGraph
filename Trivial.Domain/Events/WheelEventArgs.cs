@@ -1,14 +1,14 @@
 ﻿namespace Trivial.Domain.Events;
 
 public record WheelEventArgs(
-    double ClientX,
-    double ClientY,
+    float ClientX,
+    float ClientY,
     long Button,
     long Buttons,
     bool CtrlKey,
     bool ShiftKey,
     bool AltKey,
-    double DeltaX,
-    double DeltaY,
-    double DeltaZ,
+    float DeltaX,
+    float DeltaY,
+    float DeltaZ,
     long DeltaMode) : MouseEventArgs(ClientX, ClientY, Button, Buttons, CtrlKey, ShiftKey, AltKey);

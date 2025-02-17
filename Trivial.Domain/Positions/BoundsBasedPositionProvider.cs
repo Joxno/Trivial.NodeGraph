@@ -1,3 +1,4 @@
+using System.Numerics;
 using Trivial.Domain.Geometry;
 using Trivial.Domain.Models.Base;
 
@@ -5,7 +6,7 @@ namespace Trivial.Domain.Positions;
 
 public class BoundsBasedPositionProvider : IPositionProvider
 {
-    public BoundsBasedPositionProvider(double x, double y, double offsetX = 0, double offsetY = 0)
+    public BoundsBasedPositionProvider(float x, float y, float offsetX = 0, float offsetY = 0)
     {
         X = x;
         Y = y;
@@ -13,12 +14,12 @@ public class BoundsBasedPositionProvider : IPositionProvider
         OffsetY = offsetY;
     }
 
-    public double X { get; }
-    public double Y { get; }
-    public double OffsetX { get; }
-    public double OffsetY { get; }
+    public float X { get; }
+    public float Y { get; }
+    public float OffsetX { get; }
+    public float OffsetY { get; }
 
-    public Point? GetPosition(Model model)
+    public Vector2? GetPosition(Model model)
     {
         if (model is not IHasBounds ihb)
             throw new DiagramsException("BoundsBasedPositionProvider requires an IHasBounds model");
@@ -27,6 +28,6 @@ public class BoundsBasedPositionProvider : IPositionProvider
         if (bounds == null)
             return null;
         
-        return new Point(bounds.Left + X * bounds.Width + OffsetX, bounds.Top + Y * bounds.Height + OffsetY);
+        return new Vector2(bounds.Left + X * bounds.Width + OffsetX, bounds.Top + Y * bounds.Height + OffsetY);
     }
 }
