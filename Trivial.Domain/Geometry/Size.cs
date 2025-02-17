@@ -1,15 +1,8 @@
 ﻿namespace Trivial.Domain.Geometry;
 
-public record Size
+public record struct Size(float Width, float Height);
+
+public static class SizeExtensions
 {
-    public static Size Zero { get; } = new(0, 0);
-
-    public Size(float Width, float Height)
-    {
-        this.Width = Width;
-        this.Height = Height;
-    }
-
-    public float Width { get; init; }
-    public float Height { get; init; }
+    public static Size Zero(this Size Size) => new(0, 0);
 }

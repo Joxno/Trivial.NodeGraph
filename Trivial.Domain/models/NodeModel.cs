@@ -11,26 +11,20 @@ public class NodeModel : MovableModel, IHasBounds, IHasShape, ILinkable
 {
     private readonly List<PortModel> m_Ports = new();
     private readonly List<BaseLinkModel> m_Links = new();
-    private Size? m_Size;
+    private Size m_Size;
 
     public event Action<NodeModel>? SizeChanged;
     public event Action<NodeModel>? Moving;
 
-    public NodeModel(Vector2? Position = null) : base(Position)
-    {
-    }
+    public NodeModel(Vector2? Position = null) : base(Position) {}
+    public NodeModel(string Id, Vector2? Position = null) : base(Id, Position) {}
 
-    public NodeModel(string Id, Vector2? Position = null) : base(Id, Position)
-    {
-    }
-
-    public Size? Size
+    public Size Size
     {
         get => m_Size;
         set
         {
-            if (value?.Equals(m_Size) == true)
-                return;
+            if (value == m_Size) return;
 
             m_Size = value;
             SizeChanged?.Invoke(this);
@@ -54,7 +48,7 @@ public class NodeModel : MovableModel, IHasBounds, IHasShape, ILinkable
     }
 
     public PortModel AddPort(PortAlignment Alignment = PortAlignment.Bottom)
-        => AddPort(new PortModel(this, Alignment, Position));
+        => AddPort(new PortModel(this, Position, new(), Alignment));
 
     public PortModel? GetPort(PortAlignment Alignment) => Ports.FirstOrDefault(P => P.Alignment == Alignment);
 
@@ -115,11 +109,8 @@ public class NodeModel : MovableModel, IHasBounds, IHasShape, ILinkable
 
     public Rectangle? GetBounds(bool IncludePorts)
     {
-        if (Size == null)
-            return null;
-
-        if (!IncludePorts)
-            return new Rectangle(Position, Size);
+        if (Size == Size.Zero()) return null;
+        if (!IncludePorts) return new Rectangle(Position, Size);
 
         var t_LeftPort = GetPort(PortAlignment.Left);
         var t_TopPort = GetPort(PortAlignment.Top);

@@ -9,22 +9,21 @@ public class PortModel : Model, IHasBounds, IHasShape, ILinkable
 {
     private readonly List<BaseLinkModel> m_Links = new(4);
 
-    public PortModel(NodeModel Parent, PortAlignment Alignment = PortAlignment.Bottom, Vector2? Position = null,
-        Size? Size = null)
+    public PortModel(NodeModel Parent, Vector2 Position,
+        Size Size, PortAlignment Alignment = PortAlignment.Bottom)
     {
         this.Parent = Parent;
         this.Alignment = Alignment;
-        this.Position = Position ?? Vector2.Zero;
-        this.Size = Size ?? Size.Zero;
+        this.Position = Position;
+        this.Size = Size;
     }
 
-    public PortModel(string Id, NodeModel Parent, PortAlignment Alignment = PortAlignment.Bottom,
-        Vector2? Position = null, Size? Size = null) : base(Id)
+    public PortModel(string Id, NodeModel Parent, Vector2 Position, Size Size, PortAlignment Alignment = PortAlignment.Bottom) : base(Id)
     {
         this.Parent = Parent;
         this.Alignment = Alignment;
-        this.Position = Position ?? Vector2.Zero;
-        this.Size = Size ?? Size.Zero;
+        this.Position = Position;
+        this.Size = Size;
     }
 
     public NodeModel Parent { get; }

@@ -10,8 +10,8 @@ namespace Trivial.Graph.Components.Widgets;
 public partial class SelectionBoxWidget : IDisposable
 {
     private Vector2? m_InitialClientPoint;
-    private Size? m_SelectionBoxSize; // Todo: remove unneeded instantiations
-    private Vector2? m_SelectionBoxTopLeft; // Todo: remove unneeded instantiations
+    private Size m_SelectionBoxSize;
+    private Vector2? m_SelectionBoxTopLeft;
 
     [CascadingParameter] public BlazorDiagram BlazorDiagram { get; set; } = null!;
 
@@ -34,7 +34,7 @@ public partial class SelectionBoxWidget : IDisposable
     private string GenerateStyle()
     {
         return FormattableString.Invariant(
-            $"position: absolute; background: {Background}; top: {m_SelectionBoxTopLeft!.Value.Y}px; left: {m_SelectionBoxTopLeft.Value.X}px; width: {m_SelectionBoxSize!.Width}px; height: {m_SelectionBoxSize.Height}px;");
+            $"position: absolute; background: {Background}; top: {m_SelectionBoxTopLeft!.Value.Y}px; left: {m_SelectionBoxTopLeft.Value.X}px; width: {m_SelectionBoxSize.Width}px; height: {m_SelectionBoxSize.Height}px;");
     }
 
     private void OnPointerDown(Model? Model, MouseEventArgs E)
@@ -86,7 +86,7 @@ public partial class SelectionBoxWidget : IDisposable
     {
         m_InitialClientPoint = null;
         m_SelectionBoxTopLeft = null;
-        m_SelectionBoxSize = null;
+        m_SelectionBoxSize = new();
         InvokeAsync(StateHasChanged);
     }
 }

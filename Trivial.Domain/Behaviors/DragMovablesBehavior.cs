@@ -41,8 +41,8 @@ public class DragMovablesBehavior : Behavior
             var t_Position = t_Movable.Position;
             if (Diagram.Options.GridSnapToCenter && t_Movable is NodeModel t_N)
             {
-                t_Position = new Vector2(t_Movable.Position.X + (t_N.Size?.Width ?? 0) / 2,
-                    t_Movable.Position.Y + (t_N.Size?.Height ?? 0) / 2);
+                t_Position = new Vector2(t_Movable.Position.X + (t_N.Size.Width) / 2,
+                    t_Movable.Position.Y + (t_N.Size.Height) / 2);
             }
 
             m_InitialPositions.Add(t_Movable, t_Position);
@@ -68,7 +68,7 @@ public class DragMovablesBehavior : Behavior
             var t_Ndy = ApplyGridSize(t_DeltaY + t_InitialPosition.Y);
             if (Diagram.Options.GridSnapToCenter && t_Movable is NodeModel t_Node)
             {
-                t_Node.SetPosition(t_Ndx - (t_Node.Size?.Width ?? 0) / 2, t_Ndy - (t_Node.Size?.Height ?? 0) / 2);
+                t_Node.SetPosition(t_Ndx - (t_Node.Size.Width) / 2, t_Ndy - (t_Node.Size.Height) / 2);
             }
             else
             {

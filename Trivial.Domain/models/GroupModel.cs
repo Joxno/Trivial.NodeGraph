@@ -13,8 +13,6 @@ public class GroupModel : NodeModel
     public GroupModel(IEnumerable<NodeModel> Children, byte Padding = 30, bool AutoSize = true)
     {
         m_Children = new List<NodeModel>();
-
-        Size = Size.Zero;
         this.Padding = Padding;
         this.AutoSize = AutoSize;
         Initialize(Children);
